@@ -1,4 +1,7 @@
 const gulp = require('gulp');
+const prefix = require('gulp-autoprefixer');
+const sourcemaps = require('gulp-sourcemaps');
+const sass = require('gulp-sass');
 const concat = require('gulp-concat');
 const wrap = require('gulp-wrap');
 const declare = require('gulp-declare');
@@ -7,6 +10,34 @@ const path = require('path');
 const vueComponent = require('gulp-vue-single-file-component');
 const babel = require('gulp-babel');
  
+/* ----------------------------------------- */
+/*  Compile Sass
+/* ----------------------------------------- */
+
+// Small error handler helper function.
+function handleError(err) {
+    console.log(err.toString());
+    this.emit('end');
+  }
+  
+const SCSS_FILES = ["styles/**/*.scss"];
+
+scss = () => gulp.src(SCSS_FILES)
+    .pipe(
+    sass({
+        outputStyle: 'nested'
+    })
+        .on('error', handleError)
+    )
+    .pipe(prefix({
+        cascade: false
+    }))
+    .pipe(gulp.dest("./css"));
+
+/* ----------------------------------------- */
+/*  Compile Vue
+/* ----------------------------------------- */
+
 const VUE_FILES = ["vue/**/*.vue"];
 
 vue = () => gulp.src(VUE_FILES)
@@ -29,9 +60,12 @@ vue = () => gulp.src(VUE_FILES)
     .pipe(minify({ noSource: true, ext: ".min.js" }))
         .pipe(gulp.dest('dist/'));
 
-watch = () => gulp.watch(VUE_FILES, vue);
+watch = () => { 
+    gulp.watch(VUE_FILES, vue);
+    gulp.watch(SCSS_FILES, scss);
+}
 
 
 gulp.task('watch', watch);
-gulp.task('build', vue);
-gulp.task('default', gulp.series(vue, watch));
+gulp.task('build', gulp.series(vue, scss));
+gulp.task('default', gulp.series(vue, scss, watch));

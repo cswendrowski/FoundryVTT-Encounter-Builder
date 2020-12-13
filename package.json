@@ -13,16 +13,20 @@
     "@babel/core": "^7.12.10",
     "@babel/plugin-transform-modules-commonjs": "^7.12.1",
     "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
     "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-declare": "^0.3.0",
     "gulp-minify": "^3.1.0",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^3.0.0",
     "gulp-vue-single-file-component": "^1.0.12",
     "gulp-wrap": "^0.15.0",
     "vue-histogram-slider": "^0.3.8",
     "vue-numeric-input": "^1.0.6",
     "vue-range-component": "^1.0.3",
     "vue-select": "^3.10.8",
-    "vue-slider-component": "^3.2.11"
+    "vue-slider-component": "^3.2.11",
+    "vuejs-smart-table": "0.0.5"
   }
 }
