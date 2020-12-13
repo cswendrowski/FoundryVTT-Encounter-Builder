@@ -1,0 +1,1 @@
+{"version":3,"file":"module.css","sources":["module.scss"],"sourcesContent":[".vue-histogram-slider-wrapper {\r\n    --primary-color: #ff6400 !important;\r\n}"],"names":[],"mappings":"AAAA,AAAA,6BAA6B,CAAC;EAC1B,eAAe,CAAA,mBAAC,GACnB"}

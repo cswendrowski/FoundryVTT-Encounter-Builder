@@ -23,15 +23,17 @@ function handleError(err) {
 const SCSS_FILES = ["styles/**/*.scss"];
 
 scss = () => gulp.src(SCSS_FILES)
+    .pipe(sourcemaps.init())
     .pipe(
-    sass({
-        outputStyle: 'nested'
-    })
+        sass({
+            outputStyle: 'nested'
+        })
         .on('error', handleError)
     )
-    .pipe(prefix({
-        cascade: false
-    }))
+    .pipe(sourcemaps.write('.'))
+    // .pipe(prefix({
+    //     cascade: false
+    // }))
     .pipe(gulp.dest("./css"));
 
 /* ----------------------------------------- */
