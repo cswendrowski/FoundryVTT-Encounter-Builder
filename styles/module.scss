@@ -8,19 +8,27 @@ $dark-maroon: #2B0603;
     background: url(/ui/parchment.jpg), $gold;
 	background-repeat: repeat;
 	background-blend-mode: hard-light;
+    height: 100%;
+    overflow: hidden;
+
+    .dialog-buttons {
+        display: none;
+    }
 }
 
 .encounter-builder {
 	display: grid;
-	grid-template-columns: 80% 20%;
+	grid-template-columns: 1fr 30ch;
+    grid-template-rows: 5em 1fr;
     column-gap: 2ch;
     row-gap: .5em;
+    height: 100%;
 
     .encounter-info {
         grid-row: 1;
         grid-column: 1;
 
-        height: 5em;
+        height: 100%;
         background: $white;
         box-shadow: 0px 2px 6px 0px black;
         padding: .5em;
@@ -29,9 +37,7 @@ $dark-maroon: #2B0603;
         grid-column: 2;
         grid-row-start: 1;
         grid-row-end: 3;
-        padding-top: .5em;
-        padding-left: 1ch;
-        padding-right: 1ch;
+        padding: .5em 1ch .5em 1ch;
         box-shadow: -1px 3px 6px 0px black;
         background: $white;
         
