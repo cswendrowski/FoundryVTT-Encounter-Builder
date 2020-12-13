@@ -44,10 +44,6 @@ $dark-maroon: #2B0603;
         .encounter-members {
             list-style: none;
             padding-left: 0;
-
-            .member {
-
-            }
         }
     }
     .search-area {
@@ -73,6 +69,7 @@ $dark-maroon: #2B0603;
         .search-results {
             grid-column: 2;
             grid-row: 1;
+            height: 45em;
             
             overflow-y: scroll;
         }
