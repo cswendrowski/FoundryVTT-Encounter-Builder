@@ -46,7 +46,7 @@ class EncounterBuilder {
         const d = new Dialog({
             content: `<encounter-builder class="vueport-render" dependencies='vueport-encounter-builder'>Loading, please wait...</encounter-builder>`,
             buttons: {}
-        }, {height: '1000', width: '800', resizable: true, popOutModuleDisable: true}).render(true);
+        }, {height: '800', width: '1200', resizable: true, popOutModuleDisable: true}).render(true);
         // Auto resize after 2 seconds
         setTimeout(() => d.setPosition(), 500);
     }
