@@ -23,10 +23,8 @@
     <section class="search-area">
       <header class="search-configuration">
         <h2>Available Options</h2>
-        <h3>Filters</h3>
         <div class="filters">
-          <h4>Level</h4>
-          <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
+          <h3>Filters</h3>
           <h4>Size</h4>
           <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
           <h4>Role</h4>
@@ -36,6 +34,10 @@
         </div>
       </header>
       <section class="search-results">
+        <figure class="level-filter">
+          <h4>Level</h4>
+          <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
+        </figure>
         <h3>Results</h3>
         <div v-if="loading">
           <h3>Loading. . .</h3>

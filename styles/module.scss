@@ -47,6 +47,28 @@ $dark-maroon: #2B0603;
     .search-area {
         grid-column: 1;
         grid-row: 2;
+        column-gap: 2ch;
+        row-gap: .5em;
         padding-right: 1ch;
+
+        display: grid;
+        grid-template-columns: 25ch 1fr;
+
+        height: 1fr;
+
+        .search-configuration {
+            grid-column: 1;
+            grid-row: 1;
+            
+            padding: .5em 1ch .5em 1ch;
+            box-shadow: 1px 3px 6px 0px black;
+            background: $white;
+        }
+        .search-results {
+            grid-column: 2;
+            grid-row: 1;
+            
+            overflow-y: scroll;
+        }
     }
 }
