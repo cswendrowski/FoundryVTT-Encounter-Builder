@@ -1,50 +1,58 @@
 <template>
-  <div>
-    <h1>Dungeon Moon</h1>
-    <h2>Current Encounter</h2>
-    <div class="encounterSettings">
-      <h4>Tier</h4>
-      <v-select v-model="selectedTier" :options="['Adventurer', 'Champion', 'Epic']"></v-select>
-      <h4>Average Party Level</h4>
-      <vue-numeric-input v-model="averagePartyLevel" :min="1" ></vue-numeric-input>
-      <h4>Number of Party Members</h4>
-      <vue-numeric-input v-model="numberOfPartyMembers" :min="1" ></vue-numeric-input>
-    </div>
-    <div>
-      <ul>
-        <li v-for="t of selectedActors" :key="t" v-on:click.right="removeActor(t)">[{{t.data.data.details.level.value}}] {{t.data.name}} - {{getEncounterScore(selectedTier, averagePartyLevel, t)}}</li>
-      </ul>
-      <h4>Total Encounter Score: {{totalEncounterScore}} of {{numberOfPartyMembers}}</h4>
-    </div>
-    <hr>
-    <h2>Available Options</h2>
-    <h3>Filters</h3>
-    <div class="filters">
-      <h4>Level</h4>
-      <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
-      <h4>Size</h4>
-      <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
-      <h4>Role</h4>
-      <v-select multiple v-model="selectedRoles" :options="['Archer', 'Blocker', 'Caster', 'Leader', 'Mook', 'Spoiler', 'Troop', 'Wrecker']" :reduce="x => x.toLowerCase()"></v-select>
-      <h4>Type</h4>
-      <v-select multiple v-model="selectedTypes" :options="['Aberration', 'Beast', 'Celestial', 'Construct', 'Demon', 'Devil', 'Dragon', 'Elemental', 'Fey', 'Giant', 'Humanoid', 'Monstrosity', 'Ooze', 'Plant', 'Undead']" :reduce="x => x.toLowerCase()"></v-select>
-    </div>
-    <hr>
-    <h3>Results</h3>
-    <div v-if="loading">
-      <h3>Loading. . .</h3>
-    </div>
-    <div v-else>
-        <div v-for="t of availableActors" :key="t" v-on:click="addActor(t)">
-          <img :src="t.data.img" width="100" height="100" />
-          <div>
-            <h4><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
-            <p v-if="t.data.data.details?.size?.value != undefined">Size - {{t.data.data.details.size.value}}</p>
-            <p v-if="t.data.data.details?.role?.value != undefined">Role - {{t.data.data.details.role.value}}</p>
-            <p v-if="t.data.data.details?.type?.value != undefined">Type - {{t.data.data.details.type.value}}</p>
-          </div>
+  <div class="encounter-builder">
+    <header class="encounter-info">
+      <h1>Encounter Name</h1>
+    </header>
+    <section class="encounter-details">
+      <h2>Current Encounter</h2>
+      <div class="encounterSettings">
+        <h4>Tier</h4>
+        <v-select v-model="selectedTier" :options="['Adventurer', 'Champion', 'Epic']"></v-select>
+        <h4>Average Party Level</h4>
+        <vue-numeric-input v-model="averagePartyLevel" :min="1" ></vue-numeric-input>
+        <h4>Number of Party Members</h4>
+        <vue-numeric-input v-model="numberOfPartyMembers" :min="1" ></vue-numeric-input>
+      </div>
+      <div>
+        <ul class="encounter-members">
+          <li class="member" v-for="t of selectedActors" :key="t" v-on:click.right="removeActor(t)">[{{t.data.data.details.level.value}}] {{t.data.name}} - {{getEncounterScore(selectedTier, averagePartyLevel, t)}}</li>
+        </ul>
+        <h4>Total Encounter Score: {{totalEncounterScore}} of {{numberOfPartyMembers}}</h4>
+      </div>
+    </section>
+    <section class="search-area">
+      <header class="search-configuration">
+        <h2>Available Options</h2>
+        <h3>Filters</h3>
+        <div class="filters">
+          <h4>Level</h4>
+          <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
+          <h4>Size</h4>
+          <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
+          <h4>Role</h4>
+          <v-select multiple v-model="selectedRoles" :options="['Archer', 'Blocker', 'Caster', 'Leader', 'Mook', 'Spoiler', 'Troop', 'Wrecker']" :reduce="x => x.toLowerCase()"></v-select>
+          <h4>Type</h4>
+          <v-select multiple v-model="selectedTypes" :options="['Aberration', 'Beast', 'Celestial', 'Construct', 'Demon', 'Devil', 'Dragon', 'Elemental', 'Fey', 'Giant', 'Humanoid', 'Monstrosity', 'Ooze', 'Plant', 'Undead']" :reduce="x => x.toLowerCase()"></v-select>
         </div>
-    </div>
+      </header>
+      <section class="search-results">
+        <h3>Results</h3>
+        <div v-if="loading">
+          <h3>Loading. . .</h3>
+        </div>
+        <div v-else>
+            <div v-for="t of availableActors" :key="t" v-on:click="addActor(t)">
+              <img :src="t.data.img" width="100" height="100" />
+              <div>
+                <h4><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
+                <p v-if="t.data.data.details?.size?.value != undefined">Size - {{t.data.data.details.size.value}}</p>
+                <p v-if="t.data.data.details?.role?.value != undefined">Role - {{t.data.data.details.role.value}}</p>
+                <p v-if="t.data.data.details?.type?.value != undefined">Type - {{t.data.data.details.type.value}}</p>
+              </div>
+            </div>
+        </div>
+      </section>
+    </section>
   </div>
 </template>
 
