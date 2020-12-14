@@ -14,6 +14,7 @@ $dark-maroon: #2B0603;
     --background-primary-color: #{$gold};
     --background-primary-blend: hard-light;
     --background-secondary-color: #{$white};
+    --background-disabled-color: #BDB8A7;
 
     --color-primary: #{$gold};
     --color-secondary: #{$yellow};
@@ -165,9 +166,15 @@ $dark-maroon: #2B0603;
             .actor-listing {
                 display: flex;
                 flex-direction: row;
-                cursor: pointer;
+                &:not([disabled]) {
+                    background: var(--background-primary-image), var(--color-secondary);
+                    cursor: pointer;
+                }
+                &[disabled] {
+                    background: var(--background-primary-image), var(--background-disabled-color);
+                    cursor: not-allowed;
+                }
                 border: 1px solid $dark-maroon;
-                background: var(--background-primary-image), var(--color-secondary);
 	            background-repeat: repeat;
 	            background-blend-mode: var(--background-primary-blend);
                 box-shadow: none;

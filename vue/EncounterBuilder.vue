@@ -15,7 +15,7 @@
       </div>
       <div>
         <ul class="encounter-members">
-          <li class="member" v-for="t of selectedActors" :key="t._id" v-on:click.right="removeActor(t)">[{{t.data.data.details.level.value}}] {{t.data.name}} - {{getEncounterScore(selectedTier, averagePartyLevel, t)}}</li>
+          <li class="member" v-for="t of selectedActors" :key="t._id" v-on:click.right="removeActor(t)">[{{t.data.data.details.level.value}}] {{t.data.name}} - {{getEncounterScore(t)}}</li>
         </ul>
         <h4>Total Encounter Score: {{totalEncounterScore}} of {{numberOfPartyMembers}}</h4>
       </div>
@@ -66,7 +66,7 @@
                 @finish="sliderFinished">
             </histogramslider>
             <ul class="result-list">
-              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)" >
+              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)" :disabled="getEncounterScore(t) <= 0">
                 <img :src="t.data.img" width="100" height="100" />
                 <section class="actor-info">
                   <h4 class="name"><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
@@ -82,6 +82,10 @@
                     <li class="type" v-if="t.data.data.details?.type?.value != undefined">
                       <label class="trait-label">Type</label>
                       <span class="trait-value">{{t.data.data.details.type.value}}</span>
+                    </li>
+                    <li class="score"  v-if="getEncounterScore(t) > 0">
+                      <label class="trait-label">Encounter Score</label>
+                      <span class="trait-value">{{getEncounterScore(t)}}</span>
                     </li>
                   </ul>
                 </section>
@@ -115,7 +119,9 @@ export default {
   }),
   methods: {
     addActor: function (actor) {
-      this.selectedActors.push(actor);
+      if (this.getEncounterScore(actor) > 0) {
+        this.selectedActors.push(actor);
+      }
     },
     removeActor: function (actor) {
       var index = this.selectedActors.indexOf(actor);
@@ -129,15 +135,20 @@ export default {
         this.sortLevelAsc = undefined;
         this.sortNameAsc = value;
     },
-    getEncounterScore: function (tier, averageLevel, actor) {
+    getEncounterScore: function (actor) {
       console.log(actor);
-      let role = actor.data.data.details.role.value;
-      tier = tier.toLowerCase();
-      if (role == "mook") {
-        return this.getMookEncounterScore(tier, averageLevel, actor);
+      try {
+        let role = actor.data.data.details.role.value.toLowerCase();
+        let encounterTier = this.selectedTier.toLowerCase();
+        if (role == "mook") {
+            return this.getMookEncounterScore(encounterTier, this.averagePartyLevel, actor);
+        }
+        else {
+            return this.getNormalEncounterScore(encounterTier, this.averagePartyLevel, actor);
+        }
       }
-      else {
-        return this.getNormalEncounterScore(tier, averageLevel, actor);
+      catch (error) {
+          return -30;
       }
     },
     getNormalEncounterScore: function (tier, averageLevel, enemy) {
@@ -183,7 +194,7 @@ export default {
       return scoreChart[levelDifference][sizeToColumn[size]];
 
     },
-    getMookEncounterScore: function (tier, averageLevel, mook) {
+    getMookEncounterScore: function (tier, averageLevel, enemy) {
       let scoreChart = [
         [0.05, 0.10, 0.20, 0.30],
         [.075, 0.15, 0.30, 0.45],
@@ -240,7 +251,7 @@ export default {
       let totalScore = 0;
       for (let x = 0; x < this.selectedActors.length; x++) {
         let actor = this.selectedActors[x];
-        totalScore += this.getEncounterScore(this.selectedTier, this.averagePartyLevel, actor);
+        totalScore += this.getEncounterScore(actor);
       }
       return totalScore;
     },
