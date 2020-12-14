@@ -68,7 +68,7 @@ $dark-maroon: #2B0603;
 
             .sortings {
                 .active {
-                    background: #78b2e6;
+                    background: $gold;
                 }
             }
         }
@@ -88,6 +88,7 @@ $dark-maroon: #2B0603;
 
                 .spinner {
                     width: 75% !important;
+                    fill: $red !important;
                 }
                 .line {
                     animation: linePencil .8s infinite linear;
@@ -111,6 +112,7 @@ $dark-maroon: #2B0603;
                 grid-template-columns: 1fr 1fr 1fr;
                 column-gap: .5em;
                 row-gap: .5em;
+
             }
             .actor-listing {
                 display: flex;
@@ -139,8 +141,13 @@ $dark-maroon: #2B0603;
                     
                 }
             }
+            
             .vue-histogram-slider-wrapper {
                 width: 100% !important;
+
+                .irs-bar {
+                    background-color: $yellow;
+                }
             }
             
         }

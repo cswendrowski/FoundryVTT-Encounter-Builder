@@ -54,7 +54,17 @@
         </div>
         <div v-else>
             <h3>Level</h3>
-            <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
+            <histogramslider ref="levelHistogram" 
+                :data="levelData" 
+                :min="0" :max="15"
+                primary-color="#78110A"
+                holder-color="#F4F3EA"
+                handle-color="#B9A660"
+                label-color="#2B0603"
+                grid-text-color="#2B0603"
+                :key="levelData.length" 
+                @finish="sliderFinished">
+            </histogramslider>
             <ul class="result-list">
               <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)">
                 <img :src="t.data.img" width="100" height="100" />
@@ -77,6 +87,7 @@
 <script>
 export default {
   data: () => ({
+    colors: [ "#78110A", "#AE8C13", "#B9A660" ],
     actors: [],
     selectedActors: [],
     selectedSizes: [],
