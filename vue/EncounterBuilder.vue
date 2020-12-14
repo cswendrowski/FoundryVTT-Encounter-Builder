@@ -15,7 +15,7 @@
       </div>
       <div>
         <ul class="encounter-members">
-          <li class="member" v-for="t of selectedActors" :key="t" v-on:click.right="removeActor(t)">[{{t.data.data.details.level.value}}] {{t.data.name}} - {{getEncounterScore(selectedTier, averagePartyLevel, t)}}</li>
+          <li class="member" v-for="t of selectedActors" :key="t._id" v-on:click.right="removeActor(t)">[{{t.data.data.details.level.value}}] {{t.data.name}} - {{getEncounterScore(selectedTier, averagePartyLevel, t)}}</li>
         </ul>
         <h4>Total Encounter Score: {{totalEncounterScore}} of {{numberOfPartyMembers}}</h4>
       </div>
@@ -23,8 +23,8 @@
     <section class="search-area">
       <header class="search-configuration">
         <h2>Available Options</h2>
+        <h3>Filters</h3>
         <div class="filters">
-          <h3>Filters</h3>
           <h4>Size</h4>
           <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
           <h4>Role</h4>
@@ -32,18 +32,26 @@
           <h4>Type</h4>
           <v-select multiple v-model="selectedTypes" :options="['Aberration', 'Beast', 'Celestial', 'Construct', 'Demon', 'Devil', 'Dragon', 'Elemental', 'Fey', 'Giant', 'Humanoid', 'Monstrosity', 'Ooze', 'Plant', 'Undead']" :reduce="x => x.toLowerCase()"></v-select>
         </div>
+        <h3>Sort</h3>
+        <div class="sort">
+            <h4>Level</h4>
+            <button>
+                <i class="btn btn-primary fas fa-sort-up " :disabled="sortLevelAsc"></i>
+            </button>
+            <button>
+                <i class="btn btn-primary fas fa-sort-down" :disabled="!sortLevelAsc"></i>
+            </button>
+        </div>
       </header>
       <section class="search-results">
-        <figure class="level-filter">
-          <h4>Level</h4>
-          <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
-        </figure>
         <h3>Results</h3>
         <div v-if="loading">
           <h3>Loading. . .</h3>
         </div>
         <div v-else>
-            <div v-for="t of availableActors" :key="t" v-on:click="addActor(t)">
+            <h4>Level</h4>
+            <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
+            <div v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)">
               <img :src="t.data.img" width="100" height="100" />
               <div>
                 <h4><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
@@ -66,14 +74,18 @@ export default {
     selectedSizes: [],
     selectedRoles: [],
     selectedTypes: [],
-    averagePartyLevel: 0,
-    numberOfPartyMembers: 0,
+    averagePartyLevel: 4,
+    numberOfPartyMembers: 4,
     minimumLevel: 100,
     maximumLevel: 0,
     minSelectedLevel: 0,
     maxSelectedLevel: 100,
     loading: true,
-    selectedTier: "Adventurer"
+    selectedTier: "Adventurer",
+    sortLevelAsc: true,
+    sortRoleAsc: undefined,
+    sortTypeAsc: undefined,
+    sortSizeAsc: undefined
   }),
   methods: {
     addActor: function (actor) {
@@ -270,12 +282,13 @@ export default {
     //console.log("Mounted!");
     let characters = game.actors.entities.filter(x => x.hasPlayerOwner);
     console.log(characters);
-    this.numberOfPartyMembers = characters.length;
-    for (let index = 0; index < this.numberOfPartyMembers; index++) {
-      this.averagePartyLevel += characters[index].data.data.details.level.value;
+    if (characters.length > 0) {
+        this.numberOfPartyMembers = characters.length;
+        for (let index = 0; index < this.numberOfPartyMembers; index++) {
+            this.averagePartyLevel += characters[index].data.data.details.level.value;
+        }
+        this.averagePartyLevel = Math.round(this.averagePartyLevel / this.numberOfPartyMembers);
     }
-    this.averagePartyLevel = Math.round(this.averagePartyLevel / this.numberOfPartyMembers);
-
 
     let npcs = game.actors.entities.filter(x => x.data.type == "npc");
     let allActors = npcs;
@@ -297,7 +310,6 @@ export default {
       if (level < this.minimumLevel) this.minimumLevel = level;
     }
 
-    this.levelRange = [ this.minimumLevel, this.maximumLevel ];
     this.minSelectedLevel = this.averagePartyLevel - 2;
     if (this.minSelectedLevel < this.minimumLevel) this.minSelectedLevel = this.minimumLevel;
 
@@ -307,7 +319,6 @@ export default {
     //console.log(allActors);
     this.actors = allActors;
     this.loading = false;
-    this.$forceUpdate();
   },
 };
 </script>
