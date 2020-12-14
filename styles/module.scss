@@ -42,6 +42,10 @@ $dark-maroon: #2B0603;
     grid-template-rows: 5em 1fr;
     height: 100%;
 
+    h2 {
+        border-bottom: 1px solid var(--color-accent);
+    }
+
     .encounter-info {
         grid-row: 1;
         grid-column: 1;
