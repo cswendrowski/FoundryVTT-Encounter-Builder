@@ -69,6 +69,7 @@ $dark-maroon: #2B0603;
                 color: inherit;
                 border: 0;
                 background: none;
+
                 &:focus {
                     text-decoration: underline dashed;
 	                box-shadow: none;
@@ -171,6 +172,10 @@ $dark-maroon: #2B0603;
                 &:hover {
                     box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
                 }
+                .name {
+                    font-weight: bold;
+                    color: var(--color-accent2);
+                }
                 .actor-info {
                     margin-left: 1ch;
                     padding: .5em 0 .5em 0;
@@ -180,8 +185,12 @@ $dark-maroon: #2B0603;
                     height: 100px;
                     border: none;
                 }
-                .traits {
-                    
+                .trait-label {
+                    font-style: italic;
+                    font-weight: bold;
+                    &:after {
+                        content: " - "
+                    }
                 }
             }
             
