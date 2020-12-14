@@ -72,15 +72,15 @@
                   <h4 class="name"><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
                   <ul class="traits">
                     <li class="size" v-if="t.data.data.details?.size?.value != undefined">
-                      <label class="triat-label">Size</label>
+                      <label class="trait-label">Size</label>
                       <span class="trait-value">{{t.data.data.details.size.value}}</span>
                     </li>
                     <li class="role" v-if="t.data.data.details?.role?.value != undefined">
-                      <label class="triat-label">Role</label>
+                      <label class="trait-label">Role</label>
                       <span class="trait-value">{{t.data.data.details.role.value}}</span>
                     </li>
                     <li class="type" v-if="t.data.data.details?.type?.value != undefined">
-                      <label class="triat-label">Type</label>
+                      <label class="trait-label">Type</label>
                       <span class="trait-value">{{t.data.data.details.type.value}}</span>
                     </li>
                   </ul>
