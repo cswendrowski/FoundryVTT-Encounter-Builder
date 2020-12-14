@@ -51,15 +51,19 @@
         <div v-else>
             <h4>Level</h4>
             <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
-            <div v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)">
-              <img :src="t.data.img" width="100" height="100" />
-              <div>
-                <h4><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
-                <p v-if="t.data.data.details?.size?.value != undefined">Size - {{t.data.data.details.size.value}}</p>
-                <p v-if="t.data.data.details?.role?.value != undefined">Role - {{t.data.data.details.role.value}}</p>
-                <p v-if="t.data.data.details?.type?.value != undefined">Type - {{t.data.data.details.type.value}}</p>
-              </div>
-            </div>
+            <ul class="result-list">
+              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)">
+                <img :src="t.data.img" width="100" height="100" />
+                <section class="actor-info">
+                  <h4 class="name"><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
+                  <ul class="traits">
+                    <li class="size" v-if="t.data.data.details?.size?.value != undefined">Size - {{t.data.data.details.size.value}}</li>
+                    <li class="role" v-if="t.data.data.details?.role?.value != undefined">Role - {{t.data.data.details.role.value}}</li>
+                    <li class="type" v-if="t.data.data.details?.type?.value != undefined">Type - {{t.data.data.details.type.value}}</li>
+                  </ul>
+                </section>
+              </li>
+            </ul>
         </div>
       </section>
     </section>
