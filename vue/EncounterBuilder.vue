@@ -66,7 +66,7 @@
                 @finish="sliderFinished">
             </histogramslider>
             <ul class="result-list">
-              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)">
+              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)" >
                 <img :src="t.data.img" width="100" height="100" />
                 <section class="actor-info">
                   <h4 class="name"><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>

@@ -46,16 +46,24 @@ class EncounterBuilder {
         // Define dependency on our own custom vue components for when we need it
         Dlopen.register('vueport-encounter-builder', {
             scripts: "/modules/encounter-builder/dist/vue-components.min.js",
-            dependencies: [ "vue-select", "vue-histogram-slider", "vue-numeric-input", "vue-loading-spinner" ]
+            dependencies: ["vue-select", "vue-histogram-slider", "vue-numeric-input", "vue-loading-spinner"]
         });
     }
 
     static run() {
 
         const d = new Dialog({
+            title: "Dungeon Moon Encounter Builder",
             content: `<encounter-builder class="vueport-render" dependencies='vueport-encounter-builder'>Loading, please wait...</encounter-builder>`,
             buttons: {}
-        }, {height: '800', width: '1200', resizable: true, popOutModuleDisable: true}).render(true);
+        },
+        {
+            height: '800',
+            width: '1200',
+            resizable: true,
+            popOutModuleDisable: true,
+            classes: ["encounter-builder-application"]
+        }).render(true);
         // Auto resize after 2 seconds
         setTimeout(() => d.setPosition(), 500);
     }
