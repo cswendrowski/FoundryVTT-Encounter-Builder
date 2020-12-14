@@ -1,7 +1,7 @@
 <template>
   <div class="encounter-builder">
     <header class="encounter-info">
-      <h1>Encounter Name</h1>
+      <h1><input type="text" placeholder="encounter name" value="Encounter Name"></h1>
     </header>
     <section class="encounter-details">
       <h2>Current Encounter</h2>
