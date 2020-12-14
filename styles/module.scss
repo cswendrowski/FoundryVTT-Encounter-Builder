@@ -4,18 +4,38 @@ $gold: #B9A660;
 $white: #F4F3EA;
 $dark-maroon: #2B0603;
 
-.window-app .window-content {
-    background: url(/ui/parchment.jpg), $gold;
+.encounter-builder-application {
+    --title-font-family: 'mason-serif';
+    --title-font-size: 2.5em;
+    --title-background-color: #{$red};
+    --title-background-blend: color-burn;
+
+    --background-primary-image: url(/ui/parchment.jpg);
+    --background-primary-color: #{$gold};
+    --background-primary-blend: hard-light;
+    --background-secondary-color: #{$white};
+
+    --color-primary: #{$gold};
+    --color-secondary: #{$yellow};
+    --color-accent: #{$red};
+    --color-accent2: #{$dark-maroon};
+
+    --shadow-full-color: black;
+    --shadow-subtle-color: #00000080;
+}
+
+.encounter-builder-application.window-app .window-content {
+    background: var(--background-primary-image), var(--background-primary-color);
 	background-repeat: repeat;
-	background-blend-mode: hard-light;
+	background-blend-mode: var(--background-primary-blend);
     height: 100%;
     overflow: hidden;
+    padding: 0;
 
     .dialog-buttons {
         display: none;
     }
 }
-
 .encounter-builder {
 	display: grid;
 	grid-template-columns: 1fr 30ch;
@@ -29,17 +49,40 @@ $dark-maroon: #2B0603;
         z-index: 1;
 
         height: 100%;
-        background: $white;
-        box-shadow: 0px 2px 6px 0px black;
+        background: var(--color-accent);
+        background: var(--background-primary-image), var(--title-background-color);
+	    background-repeat: repeat;
+	    background-blend-mode: var(--title-background-blend);
+
+        color: var(--color-primary);
+        box-shadow: 0px 2px 6px 0px var(--shadow-full-color);
         padding: .5em;
+
+        h1 {
+            font-size: var(--title-font-size);
+            border: none;
+            font-family: var(--title-font-family);
+            height: 100%;
+            margin: 0;
+            line-height: 1.5;
+            input {
+                color: inherit;
+                border: 0;
+                background: none;
+                &:focus {
+                    text-decoration: underline dashed;
+	                box-shadow: none;
+                }
+            }
+        }
     }
     .encounter-details {
         grid-column: 2;
         grid-row-start: 1;
         grid-row-end: 3;
         padding: .5em 1ch .5em 1ch;
-        box-shadow: -1px 3px 6px 0px black;
-        background: $white;
+        box-shadow: -1px 3px 6px 0px var(--shadow-full-color);
+        background: var(--background-secondary-color);
 
         z-index: 2;
         
@@ -63,12 +106,12 @@ $dark-maroon: #2B0603;
             grid-row: 1;
             
             padding: .5em 1ch .5em 1ch;
-            box-shadow: 1px 4px 6px 0px black;
-            background: $white;
+            box-shadow: 1px 4px 6px 0px var(--shadow-full-color);
+            background: var(--background-secondary-color);
 
             .sortings {
                 .active {
-                    background: $gold;
+                    background: var(--color-primary);
                 }
             }
         }
@@ -119,14 +162,14 @@ $dark-maroon: #2B0603;
                 flex-direction: row;
                 cursor: pointer;
                 border: 1px solid $dark-maroon;
-                background: url(/ui/parchment.jpg), $yellow;
+                background: var(--background-primary-image), var(--color-secondary);
 	            background-repeat: repeat;
-	            background-blend-mode: hard-light;
+	            background-blend-mode: var(--background-primary-blend);
                 box-shadow: none;
                 transition: box-shadow .3s;
 
                 &:hover {
-                    box-shadow: 0 0 6px 0px #00000080;
+                    box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
                 }
                 .actor-info {
                     margin-left: 1ch;
