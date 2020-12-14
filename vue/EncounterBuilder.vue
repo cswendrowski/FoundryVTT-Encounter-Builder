@@ -22,8 +22,7 @@
     </section>
     <section class="search-area">
       <header class="search-configuration">
-        <h2>Available Options</h2>
-        <h3>Filters</h3>
+        <h2>Filters</h2>
         <div class="filters">
           <h4>Size</h4>
           <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
@@ -32,7 +31,7 @@
           <h4>Type</h4>
           <v-select multiple v-model="selectedTypes" :options="['Aberration', 'Beast', 'Celestial', 'Construct', 'Demon', 'Devil', 'Dragon', 'Elemental', 'Fey', 'Giant', 'Humanoid', 'Monstrosity', 'Ooze', 'Plant', 'Undead']" :reduce="x => x.toLowerCase()"></v-select>
         </div>
-        <h3>Sort</h3>
+        <h2>Sortings</h2>
         <div class="sort">
             <h4>Level</h4>
             <button>
@@ -44,12 +43,11 @@
         </div>
       </header>
       <section class="search-results">
-        <h3>Results</h3>
         <div v-if="loading">
           <h3>Loading. . .</h3>
         </div>
         <div v-else>
-            <h4>Level</h4>
+            <h3>Level</h3>
             <histogramslider ref="levelHistogram" :data="levelData" :min=0 :max=15 :step=1 :bar-height="100" :key="levelData.length" @finish="sliderFinished"></histogramslider>
             <ul class="result-list">
               <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)">
