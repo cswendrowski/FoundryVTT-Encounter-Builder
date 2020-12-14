@@ -14,7 +14,6 @@ $dark-maroon: #2B0603;
     --background-primary-color: #{$gold};
     --background-primary-blend: hard-light;
     --background-secondary-color: #{$white};
-    --background-disabled-color: #BDB8A7;
 
     --color-primary: #{$gold};
     --color-secondary: #{$yellow};
@@ -23,6 +22,8 @@ $dark-maroon: #2B0603;
 
     --shadow-full-color: black;
     --shadow-subtle-color: #00000080;
+
+    --text-color: black;
 }
 
 .encounter-builder-application.window-app .window-content {
@@ -42,6 +43,7 @@ $dark-maroon: #2B0603;
 	grid-template-columns: 1fr 30ch;
     grid-template-rows: 5em 1fr;
     height: 100%;
+    color: var(--text-color);
 
     h2 {
         border-bottom: 1px solid var(--color-accent);
@@ -166,14 +168,9 @@ $dark-maroon: #2B0603;
             .actor-listing {
                 display: flex;
                 flex-direction: row;
-                &:not([disabled]) {
-                    background: var(--background-primary-image), var(--color-secondary);
-                    cursor: pointer;
-                }
-                &[disabled] {
-                    background: var(--background-primary-image), var(--background-disabled-color);
-                    cursor: not-allowed;
-                }
+                background: var(--background-primary-image), var(--color-secondary);
+                cursor: pointer;
+               
                 border: 1px solid $dark-maroon;
 	            background-repeat: repeat;
 	            background-blend-mode: var(--background-primary-blend);
@@ -183,6 +180,12 @@ $dark-maroon: #2B0603;
                 &:hover {
                     box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
                 }
+                &[disabled] {
+                    cursor: not-allowed;
+                    opacity: 40%;
+                    &:hover { box-shadow: none; }
+                }
+
                 .name {
                     font-weight: bold;
                     color: var(--color-accent2);
