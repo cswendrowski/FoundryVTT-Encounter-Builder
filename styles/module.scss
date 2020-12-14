@@ -92,6 +92,8 @@ $dark-maroon: #2B0603;
                 background: url(/ui/parchment.jpg), $yellow;
 	            background-repeat: repeat;
 	            background-blend-mode: hard-light;
+                box-shadow: none;
+                transition: box-shadow .3s;
 
                 &:hover {
                     box-shadow: 0 0 6px 0px #00000080;
