@@ -80,6 +80,28 @@ $dark-maroon: #2B0603;
             
             overflow-y: scroll;
 
+            .loading-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+
+                .spinner {
+                    width: 75% !important;
+                }
+                .line {
+                    animation: linePencil .8s infinite linear;
+                }
+                @keyframes linePencil {
+                    0% {
+                        transform: translateY(0);
+                    }
+                    100% {
+                        transform: translateY(-150px);
+                    }
+                }
+            }
+
             ul {
                 padding: 0;
                 list-style: none;

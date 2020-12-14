@@ -34,10 +34,19 @@ class EncounterBuilder {
             init: () => Vue.component(VueNumericInput.default.name, VueNumericInput.default)
         });
 
+        Dlopen.register('vue-loading-spinner', {
+            scripts: [
+                "https://unpkg.com/vue-loading-spinner@1.0.11/dist/vue-loading-spinner.js"
+            ],
+            styles: [],
+            dependencies: [],
+            init: () => Vue.component("pencil", VueLoadingSpinner.Pencil)
+        });
+
         // Define dependency on our own custom vue components for when we need it
         Dlopen.register('vueport-encounter-builder', {
             scripts: "/modules/encounter-builder/dist/vue-components.min.js",
-            dependencies: [ "vue-select", "vue-histogram-slider", "vue-numeric-input" ]
+            dependencies: [ "vue-select", "vue-histogram-slider", "vue-numeric-input", "vue-loading-spinner" ]
         });
     }
 

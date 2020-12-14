@@ -49,8 +49,8 @@
             </button>
       </header>
       <section class="search-results">
-        <div v-if="loading">
-          <h3>Loading. . .</h3>
+        <div v-if="loading" class="loading-container">
+          <pencil></pencil>
         </div>
         <div v-else>
             <h3>Level</h3>
