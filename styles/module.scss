@@ -65,6 +65,12 @@ $dark-maroon: #2B0603;
             padding: .5em 1ch .5em 1ch;
             box-shadow: 1px 4px 6px 0px black;
             background: $white;
+
+            .sortings {
+                .active {
+                    background: #78b2e6;
+                }
+            }
         }
         .search-results {
             grid-column: 2;

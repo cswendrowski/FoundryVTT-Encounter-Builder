@@ -32,15 +32,21 @@
           <v-select multiple v-model="selectedTypes" :options="['Aberration', 'Beast', 'Celestial', 'Construct', 'Demon', 'Devil', 'Dragon', 'Elemental', 'Fey', 'Giant', 'Humanoid', 'Monstrosity', 'Ooze', 'Plant', 'Undead']" :reduce="x => x.toLowerCase()"></v-select>
         </div>
         <h2>Sortings</h2>
-        <div class="sort">
+        <div class="sortings">
             <h4>Level</h4>
-            <button>
-                <i class="btn btn-primary fas fa-sort-up " :disabled="sortLevelAsc"></i>
+            <button v-bind:class="{ active: sortLevelAsc }" v-on:click="setSortLevelAsc(true)">
+                <i class="btn btn-primary fas fa-sort-up"></i>
             </button>
-            <button>
-                <i class="btn btn-primary fas fa-sort-down" :disabled="!sortLevelAsc"></i>
+            <button v-bind:class="{ active: sortLevelAsc != undefined && !sortLevelAsc }" v-on:click="setSortLevelAsc(false)">
+                <i class="btn btn-primary fas fa-sort-down"></i>
             </button>
-        </div>
+            <h4>Name</h4>
+            <button v-bind:class="{ active: sortNameAsc }" v-on:click="setSortNameAsc(true)">
+                <i class="btn btn-primary fas fa-sort-up"></i>
+            </button>
+            <button v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }" v-on:click="setSortNameAsc(false)">
+                <i class="btn btn-primary fas fa-sort-down"></i>
+            </button>
       </header>
       <section class="search-results">
         <div v-if="loading">
@@ -85,9 +91,7 @@ export default {
     loading: true,
     selectedTier: "Adventurer",
     sortLevelAsc: true,
-    sortRoleAsc: undefined,
-    sortTypeAsc: undefined,
-    sortSizeAsc: undefined
+    sortNameAsc: undefined
   }),
   methods: {
     addActor: function (actor) {
@@ -96,6 +100,14 @@ export default {
     removeActor: function (actor) {
       var index = this.selectedActors.indexOf(actor);
       this.selectedActors.splice(index, 1);
+    },
+    setSortLevelAsc: function (value) {
+        this.sortLevelAsc = value;
+        this.sortNameAsc = undefined;
+    },
+    setSortNameAsc: function (value) {
+        this.sortLevelAsc = undefined;
+        this.sortNameAsc = value;
     },
     getEncounterScore: function (tier, averageLevel, actor) {
       console.log(actor);
@@ -121,7 +133,6 @@ export default {
 
       let size = enemy.data.data.details.size.value;
       if (size) size = size.toLowerCase();
-      console.log("Enemy Size: " + size);
       let sizeToColumn = {
          "weakling": 0,
          "normal": 1,
@@ -132,20 +143,15 @@ export default {
          "triple-strength": 4
       };
 
-      console.log("Enemy level: " + enemy.data.data.details.level.value);
-      console.log("Encounter Tier: " + tier);
       let levelDifference = enemy.data.data.details.level.value - averageLevel;
-      console.log("Base Level difference: " + levelDifference);
       if (tier == "champion") {
         levelDifference--;
       }
       else if (tier == "epic") {
         levelDifference -= 2;
       }
-      console.log("Level difference: " + levelDifference);
       levelDifference += 2;
 
-      console.log("Enemy relative level row: " + levelDifference);
       if (levelDifference < 0) {
         console.log("Enemy too weak!");
         return -20;
@@ -154,7 +160,6 @@ export default {
         console.log("Enemy too strong!");
         return -10;
       }
-      console.log("Enemy size column: " + sizeToColumn[size]);
       return scoreChart[levelDifference][sizeToColumn[size]];
 
     },
@@ -171,7 +176,6 @@ export default {
 
       let size = enemy.data.data.details.size.value;
       if (size) size = size.toLowerCase();
-      console.log("Enemy Size: " + size);
       let sizeToColumn = {
          "weakling": 0,
          "normal": 1,
@@ -182,20 +186,15 @@ export default {
          "triple-strength": 3
       };
 
-      console.log("Enemy level: " + enemy.data.data.details.level.value);
-      console.log("Encounter Tier: " + tier);
       let levelDifference = enemy.data.data.details.level.value - averageLevel;
-      console.log("Base Level difference: " + levelDifference);
       if (tier == "champion") {
         levelDifference--;
       }
       else if (tier == "epic") {
         levelDifference -= 2;
       }
-      console.log("Level difference: " + levelDifference);
       levelDifference += 2;
 
-      console.log("Enemy relative level row: " + levelDifference);
       if (levelDifference < 0) {
         console.log("Enemy too weak!");
         return -20;
@@ -204,7 +203,6 @@ export default {
         console.log("Enemy too strong!");
         return -10;
       }
-      console.log("Enemy size column: " + sizeToColumn[size]);
       return scoreChart[levelDifference][sizeToColumn[size]];
     },
     sliderChanged: function (values) {
@@ -242,6 +240,24 @@ export default {
       }
       if (this.selectedTypes.length > 0) {
         availableActors = availableActors.filter(x => this.selectedTypes.includes(x.data.data.details.type.value));
+      }
+
+      if (this.sortLevelAsc != undefined) {
+          if (this.sortLevelAsc) {
+            availableActors.sort((a, b) => (a.data.data.details.level.value > b.data.data.details.level.value) ? 1 : -1);
+          }
+          else {
+            availableActors.sort((a, b) => (a.data.data.details.level.value < b.data.data.details.level.value) ? 1 : -1);
+          }
+      }
+
+      if (this.sortNameAsc != undefined) {
+          if (this.sortNameAsc) {
+            availableActors.sort((a, b) => (a.data.name > b.data.name) ? 1 : -1);
+          }
+          else {
+            availableActors.sort((a, b) => (a.data.name < b.data.name) ? 1 : -1);
+          }
       }
 
       return availableActors;
