@@ -39,7 +39,7 @@
         <h2>Filters</h2>
         <div class="filters">
           <h4>Name</h4>
-          <input placeholder="Name" v-model="selectedName" >
+          <input type="text" placeholder="Name" v-model="selectedName" >
           <h4>Source</h4>
           <v-select multiple v-model="selectedSources" :options="sources" :reduce="x => x.toLowerCase()"></v-select>
           <h4>Size</h4>
