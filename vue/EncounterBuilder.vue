@@ -38,6 +38,8 @@
       <header class="search-configuration">
         <h2>Filters</h2>
         <div class="filters">
+          <h4>Name</h4>
+          <input placeholder="Name" v-model="selectedName" >
           <h4>Size</h4>
           <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
           <h4>Role</h4>
@@ -118,6 +120,7 @@ export default {
   data: () => ({
     colors: [ "#78110A", "#AE8C13", "#B9A660" ],
     actors: [],
+    selectedName: "",
     selectedActors: [],
     selectedSizes: [],
     selectedRoles: [],
@@ -287,6 +290,9 @@ export default {
         return level >= this.minSelectedLevel && level <= this.maxSelectedLevel;
       });
       
+      if (this.selectedName != "") {
+        availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
+      }
       if (this.selectedSizes.length > 0) {
         availableActors = availableActors.filter(x => this.selectedSizes.includes(x.data.data.details.size.value));
       }
@@ -323,6 +329,9 @@ export default {
       
       // We don't  use this.availableActors because that filters by level, and we always want the histogram to be all levels available
 
+      if (this.selectedName != "") {
+        availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
+      }
       if (this.selectedSizes.length > 0) {
         availableActors = availableActors.filter(x => this.selectedSizes.includes(x.data.data.details.size.value));
       }
@@ -383,13 +392,13 @@ export default {
     let allActors = npcs;
     let actorCompendiums = game.packs.filter(x => x.metadata.entity == "Actor");
 
-    // for (let index = 0; index < actorCompendiums.length; index++) {
-    //   let pack = actorCompendiums[index];
-    //   //console.log(pack);
-    //   var packActors = await pack.getContent();
-    //   //console.log(packActors);
-    //   allActors = allActors.concat(packActors);
-    // }
+    for (let index = 0; index < actorCompendiums.length; index++) {
+      let pack = actorCompendiums[index];
+      //console.log(pack);
+      var packActors = await pack.getContent();
+      //console.log(packActors);
+      allActors = allActors.concat(packActors);
+    }
 
     for (let x = 0; x < allActors.length; x++) {
       let actor = allActors[x];
