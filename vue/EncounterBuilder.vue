@@ -40,6 +40,8 @@
         <div class="filters">
           <h4>Name</h4>
           <input placeholder="Name" v-model="selectedName" >
+          <h4>Source</h4>
+          <v-select multiple v-model="selectedSources" :options="sources" :reduce="x => x.toLowerCase()"></v-select>
           <h4>Size</h4>
           <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
           <h4>Role</h4>
@@ -105,6 +107,9 @@
                       <label class="trait-label">Encounter Score</label>
                       <span class="trait-value">{{getEncounterScore(t)}}</span>
                     </li>
+                    <li class="source">
+                      <span class="trait-value"><i>{{getActorSource(t)}}</i></span>
+                    </li>
                   </ul>
                 </section>
               </li>
@@ -121,6 +126,7 @@ export default {
     colors: [ "#78110A", "#AE8C13", "#B9A660" ],
     actors: [],
     selectedName: "",
+    selectedSources: [],
     selectedActors: [],
     selectedSizes: [],
     selectedRoles: [],
@@ -135,7 +141,8 @@ export default {
     loading: true,
     selectedTier: "Adventurer",
     sortLevelAsc: true,
-    sortNameAsc: undefined
+    sortNameAsc: undefined,
+    sources: []
   }),
   methods: {
     addActor: function (actor) {
@@ -260,6 +267,11 @@ export default {
       this.levelHasBeenSelected = true;
       this.minSelectedLevel = values.from;
       this.maxSelectedLevel = values.to;
+    },
+    getActorSource: function (actor) {
+      let source = "world";
+      if (actor.compendium != undefined && actor.compendium.metadata != undefined) source = actor.compendium.metadata.label;
+      return source;
     }
   },
   computed: {
@@ -299,6 +311,9 @@ export default {
       if (this.selectedTypes.length > 0) {
         availableActors = availableActors.filter(x => this.selectedTypes.includes(x.data.data.details.type.value));
       }
+      if (this.selectedSources.length > 0) {
+        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
+      }
 
       if (this.sortLevelAsc != undefined) {
           if (this.sortLevelAsc) {
@@ -337,6 +352,9 @@ export default {
       }
       if (this.selectedTypes.length > 0) {
         availableActors = availableActors.filter(x => this.selectedTypes.includes(x.data.data.details.type.value));
+      }
+      if (this.selectedSources.length > 0) {
+        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
       }
 
       for (let x = 0; x < availableActors.length; x++) {
@@ -403,14 +421,16 @@ export default {
 
     let npcs = game.actors.entities.filter(x => x.data.type == "npc");
     let allActors = npcs;
+    this.sources.push("World")
     let actorCompendiums = game.packs.filter(x => x.metadata.entity == "Actor");
 
     for (let index = 0; index < actorCompendiums.length; index++) {
       let pack = actorCompendiums[index];
-      //console.log(pack);
+      console.log(pack);
       var packActors = await pack.getContent();
       //console.log(packActors);
       allActors = allActors.concat(packActors);
+      this.sources.push(pack.metadata.label);
     }
 
     for (let x = 0; x < allActors.length; x++) {
