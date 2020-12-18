@@ -208,14 +208,18 @@ $dark-maroon: #2B0603;
                 }
             }
             
-            .vue-histogram-slider-wrapper {
-                width: 100% !important;
+            .level-histogram {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
 
-                .irs-bar {
-                    background-color: $yellow;
+                .vue-histogram-slider-wrapper {
+                    .irs-bar {
+                        background-color: $yellow;
+                    }
                 }
-            }
-            
+            }      
         }
     }
 }
