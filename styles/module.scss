@@ -99,7 +99,12 @@ $dark-maroon: #2B0603;
         background: var(--background-secondary-color);
 
         z-index: 2;
-        
+
+        .numeric-input {
+            background: none;
+            border: 1px solid rgba(60,60,60,.26);
+            border-radius: 4px;
+        }
 
         .vs__actions > svg {
             width: 28px;
@@ -146,6 +151,15 @@ $dark-maroon: #2B0603;
         grid-template-columns: 25ch 1fr;
 
         height: 1fr;
+
+        input[type=text] {
+            padding: 4px;
+            background: none;
+            border: 1px solid rgba(60,60,60,.26);
+            border-radius: 4px;
+            height: 2.5em;
+            width: 100%;
+        }
 
         .search-configuration {
             grid-column: 1;
