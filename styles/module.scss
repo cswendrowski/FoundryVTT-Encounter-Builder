@@ -94,6 +94,11 @@ $dark-maroon: #2B0603;
 
         z-index: 2;
         
+
+        .vs__actions > svg {
+            width: 28px;
+        }
+        
         .encounter-members {
             list-style: none;
             padding-left: 0;
