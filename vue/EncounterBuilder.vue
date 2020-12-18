@@ -4,7 +4,7 @@
       <h1><input type="text" placeholder="encounter name" value="Encounter Name"></h1>
     </header>
     <section class="encounter-details">
-      <h2>Current Encounter</h2>
+      <h2>Encounter Settings</h2>
       <div class="encounterSettings">
         <h4>Tier</h4>
         <v-select v-model="selectedTier" :options="['Adventurer', 'Champion', 'Epic']"></v-select>
@@ -13,11 +13,25 @@
         <h4>Number of Party Members</h4>
         <vue-numeric-input v-model="numberOfPartyMembers" :min="1" ></vue-numeric-input>
       </div>
-      <div>
-        <ul class="encounter-members">
+      <h2>Enemies</h2>
+      <div class="encounter-actors">
+        <!-- <ul class="encounter-members">
           <li class="member" v-for="t of selectedActors" :key="t._id" v-on:click.right="removeActor(t)">[{{t.data.data.details.level.value}}] {{t.data.name}} - {{getEncounterScore(t)}}</li>
+        </ul> -->
+        <ul class="encounter-members">
+          <li class="member" v-for="t of groupedSelectedActors" :key="t[0]" v-on:click="addActor(t[1][0])" v-on:click.right="removeActor(t[1][0])">
+            <img :src="t[1][0].data.img" width="50" height="50" />
+            <div class="member-details">
+              <b>{{t[0]}}</b>
+              <div>Level {{t[1][0].data.data.details.level.value}} {{t[1][0].data.data.details.role.value}}</div>
+              <div><b>{{t[1].length}}</b> x {{getEncounterScore(t[1][0]).toFixed(2)}} = {{(getEncounterScore(t[1][0]) * t[1].length).toFixed(2)}} ES</div>
+            </div>
+          </li>
         </ul>
-        <h4>Total Encounter Score: {{totalEncounterScore}} of {{numberOfPartyMembers}}</h4>
+      </div>
+      <h2>Summary</h2>
+      <div class="encounter-results">
+        <h4>Total Score: <span :class="totalScoreClass">{{totalEncounterScore.toFixed(2)}} of {{numberOfPartyMembers}}</span></h4>
       </div>
     </section>
     <section class="search-area">
@@ -68,7 +82,7 @@
               </histogramslider>
             </div>
             <ul class="result-list">
-              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)" :disabled="getEncounterScore(t) <= 0">
+              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)" v-on:click.right="removeActor(t)" :disabled="getEncounterScore(t) <= 0">
                 <img :src="t.data.img" width="100" height="100" />
                 <section class="actor-info">
                   <h4 class="name"><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
@@ -138,7 +152,7 @@ export default {
         this.sortNameAsc = value;
     },
     getEncounterScore: function (actor) {
-      console.log(actor);
+      //console.log(actor);
       try {
         let role = actor.data.data.details.role.value.toLowerCase();
         let encounterTier = this.selectedTier.toLowerCase();
@@ -239,7 +253,7 @@ export default {
       return scoreChart[levelDifference][sizeToColumn[size]];
     },
     sliderChanged: function (values) {
-      console.log(values);
+      //console.log(values);
       this.minSelectedLevel = values.from;
       this.maxSelectedLevel = values.to;
     },
@@ -256,6 +270,14 @@ export default {
         totalScore += this.getEncounterScore(actor);
       }
       return totalScore;
+    },
+    totalScoreClass() {
+      let difference = Math.abs(this.totalEncounterScore - this.numberOfPartyMembers);
+      if (difference == 0) return "perfect";
+      if (difference < this.totalEncounterScore * 0.1) return "close";
+      if (difference < this.totalEncounterScore * 0.2) return "straying";
+      if (difference < this.totalEncounterScore * 0.3) return "faraway";
+      return "distant";
     },
     availableActors() {
       let availableActors = this.actors;
@@ -319,6 +341,22 @@ export default {
       }
       //console.log(levels);
       return levels;
+    },
+    groupedSelectedActors() {
+      let grouped = {};
+      console.log("Grouping");
+      for (let x = 0; x < this.selectedActors.length; x ++) {
+        let selected = this.selectedActors[x];
+        console.log(selected);
+        let name = selected.data.name;
+        if (!(name in grouped)) {
+          grouped[name] = [];
+        }
+
+        grouped[name].push(selected);
+      }
+
+      return Object.entries(grouped);
     }
   },
   watch: {
@@ -345,13 +383,13 @@ export default {
     let allActors = npcs;
     let actorCompendiums = game.packs.filter(x => x.metadata.entity == "Actor");
 
-    for (let index = 0; index < actorCompendiums.length; index++) {
-      let pack = actorCompendiums[index];
-      //console.log(pack);
-      var packActors = await pack.getContent();
-      //console.log(packActors);
-      allActors = allActors.concat(packActors);
-    }
+    // for (let index = 0; index < actorCompendiums.length; index++) {
+    //   let pack = actorCompendiums[index];
+    //   //console.log(pack);
+    //   var packActors = await pack.getContent();
+    //   //console.log(packActors);
+    //   allActors = allActors.concat(packActors);
+    // }
 
     for (let x = 0; x < allActors.length; x++) {
       let actor = allActors[x];
