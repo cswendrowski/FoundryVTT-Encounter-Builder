@@ -131,6 +131,7 @@ export default {
     maximumLevel: 0,
     minSelectedLevel: 0,
     maxSelectedLevel: 100,
+    levelHasBeenSelected: false,
     loading: true,
     selectedTier: "Adventurer",
     sortLevelAsc: true,
@@ -255,12 +256,8 @@ export default {
       }
       return scoreChart[levelDifference][sizeToColumn[size]];
     },
-    sliderChanged: function (values) {
-      //console.log(values);
-      this.minSelectedLevel = values.from;
-      this.maxSelectedLevel = values.to;
-    },
     sliderFinished: function (values) {
+      this.levelHasBeenSelected = true;
       this.minSelectedLevel = values.from;
       this.maxSelectedLevel = values.to;
     }
@@ -372,8 +369,24 @@ export default {
     availableActors() {
       // If our range changes and we rerender the component, reset the handles to the previous selections
       setTimeout(() => {
+        let shouldReset = !this.levelHasBeenSelected;
         this.$refs.levelHistogram.update({ from: this.minSelectedLevel, to: this.maxSelectedLevel });
+        if (shouldReset) {
+          this.levelHasBeenSelected = false;
+        }
       }, 100)
+    },
+    selectedTier() {
+      if (!this.levelHasBeenSelected) {
+        let tier = this.selectedTier.toLowerCase();
+        switch (tier) {
+          case "adventurer": { this.minSelectedLevel = this.averagePartyLevel - 2; this.maxSelectedLevel = this.averagePartyLevel + 4; } break;
+          case "champion": { this.minSelectedLevel = this.averagePartyLevel - 1; this.maxSelectedLevel = this.averagePartyLevel + 5; } break;
+          case "epic": { this.minSelectedLevel = this.averagePartyLevel; this.maxSelectedLevel = this.averagePartyLevel + 6; } break;
+        }
+        this.$refs.levelHistogram.update({ from: this.minSelectedLevel, to: this.maxSelectedLevel });
+        this.levelHasBeenSelected = false;
+      }
     }
   },
   async mounted() {
@@ -411,7 +424,7 @@ export default {
     this.minSelectedLevel = this.averagePartyLevel - 2;
     if (this.minSelectedLevel < this.minimumLevel) this.minSelectedLevel = this.minimumLevel;
 
-    this.maxSelectedLevel = this.averagePartyLevel + 6;
+    this.maxSelectedLevel = this.averagePartyLevel + 4;
     if (this.maxSelectedLevel > this.maximumLevel) this.maximumLevel = this.maximumLevel;
 
     //console.log(allActors);
