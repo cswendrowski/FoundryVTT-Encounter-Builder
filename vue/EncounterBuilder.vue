@@ -175,7 +175,8 @@ export default {
         }
       }
       catch (error) {
-          return -30;
+        console.error(error);
+        return -30;
       }
     },
     getNormalEncounterScore: function (tier, averageLevel, enemy) {
@@ -196,8 +197,10 @@ export default {
          "normal": 1,
          "elite": 2,
          "large": 3,
+         "2x": 3,
          "double-strength": 3,
          "huge": 4,
+         "3x": 4,
          "triple-strength": 4
       };
 
@@ -218,6 +221,7 @@ export default {
         console.log("Enemy too strong!");
         return -10;
       }
+      console.log(levelDifference + " " + sizeToColumn + " " + size);
       return scoreChart[levelDifference][sizeToColumn[size]];
 
     },
