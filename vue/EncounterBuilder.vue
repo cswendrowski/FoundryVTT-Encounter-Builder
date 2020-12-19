@@ -269,7 +269,7 @@ export default {
       this.maxSelectedLevel = values.to;
     },
     getActorSource: function (actor) {
-      let source = "world";
+      let source = game.world.title;
       if (actor.compendium != undefined && actor.compendium.metadata != undefined) source = actor.compendium.metadata.label;
       return source;
     }
@@ -368,10 +368,10 @@ export default {
     },
     groupedSelectedActors() {
       let grouped = {};
-      console.log("Grouping");
+      //console.log("Grouping");
       for (let x = 0; x < this.selectedActors.length; x ++) {
         let selected = this.selectedActors[x];
-        console.log(selected);
+        //console.log(selected);
         let name = selected.data.name;
         if (!(name in grouped)) {
           grouped[name] = [];
@@ -410,7 +410,7 @@ export default {
   async mounted() {
     //console.log("Mounted!");
     let characters = game.actors.entities.filter(x => x.hasPlayerOwner);
-    console.log(characters);
+    //console.log(characters);
     if (characters.length > 0) {
         this.numberOfPartyMembers = characters.length;
         for (let index = 0; index < this.numberOfPartyMembers; index++) {
@@ -421,12 +421,12 @@ export default {
 
     let npcs = game.actors.entities.filter(x => x.data.type == "npc");
     let allActors = npcs;
-    this.sources.push("World")
+    this.sources.push(game.world.title);
     let actorCompendiums = game.packs.filter(x => x.metadata.entity == "Actor");
 
     for (let index = 0; index < actorCompendiums.length; index++) {
       let pack = actorCompendiums[index];
-      console.log(pack);
+      //console.log(pack);
       var packActors = await pack.getContent();
       //console.log(packActors);
       allActors = allActors.concat(packActors);
