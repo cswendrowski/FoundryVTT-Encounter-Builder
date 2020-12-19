@@ -32,6 +32,7 @@
       <h2>Summary</h2>
       <div class="encounter-results">
         <h4>Total Score: <span :class="totalScoreClass">{{totalEncounterScore.toFixed(2)}} of {{numberOfPartyMembers}}</span></h4>
+        <button class="btn btn-primary" v-on:click="spawnOnScene()">Spawn on current Scene</button>
       </div>
     </section>
     <section class="search-area">
@@ -221,7 +222,6 @@ export default {
         console.log("Enemy too strong!");
         return -10;
       }
-      console.log(levelDifference + " " + sizeToColumn + " " + size);
       return scoreChart[levelDifference][sizeToColumn[size]];
 
     },
@@ -276,6 +276,16 @@ export default {
       let source = game.world.title;
       if (actor.compendium != undefined && actor.compendium.metadata != undefined) source = actor.compendium.metadata.label;
       return source;
+    },
+    spawnOnScene: async function() {
+      let tokensToSpawn = [];
+      for (let x = 0; x < this.selectedActors.length; x++) {
+        let actor = this.selectedActors[x];
+        let token = actor.data.token;
+        tokensToSpawn.push(token);
+      }
+      await Token.create(tokensToSpawn);
+      ui.notifications.info(tokensToSpawn.length + " tokens spawned on " + game.scenes.get(game.user.viewedScene).name);
     }
   },
   computed: {
