@@ -19,7 +19,7 @@ jobs:
       run: npm install
 
     - name: NPM Build
-      run: npm build
+      run: npm run build
 
     #Substitute the Manifest and Download URLs in the module.json
     - name: Substitute Manifest and Download Links For Versioned Ones
