@@ -67,11 +67,14 @@ class EncounterBuilder {
         // Auto resize after 2 seconds
         setTimeout(() => d.setPosition(), 500);
     }
-
-    static ready() {
-        EncounterBuilder.run();
-    }
 }
 Hooks.on('init', () => EncounterBuilder.init());
-Hooks.on('ready', () => EncounterBuilder.ready());
+//Hooks.on('ready', () => EncounterBuilder.ready());
 //Hooks.on('createChatMessage', (m) => );
+Hooks.on('renderCombatTracker', () => { 
+    console.log("rendered!")
+    $("#combat-controls").append(`<button class="dungeon-moon-launcher">🌑 Dungeon Moon</button>`);
+    $(".dungeon-moon-launcher").on("click", () => {
+        EncounterBuilder.run();
+    });
+});
