@@ -24,7 +24,7 @@
             <div class="member-details">
               <b>{{t[0]}}</b>
               <div>Level {{t[1][0].data.data.details.level.value}} {{t[1][0].data.data.details.role.value}}</div>
-              <div><b>{{t[1].length}}</b> x {{getEncounterScore(t[1][0]).toFixed(2)}} = {{(getEncounterScore(t[1][0]) * t[1].length).toFixed(2)}} ES</div>
+              <div><b>{{t[1].length}}</b> x {{t[1][0].encounterScore.toFixed(2)}} = {{(t[1][0].encounterScore * t[1].length).toFixed(2)}} ES</div>
             </div>
           </li>
         </ul>
@@ -87,7 +87,7 @@
               </histogramslider>
             </div>
             <ul class="result-list">
-              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)" v-on:click.right="removeActor(t)" :disabled="getEncounterScore(t) <= 0">
+              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)" v-on:click.right="removeActor(t)" :disabled="t.encounterScore <= 0">
                 <img :src="t.data.img" width="100" height="100" />
                 <section class="actor-info">
                   <h4 class="name"><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
@@ -104,9 +104,9 @@
                       <label class="trait-label">Type</label>
                       <span class="trait-value">{{t.data.data.details.type.value}}</span>
                     </li>
-                    <li class="score"  v-if="getEncounterScore(t) > 0">
+                    <li class="score"  v-if="t.encounterScore > 0">
                       <label class="trait-label">Encounter Score</label>
-                      <span class="trait-value">{{getEncounterScore(t)}}</span>
+                      <span class="trait-value">{{t.encounterScore}}</span>
                     </li>
                     <li class="source">
                       <span class="trait-value"><i>{{getActorSource(t)}}</i></span>
@@ -164,9 +164,13 @@ export default {
         this.sortNameAsc = value;
     },
     getEncounterScore: function (actor) {
+      if (actor == undefined) return -30;
       //console.log(actor);
       try {
-        let role = actor.data.data.details.role.value.toLowerCase();
+        let role = 'troop';
+        if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.role != undefined) {
+          role = actor.data.data.details.role.value.toLowerCase();
+        }
         let encounterTier = this.selectedTier.toLowerCase();
         if (role == "mook") {
             return this.getMookEncounterScore(encounterTier, this.averagePartyLevel, actor);
@@ -191,8 +195,10 @@ export default {
         [2.00, 4.00, 6.00, 6.00, 10.00]
       ];
 
-      let size = enemy.data.data.details.size.value;
-      if (size) size = size.toLowerCase();
+      let size = 'normal';
+      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined) {
+        size = enemy.data.data.details.size.value.toLowerCase();
+      }
       let sizeToColumn = {
          "weakling": 0,
          "normal": 1,
@@ -205,7 +211,11 @@ export default {
          "triple-strength": 4
       };
 
-      let levelDifference = enemy.data.data.details.level.value - averageLevel;
+      let enemyLevel = 1;
+      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined) {
+        enemyLevel = enemy.data.data.details.level.value;
+      }
+      let levelDifference = enemyLevel - averageLevel;
       if (tier == "champion") {
         levelDifference--;
       }
@@ -236,8 +246,10 @@ export default {
         [0.40, 0.80, 1.60, 2.40]
       ];
 
-      let size = enemy.data.data.details.size.value;
-      if (size) size = size.toLowerCase();
+      let size = 'normal';
+      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined) {
+        size = enemy.data.data.details.size.value.toLowerCase();
+      }
       let sizeToColumn = {
          "weakling": 0,
          "normal": 1,
@@ -248,7 +260,11 @@ export default {
          "triple-strength": 3
       };
 
-      let levelDifference = enemy.data.data.details.level.value - averageLevel;
+      let enemyLevel = 1;
+      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined) {
+        enemyLevel = enemy.data.data.details.level.value;
+      }
+      let levelDifference = enemyLevel - averageLevel;
       if (tier == "champion") {
         levelDifference--;
       }
@@ -313,6 +329,9 @@ export default {
         return level >= this.minSelectedLevel && level <= this.maxSelectedLevel;
       });
       
+      if (this.selectedSources.length > 0) {
+        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
+      }
       if (this.selectedName != "") {
         availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
       }
@@ -324,9 +343,6 @@ export default {
       }
       if (this.selectedTypes.length > 0) {
         availableActors = availableActors.filter(x => this.selectedTypes.includes(x.data.data.details.type.value));
-      }
-      if (this.selectedSources.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
       }
 
       if (this.sortLevelAsc != undefined) {
@@ -347,6 +363,11 @@ export default {
           }
       }
 
+      for (let x = 0; x < availableActors.length; x++) {
+        availableActors[x].encounterScore = this.getEncounterScore(availableActors[x]);
+      }
+
+      //console.log(availableActors);
       return availableActors;
     },
     levelData() {
@@ -355,6 +376,9 @@ export default {
       
       // We don't  use this.availableActors because that filters by level, and we always want the histogram to be all levels available
 
+      if (this.selectedSources.length > 0) {
+        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
+      }
       if (this.selectedName != "") {
         availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
       }
@@ -366,9 +390,6 @@ export default {
       }
       if (this.selectedTypes.length > 0) {
         availableActors = availableActors.filter(x => this.selectedTypes.includes(x.data.data.details.type.value));
-      }
-      if (this.selectedSources.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
       }
 
       for (let x = 0; x < availableActors.length; x++) {
