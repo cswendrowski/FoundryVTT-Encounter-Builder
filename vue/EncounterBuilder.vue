@@ -423,7 +423,7 @@ export default {
   },
   async mounted() {
     //console.log("Mounted!");
-    let characters = game.actors.entities.filter(x => x.hasPlayerOwner);
+    let characters = game.actors.entities.filter(x => x.hasPlayerOwner && x.data.type == "character");
     //console.log(characters);
     if (characters.length > 0) {
         this.numberOfPartyMembers = characters.length;
