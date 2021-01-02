@@ -45,7 +45,7 @@ class EncounterBuilder {
 
         // Define dependency on our own custom vue components for when we need it
         Dlopen.register('vueport-encounter-builder', {
-            scripts: "/modules/encounter-builder/dist/vue-components.min.js",
+            scripts: "/modules/vue-encounter-builder/dist/vue-components.min.js",
             dependencies: ["vue-select", "vue-histogram-slider", "vue-numeric-input", "vue-loading-spinner"]
         });
     }

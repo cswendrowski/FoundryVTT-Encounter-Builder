@@ -289,8 +289,8 @@ export default {
       this.maxSelectedLevel = values.to;
     },
     getActorSource: function (actor) {
-      //console.log(actor);
-      let defaultSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
+      //console.log(actor.name);
+      let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
       let source = game.world.title;
 
       if (nonCompendiumSourceType == "folderName") {
@@ -502,11 +502,18 @@ export default {
 
     for (let x = 0; x < allActors.length; x++) {
       let actor = allActors[x];
-      let level = actor.data.data.details.level.value;
+      let level = this.getSafeLevel(actor);
 
       if (level > this.maximumLevel) this.maximumLevel = level;
       if (level < this.minimumLevel) this.minimumLevel = level;
+      this.sources.push(this.getActorSource(actor));
     }
+
+    function onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+
+    this.sources = this.sources.filter(onlyUnique);
 
     this.minSelectedLevel = this.averagePartyLevel - 2;
     if (this.minSelectedLevel < this.minimumLevel) this.minSelectedLevel = this.minimumLevel;
