@@ -289,7 +289,16 @@ export default {
       this.maxSelectedLevel = values.to;
     },
     getActorSource: function (actor) {
+      //console.log(actor);
+      let defaultSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
       let source = game.world.title;
+
+      if (nonCompendiumSourceType == "folderName") {
+        if (actor.folder != undefined) {
+          source = actor.folder.name;
+        }
+      }
+
       if (actor.compendium != undefined && actor.compendium.metadata != undefined) source = actor.compendium.metadata.label;
       return source;
     },

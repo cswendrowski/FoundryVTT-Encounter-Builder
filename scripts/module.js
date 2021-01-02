@@ -69,10 +69,25 @@ class EncounterBuilder {
     }
 }
 Hooks.on('init', () => EncounterBuilder.init());
-//Hooks.on('ready', () => EncounterBuilder.ready());
-//Hooks.on('createChatMessage', (m) => );
+
+const moduleName = "vue-encounter-builder";
+
+Hooks.once('ready', function() {
+    game.settings.register(moduleName, "nonCompendiumSourceType", {
+        name: "Source for non-compendium Actors",
+        hint: "When the actor is not from a Compendium, the source will prefer loading from this",
+        scope: 'world',
+        config: true,
+        type: String,
+        choices: {
+            "worldName": "Name of World",
+            "folderName": "Name of Folder, then name of World"
+        },
+        default: "worldName"
+    });
+});
+
 Hooks.on('renderCombatTracker', () => { 
-    console.log("rendered!")
     $("#combat-controls").append(`<button class="dungeon-moon-launcher">🌑 Dungeon Moon</button>`);
     $(".dungeon-moon-launcher").on("click", () => {
         EncounterBuilder.run();
