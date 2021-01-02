@@ -295,13 +295,23 @@ export default {
     },
     spawnOnScene: async function() {
       let tokensToSpawn = [];
+      let viewedScene = game.scenes.get(game.user.viewedScene);
+      if (viewedScene == undefined) {
+        ui.notifications.warn("No viewed scene to spawn into");
+        return;
+      }
+      let baseX = viewedScene.data.width * viewedScene.data.padding;
+      let baseY = viewedScene.data.height * viewedScene.data.padding;
       for (let x = 0; x < this.selectedActors.length; x++) {
         let actor = this.selectedActors[x];
-        let token = actor.data.token;
+        let token = duplicate(actor.data.token);
+        token.x = baseX + (x * viewedScene.data.grid);
+        token.y = baseY;
         tokensToSpawn.push(token);
       }
+      console.log(tokensToSpawn);
       await Token.create(tokensToSpawn);
-      ui.notifications.info(tokensToSpawn.length + " tokens spawned on " + game.scenes.get(game.user.viewedScene).name);
+      ui.notifications.info(tokensToSpawn.length + " tokens spawned on " + viewedScene.name);
     },
     getSafeLevel: function (actor) {
       if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.level != undefined) {
