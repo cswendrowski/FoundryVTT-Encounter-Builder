@@ -7,7 +7,7 @@
       <h2>Encounter Settings</h2>
       <div class="encounterSettings">
         <h4>Tier</h4>
-        <v-select v-model="selectedTier" :options="['Adventurer', 'Champion', 'Epic']"></v-select>
+        <v-select v-model="selectedChallenge" :options="['Normal', 'Double Strength', 'Killer']"></v-select>
         <h4>Average Party Level</h4>
         <vue-numeric-input v-model="averagePartyLevel" :min="1" ></vue-numeric-input>
         <h4>Number of Party Members</h4>
@@ -31,7 +31,7 @@
       </div>
       <h2>Summary</h2>
       <div class="encounter-results">
-        <h4>Total Score: <span :class="totalScoreClass">{{totalEncounterScore.toFixed(2)}} of {{numberOfPartyMembers}}</span></h4>
+        <h4>Total Score: <span :class="totalScoreClass">{{totalEncounterScore.toFixed(2)}} of {{maxEncounterScore.toFixed(2)}}</span></h4>
         <button class="btn btn-primary" v-on:click="spawnOnScene()">Spawn on current Scene</button>
       </div>
     </section>
@@ -140,7 +140,7 @@ export default {
     maxSelectedLevel: 100,
     levelHasBeenSelected: false,
     loading: true,
-    selectedTier: "Adventurer",
+    selectedChallenge: "Standard",
     sortLevelAsc: true,
     sortNameAsc: undefined,
     sources: []
@@ -171,7 +171,15 @@ export default {
         if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.role != undefined) {
           role = actor.data.data.details.role.value.toLowerCase();
         }
-        let encounterTier = this.selectedTier.toLowerCase();
+
+        let encounterTier = "adventurer";
+        if (this.averagePartyLevel >= 5) {
+          encounterTier = "champion";
+        }
+        if (this.averagePartyLevel >= 8) {
+          encounterTier = "epic";
+        }
+
         if (role == "mook") {
             return this.getMookEncounterScore(encounterTier, this.averagePartyLevel, actor);
         }
@@ -374,8 +382,18 @@ export default {
       }
       return totalScore;
     },
+    maxEncounterScore() {
+      let max = this.numberOfPartyMembers;
+      if (this.selectedChallenge.toLowerCase() == "double strength") {
+        max *= 2;
+      }
+      else if (this.selectedChallenge.toLowerCase() == "killer") {
+        max *= 3;
+      }
+      return max;
+    },
     totalScoreClass() {
-      let difference = Math.abs(this.totalEncounterScore - this.numberOfPartyMembers);
+      let difference = Math.abs(this.totalEncounterScore - this.maxEncounterScore);
       if (difference == 0) return "perfect";
       if (difference < this.totalEncounterScore * 0.1) return "close";
       if (difference < this.totalEncounterScore * 0.2) return "straying";
