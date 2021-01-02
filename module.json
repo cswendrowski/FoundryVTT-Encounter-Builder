@@ -1,5 +1,5 @@
 {
-  "name": "encounter-builder",
+  "name": "vue-encounter-builder",
   "title": "🌑 Dungeon Moon Encounter Builder",
   "description": "",
   "version": "0.0.1",
@@ -32,6 +32,6 @@
     }
   ],
   "url": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder",
-  "manifest": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder/releases/download/latest/module.json",
+  "manifest": "",
   "download": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder/releases/download/0.0.1/module.zip"
 }
