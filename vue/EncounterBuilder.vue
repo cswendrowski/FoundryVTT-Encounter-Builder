@@ -302,6 +302,48 @@ export default {
       }
       await Token.create(tokensToSpawn);
       ui.notifications.info(tokensToSpawn.length + " tokens spawned on " + game.scenes.get(game.user.viewedScene).name);
+    },
+    getSafeLevel: function (actor) {
+      if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.level != undefined) {
+        return actor.data.data.details.level.value;
+      }
+      return 0;
+    },
+    filterAvailableActors(availableActors) {
+      if (this.selectedSources.length > 0) {
+        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
+      }
+      if (this.selectedName != "") {
+        availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
+      }
+      if (this.selectedSizes.length > 0)
+      {      
+          availableActors = availableActors.filter(x => { 
+            if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.size != undefined) {
+              return this.selectedSizes.includes(x.data.data.details.size.value);
+            }
+            return false;
+          });
+      }
+      if (this.selectedRoles.length > 0)
+      {
+        availableActors = availableActors.filter(x => { 
+            if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.role != undefined) {
+              return this.selectedRoles.includes(x.data.data.details.role.value);
+            }
+            return false;
+          });
+      }
+      if (this.selectedTypes.length > 0) {
+        availableActors = availableActors.filter(x => { 
+            if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.type != undefined) {
+              return this.selectedTypes.includes(x.data.data.details.type.value);
+            }
+            return false;
+          });
+      }
+
+      return availableActors;
     }
   },
   computed: {
@@ -324,34 +366,20 @@ export default {
     availableActors() {
       let availableActors = this.actors;
 
-      availableActors = availableActors.filter(x => {
-        let level = x.data.data.details.level.value;
-        return level >= this.minSelectedLevel && level <= this.maxSelectedLevel;
+      availableActors = this.filterAvailableActors(availableActors);
+
+      availableActors = availableActors.filter(x => {     
+          let level = this.getSafeLevel(x);
+          return level >= this.minSelectedLevel && level <= this.maxSelectedLevel; 
       });
-      
-      if (this.selectedSources.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
-      }
-      if (this.selectedName != "") {
-        availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
-      }
-      if (this.selectedSizes.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedSizes.includes(x.data.data.details.size.value));
-      }
-      if (this.selectedRoles.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedRoles.includes(x.data.data.details.role.value));
-      }
-      if (this.selectedTypes.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedTypes.includes(x.data.data.details.type.value));
-      }
 
       if (this.sortLevelAsc != undefined) {
-          if (this.sortLevelAsc) {
-            availableActors.sort((a, b) => (a.data.data.details.level.value > b.data.data.details.level.value) ? 1 : -1);
-          }
-          else {
-            availableActors.sort((a, b) => (a.data.data.details.level.value < b.data.data.details.level.value) ? 1 : -1);
-          }
+        if (this.sortLevelAsc) {
+          availableActors.sort((a, b) => (this.getSafeLevel(a) > this.getSafeLevel(b)) ? 1 : -1);
+        }
+        else {
+          availableActors.sort((a, b) => (this.getSafeLevel(a) < this.getSafeLevel(b)) ? 1 : -1);
+        }
       }
 
       if (this.sortNameAsc != undefined) {
@@ -375,22 +403,7 @@ export default {
       let availableActors = this.actors;
       
       // We don't  use this.availableActors because that filters by level, and we always want the histogram to be all levels available
-
-      if (this.selectedSources.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
-      }
-      if (this.selectedName != "") {
-        availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
-      }
-      if (this.selectedSizes.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedSizes.includes(x.data.data.details.size.value));
-      }
-      if (this.selectedRoles.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedRoles.includes(x.data.data.details.role.value));
-      }
-      if (this.selectedTypes.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedTypes.includes(x.data.data.details.type.value));
-      }
+      availableActors = this.filterAvailableActors(availableActors);
 
       for (let x = 0; x < availableActors.length; x++) {
         let actor = availableActors[x];
