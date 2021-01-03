@@ -6,7 +6,7 @@
     <section class="encounter-details">
       <h2>Encounter Settings</h2>
       <div class="encounterSettings">
-        <h4>Tier</h4>
+        <h4>Challenge Level</h4>
         <v-select v-model="selectedChallenge" :options="['Normal', 'Double Strength', 'Killer']"></v-select>
         <h4>Average Party Level</h4>
         <vue-numeric-input v-model="averagePartyLevel" :min="1" ></vue-numeric-input>
@@ -148,6 +148,8 @@ export default {
   methods: {
     addActor: function (actor) {
       if (this.getEncounterScore(actor) > 0) {
+        let toPush = duplicate(actor);
+        toPush.id = randomID(16);
         this.selectedActors.push(actor);
       }
     },
