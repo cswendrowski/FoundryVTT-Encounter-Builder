@@ -215,9 +215,11 @@ export default {
          "elite": 2,
          "large": 3,
          "2x": 3,
+         "double": 3,
          "double-strength": 3,
          "huge": 4,
          "3x": 4,
+         "triple": 4,
          "triple-strength": 4
       };
 
