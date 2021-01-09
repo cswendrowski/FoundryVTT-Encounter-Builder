@@ -61,6 +61,7 @@
             <button v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }" v-on:click="setSortNameAsc(false)">
                 <i class="btn btn-primary fas fa-sort-down"></i>
             </button>
+        </div>
       </header>
       <section class="search-results">
         <div v-if="loading" class="loading-container">
@@ -68,7 +69,7 @@
         </div>
         <div v-else>
             <div class="level-histogram">
-              <h2>Level</h2>
+              <h2 v-on:click.right="console.log(event)">Level</h2>
               <histogramslider ref="levelHistogram" 
                   :data="levelData" 
                   :min="0" :max="15"
@@ -82,33 +83,7 @@
               </histogramslider>
             </div>
             <ul class="result-list">
-              <li class="actor-listing" v-for="t of availableActors" :key="t._id" v-on:click="addActor(t)" v-on:click.right="removeActor(t)" :disabled="t.encounterScore <= 0">
-                <img :src="t.data.img" width="100" height="100" />
-                <section class="actor-info">
-                  <h4 class="name"><span v-if="t.data.data.details?.level?.value">[{{t.data.data.details.level.value}}]</span> {{t.data.name}}</h4>
-                  <ul class="traits">
-                    <li class="size" v-if="t.data.data.details?.size?.value != undefined">
-                      <label class="trait-label">Size</label>
-                      <span class="trait-value">{{t.data.data.details.size.value}}</span>
-                    </li>
-                    <li class="role" v-if="t.data.data.details?.role?.value != undefined">
-                      <label class="trait-label">Role</label>
-                      <span class="trait-value">{{t.data.data.details.role.value}}</span>
-                    </li>
-                    <li class="type" v-if="t.data.data.details?.type?.value != undefined">
-                      <label class="trait-label">Type</label>
-                      <span class="trait-value">{{t.data.data.details.type.value}}</span>
-                    </li>
-                    <li class="score"  v-if="t.encounterScore > 0">
-                      <label class="trait-label">Encounter Score</label>
-                      <span class="trait-value">{{t.encounterScore}}</span>
-                    </li>
-                    <li class="source">
-                      <span class="trait-value"><i>{{getActorSource(t)}}</i></span>
-                    </li>
-                  </ul>
-                </section>
-              </li>
+              <thirteenth-age-actor class="actor-listing" v-for="t of availableActors" :key="t._id" :actor="t" v-on:click-left="addActor(t)" v-on:click-right="removeActor(t)"></thirteenth-age-actor>
             </ul>
         </div>
       </section>

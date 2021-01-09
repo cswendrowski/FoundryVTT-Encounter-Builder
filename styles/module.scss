@@ -275,6 +275,9 @@ $dark-maroon: #2B0603;
                         content: " - "
                     }
                 }
+                .trait-value.missing {
+                    color: red;
+                }
             }
             
             .level-histogram {
