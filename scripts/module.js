@@ -88,8 +88,15 @@ Hooks.once('ready', function() {
 });
 
 Hooks.on('renderCombatTracker', () => { 
-    $("#combat-controls").append(`<button class="dungeon-moon-launcher">🌑 Dungeon Moon</button>`);
+    $("#combat-controls").append(`<a class="dungeon-moon-launcher dungeon-moon-launcher-full">🌑 Dungeon Moon</a>`);
+    $("#combat-controls").append(`<a class="dungeon-moon-launcher dungeon-moon-launcher-smol">🌑</a>`);
+    
     $(".dungeon-moon-launcher").on("click", () => {
         EncounterBuilder.run();
     });
+    
+    if (game.combats.find(x => x.data.scene == game.user.viewedScene)) {
+        $(".dungeon-moon-launcher-full").hide();
+        $(".dungeon-moon-launcher-smol").show();
+    }
 });

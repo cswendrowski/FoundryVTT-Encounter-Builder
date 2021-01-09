@@ -4,6 +4,17 @@ $gold: #B9A660;
 $white: #F4F3EA;
 $dark-maroon: #2B0603;
 
+// #combat #combat-controls {
+//     flex-direction: column;
+// }
+
+.dungeon-moon-launcher-smol {
+    display: none;
+    align-self: flex-end;
+    flex: 1;
+    flex-grow: 0;
+}
+
 .dungeon-moon-launcher {
     margin-left: 5px;
     margin-right: 5px;
