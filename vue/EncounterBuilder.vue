@@ -183,7 +183,7 @@ export default {
       ];
 
       let size = 'normal';
-      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined) {
+      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined && enemy.data.data.details.size != '') {
         size = enemy.data.data.details.size.value.toLowerCase();
       }
       let sizeToColumn = {
@@ -201,7 +201,7 @@ export default {
       };
 
       let enemyLevel = 1;
-      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined) {
+      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined && enemy.data.data.details.level != '') {
         enemyLevel = enemy.data.data.details.level.value;
       }
       let levelDifference = enemyLevel - averageLevel;
@@ -236,7 +236,7 @@ export default {
       ];
 
       let size = 'normal';
-      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined) {
+      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined && enemy.data.data.details.size != '') {
         size = enemy.data.data.details.size.value.toLowerCase();
       }
       let sizeToColumn = {
@@ -250,7 +250,7 @@ export default {
       };
 
       let enemyLevel = 1;
-      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined) {
+      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined && enemy.data.data.details.level != '') {
         enemyLevel = enemy.data.data.details.level.value;
       }
       let levelDifference = enemyLevel - averageLevel;
@@ -452,7 +452,6 @@ export default {
   watch: {
     availableActors() {
       // If our range changes and we rerender the component, reset the handles to the previous selections
-      console.log(this.filters);
       setTimeout(() => {
         let shouldReset = !this.levelHasBeenSelected;
         this.$refs.levelHistogram.update({ from: this.minSelectedLevel, to: this.maxSelectedLevel });
@@ -524,6 +523,13 @@ export default {
     //console.log(allActors);
     this.actors = allActors;
     this.loading = false;
+
+    Hooks.on("deleteActor", (actor, meta, id) => {
+      console.log("Handling delete for " + id);
+      console.log(this.selectedActors);
+      this.selectedActors = this.selectedActors.filter(x => x.id != actor.id);
+      this.actors = this.actors.filter(x => x.id != actor.id);
+    });
   },
 };
 </script>

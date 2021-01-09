@@ -8,7 +8,7 @@
     <img :src="actor.data.img" width="100" height="100" />
     <section class="actor-info">
       <h4 class="name">
-        <span v-if="actor.data.data.details?.level?.value"
+        <span class="level" v-if="actor.data.data.details?.level?.value"
           >[{{ actor.data.data.details.level.value }}]</span
         >
         {{ actor.data.name }}

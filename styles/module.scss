@@ -258,6 +258,10 @@ $dark-maroon: #2B0603;
                 .name {
                     font-weight: bold;
                     color: var(--color-accent2);
+
+                    .level {
+                        padding-right: 3px;
+                    }
                 }
                 .actor-info {
                     margin-left: 1ch;
