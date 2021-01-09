@@ -43,12 +43,7 @@
           <input type="text" placeholder="Name" v-model="selectedName" >
           <h4>Source</h4>
           <v-select multiple v-model="selectedSources" :options="sources" :reduce="x => x.toLowerCase()"></v-select>
-          <h4>Size</h4>
-          <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
-          <h4>Role</h4>
-          <v-select multiple v-model="selectedRoles" :options="['Archer', 'Blocker', 'Caster', 'Leader', 'Mook', 'Spoiler', 'Troop', 'Wrecker']" :reduce="x => x.toLowerCase()"></v-select>
-          <h4>Type</h4>
-          <v-select multiple v-model="selectedTypes" :options="['Aberration', 'Beast', 'Celestial', 'Construct', 'Demon', 'Devil', 'Dragon', 'Elemental', 'Fey', 'Giant', 'Humanoid', 'Monstrosity', 'Ooze', 'Plant', 'Undead']" :reduce="x => x.toLowerCase()"></v-select>
+          <thirteenth-age-filters v-model="filters"></thirteenth-age-filters>
         </div>
         <h2>Sortings</h2>
         <div class="sortings">
@@ -122,16 +117,23 @@
 </template>
 
 <script>
+//import ThirteenthAgeFilters from "./components/13A-Filters"
+
 export default {
+  // components: {
+  //   'thirteenth-age-filters': ThirteenthAgeFilters,
+  // },
   data: () => ({
     colors: [ "#78110A", "#AE8C13", "#B9A660" ],
     actors: [],
     selectedName: "",
     selectedSources: [],
     selectedActors: [],
-    selectedSizes: [],
-    selectedRoles: [],
-    selectedTypes: [],
+    filters: {
+      selectedSizes: [],
+      selectedRoles: [],
+      selectedTypes: [],
+    },
     averagePartyLevel: 4,
     numberOfPartyMembers: 4,
     minimumLevel: 100,
@@ -347,28 +349,28 @@ export default {
       if (this.selectedName != "") {
         availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
       }
-      if (this.selectedSizes.length > 0)
+      if (this.filters.selectedSizes.length > 0)
       {      
           availableActors = availableActors.filter(x => { 
             if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.size != undefined) {
-              return this.selectedSizes.includes(x.data.data.details.size.value);
+              return this.filters.selectedSizes.includes(x.data.data.details.size.value);
             }
             return false;
           });
       }
-      if (this.selectedRoles.length > 0)
+      if (this.filters.selectedRoles.length > 0)
       {
         availableActors = availableActors.filter(x => { 
             if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.role != undefined) {
-              return this.selectedRoles.includes(x.data.data.details.role.value);
+              return this.filters.selectedRoles.includes(x.data.data.details.role.value);
             }
             return false;
           });
       }
-      if (this.selectedTypes.length > 0) {
+      if (this.filters.selectedTypes.length > 0) {
         availableActors = availableActors.filter(x => { 
             if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.type != undefined) {
-              return this.selectedTypes.includes(x.data.data.details.type.value);
+              return this.filters.selectedTypes.includes(x.data.data.details.type.value);
             }
             return false;
           });
@@ -475,6 +477,7 @@ export default {
   watch: {
     availableActors() {
       // If our range changes and we rerender the component, reset the handles to the previous selections
+      console.log(this.filters);
       setTimeout(() => {
         let shouldReset = !this.levelHasBeenSelected;
         this.$refs.levelHistogram.update({ from: this.minSelectedLevel, to: this.maxSelectedLevel });

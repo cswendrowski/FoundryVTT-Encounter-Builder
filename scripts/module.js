@@ -90,7 +90,7 @@ Hooks.once('ready', function() {
 Hooks.on('renderCombatTracker', () => { 
     $("#combat-controls").append(`<a class="dungeon-moon-launcher dungeon-moon-launcher-full">🌑 Dungeon Moon</a>`);
     $("#combat-controls").append(`<a class="dungeon-moon-launcher dungeon-moon-launcher-smol">🌑</a>`);
-    
+
     $(".dungeon-moon-launcher").on("click", () => {
         EncounterBuilder.run();
     });
