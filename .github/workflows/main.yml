@@ -21,7 +21,7 @@ jobs:
     - name: NPM Build
       run: npm run build
       env:
-        NODE_ENV: production 
+        NODE_ENV: production
 
     #Substitute the Manifest and Download URLs in the module.json
     - name: Substitute Manifest and Download Links For Versioned Ones
