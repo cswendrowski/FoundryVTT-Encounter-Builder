@@ -3,7 +3,6 @@
     class="actor-listing"
     v-on:click.left="$emit('click-left')"
     v-on:click.right="$emit('click-right')"
-    :disabled="actor.encounterScore <= 0"
   >
     <img :src="actor.data.img" width="100" height="100" />
     <section class="actor-info">

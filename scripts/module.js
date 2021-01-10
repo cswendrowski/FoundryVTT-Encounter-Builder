@@ -1,3 +1,5 @@
+import ThirteenthAge from "./thirteenth-age.mjs";
+
 class EncounterBuilder {
     static init() {
         Dlopen.register('vue-select', {
@@ -68,6 +70,7 @@ class EncounterBuilder {
         setTimeout(() => d.setPosition(), 500);
     }
 }
+
 Hooks.on('init', () => EncounterBuilder.init());
 
 const moduleName = "vue-encounter-builder";
@@ -85,6 +88,10 @@ Hooks.once('ready', function() {
         },
         default: "worldName"
     });
+
+    window.dungeonMoon = {
+        thirteenthAge: new ThirteenthAge()
+    };
 });
 
 Hooks.on('renderCombatTracker', () => { 

@@ -1,32 +1,22 @@
 <template>
   <div class="encounter-builder">
     <header class="encounter-info">
-      <h1><input type="text" placeholder="encounter name" value="Encounter Name"></h1>
+      <!-- <h1><input type="text" placeholder="encounter name" value="Encounter Name"></h1> -->
+      <h1>Encounter</h1>
     </header>
     <section class="encounter-details">
       <h2>Encounter Settings</h2>
       <div class="encounterSettings">
-        <h4>Challenge Level</h4>
-        <v-select v-model="selectedChallenge" :options="['Normal', 'Double Strength', 'Killer']"></v-select>
         <h4>Average Party Level</h4>
-        <vue-numeric-input v-model="averagePartyLevel" :min="1" ></vue-numeric-input>
+        <vue-numeric-input v-model="partyInfo.averagePartyLevel" :min="1" ></vue-numeric-input>
         <h4>Number of Party Members</h4>
-        <vue-numeric-input v-model="numberOfPartyMembers" :min="1" ></vue-numeric-input>
+        <vue-numeric-input v-model="partyInfo.numberOfPartyMembers" :min="1" ></vue-numeric-input>
+        <component v-bind:is="encounterSettingsComponent" v-model="encounterSettings"></component>
       </div>
       <h2>Enemies</h2>
       <div class="encounter-actors">
-        <!-- <ul class="encounter-members">
-          <li class="member" v-for="t of selectedActors" :key="t._id" v-on:click.right="removeActor(t)">[{{t.data.data.details.level.value}}] {{t.data.name}} - {{getEncounterScore(t)}}</li>
-        </ul> -->
         <ul class="encounter-members">
-          <li class="member" v-for="t of groupedSelectedActors" :key="t[0]" v-on:click="addActor(t[1][0])" v-on:click.right="removeActor(t[1][0])">
-            <img :src="t[1][0].data.img" width="50" height="50" />
-            <div class="member-details">
-              <b>{{t[0]}}</b>
-              <div>Level {{t[1][0].data.data.details.level.value}} {{t[1][0].data.data.details.role.value}}</div>
-              <div><b>{{t[1].length}}</b> x {{t[1][0].encounterScore.toFixed(2)}} = {{(t[1][0].encounterScore * t[1].length).toFixed(2)}} ES</div>
-            </div>
-          </li>
+          <component v-bind:is="selectedActorComponent" v-for="t of groupedSelectedActors" :key="t[0]" :group="t[0]" :actor="t[1][0]" :groupSize="t[1].length" v-on:click-left="addActor(t[1][0])" v-on:click-right="removeActor(t[1][0])"></component>
         </ul>
       </div>
       <h2>Summary</h2>
@@ -43,7 +33,7 @@
           <input type="text" placeholder="Name" v-model="selectedName" >
           <h4>Source</h4>
           <v-select multiple v-model="selectedSources" :options="sources" :reduce="x => x.toLowerCase()"></v-select>
-          <thirteenth-age-filters v-model="filters"></thirteenth-age-filters>
+          <component v-bind:is="filtersComponent" v-model="filters"></component>
         </div>
         <h2>Sortings</h2>
         <div class="sortings">
@@ -83,7 +73,7 @@
               </histogramslider>
             </div>
             <ul class="result-list">
-              <thirteenth-age-actor class="actor-listing" v-for="t of availableActors" :key="t._id" :actor="t" v-on:click-left="addActor(t)" v-on:click-right="removeActor(t)"></thirteenth-age-actor>
+              <component v-bind:is="actorComponent" v-model="encounterSettings" class="actor-listing" v-for="t of availableActors" :key="t._id" :actor="t" v-on:click-left="addActor(t)" v-on:click-right="removeActor(t)" :disabled="t.encounterScore <= 0"></component>
             </ul>
         </div>
       </section>
@@ -92,39 +82,49 @@
 </template>
 
 <script>
-//import ThirteenthAgeFilters from "./components/13A-Filters"
-
 export default {
-  // components: {
-  //   'thirteenth-age-filters': ThirteenthAgeFilters,
-  // },
   data: () => ({
+    systemName: "thirteenth-age",
+    system: window.dungeonMoon.thirteenthAge,
+
     colors: [ "#78110A", "#AE8C13", "#B9A660" ],
+
     actors: [],
-    selectedName: "",
-    selectedSources: [],
     selectedActors: [],
+
+    selectedName: "",
+
+    sources: [],
+    selectedSources: [],
     filters: {
       selectedSizes: [],
       selectedRoles: [],
       selectedTypes: [],
     },
-    averagePartyLevel: 4,
-    numberOfPartyMembers: 4,
+
+    encounterSettings: {
+      selectedChallenge: "Standard",
+    },
+
+    partyInfo: {
+      averagePartyLevel: 4,
+      numberOfPartyMembers: 4,
+    },
+
     minimumLevel: 100,
     maximumLevel: 0,
     minSelectedLevel: 0,
     maxSelectedLevel: 100,
     levelHasBeenSelected: false,
+    
     loading: true,
-    selectedChallenge: "Standard",
+
     sortLevelAsc: true,
     sortNameAsc: undefined,
-    sources: []
   }),
   methods: {
     addActor: function (actor) {
-      if (this.getEncounterScore(actor) > 0) {
+      if (actor.encounterScore > 0) {
         let toPush = duplicate(actor);
         toPush.id = randomID(16);
         this.selectedActors.push(actor);
@@ -146,150 +146,18 @@ export default {
       if (actor == undefined) return -30;
       //console.log(actor);
       try {
-        let role = 'troop';
-        if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.role != undefined) {
-          role = actor.data.data.details.role.value.toLowerCase();
-        }
-
-        let encounterTier = "adventurer";
-        if (this.averagePartyLevel >= 5) {
-          encounterTier = "champion";
-        }
-        if (this.averagePartyLevel >= 8) {
-          encounterTier = "epic";
-        }
-
-        if (role == "mook") {
-            return this.getMookEncounterScore(encounterTier, this.averagePartyLevel, actor);
-        }
-        else {
-            return this.getNormalEncounterScore(encounterTier, this.averagePartyLevel, actor);
-        }
+        return this.system.getEncounterScore(actor, this.partyInfo);
       }
       catch (error) {
         console.error(error);
         return -30;
       }
     },
-    getNormalEncounterScore: function (tier, averageLevel, enemy) {
-      let scoreChart = [
-        [0.25, 0.50, 0.75, 1.00, 1.50],
-        [0.35, 0.70, 1.00, 1.50, 2.00],
-        [0.50, 1.00, 1.50, 2.00, 3.00], // Same level
-        [0.75, 1.50, 2.25, 3.00, 4.00],
-        [1.00, 2.00, 3.00, 4.00, 6.00],
-        [1.50, 3.00, 4.50, 5.00, 8.00],
-        [2.00, 4.00, 6.00, 6.00, 10.00]
-      ];
-
-      let size = 'normal';
-      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined && enemy.data.data.details.size != '') {
-        size = enemy.data.data.details.size.value.toLowerCase();
-      }
-      let sizeToColumn = {
-         "weakling": 0,
-         "normal": 1,
-         "elite": 2,
-         "large": 3,
-         "2x": 3,
-         "double": 3,
-         "double-strength": 3,
-         "huge": 4,
-         "3x": 4,
-         "triple": 4,
-         "triple-strength": 4
-      };
-
-      let enemyLevel = 1;
-      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined && enemy.data.data.details.level != '') {
-        enemyLevel = enemy.data.data.details.level.value;
-      }
-      let levelDifference = enemyLevel - averageLevel;
-      if (tier == "champion") {
-        levelDifference--;
-      }
-      else if (tier == "epic") {
-        levelDifference -= 2;
-      }
-      levelDifference += 2;
-
-      if (levelDifference < 0) {
-        console.log("Enemy too weak!");
-        return -20;
-      }
-      else if (levelDifference > 6) {
-        console.log("Enemy too strong!");
-        return -10;
-      }
-      return scoreChart[levelDifference][sizeToColumn[size]];
-
-    },
-    getMookEncounterScore: function (tier, averageLevel, enemy) {
-      let scoreChart = [
-        [0.05, 0.10, 0.20, 0.30],
-        [.075, 0.15, 0.30, 0.45],
-        [0.10, 0.20, 0.40, 0.60], // Same level
-        [0.15, 0.30, 0.60, 0.90],
-        [0.20, 0.40, 0.80, 1.20],
-        [0.30, 0.60, 1.20, 1.80],
-        [0.40, 0.80, 1.60, 2.40]
-      ];
-
-      let size = 'normal';
-      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined && enemy.data.data.details.size != '') {
-        size = enemy.data.data.details.size.value.toLowerCase();
-      }
-      let sizeToColumn = {
-         "weakling": 0,
-         "normal": 1,
-         "elite": 2,
-         "large": 2,
-         "double-strength": 2,
-         "huge": 3,
-         "triple-strength": 3
-      };
-
-      let enemyLevel = 1;
-      if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined && enemy.data.data.details.level != '') {
-        enemyLevel = enemy.data.data.details.level.value;
-      }
-      let levelDifference = enemyLevel - averageLevel;
-      if (tier == "champion") {
-        levelDifference--;
-      }
-      else if (tier == "epic") {
-        levelDifference -= 2;
-      }
-      levelDifference += 2;
-
-      if (levelDifference < 0) {
-        console.log("Enemy too weak!");
-        return -20;
-      }
-      else if (levelDifference > 6) {
-        console.log("Enemy too strong!");
-        return -10;
-      }
-      return scoreChart[levelDifference][sizeToColumn[size]];
-    },
+    
     sliderFinished: function (values) {
       this.levelHasBeenSelected = true;
       this.minSelectedLevel = values.from;
       this.maxSelectedLevel = values.to;
-    },
-    getActorSource: function (actor) {
-      //console.log(actor.name);
-      let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
-      let source = game.world.title;
-
-      if (nonCompendiumSourceType == "folderName") {
-        if (actor.folder != undefined) {
-          source = actor.folder.name;
-        }
-      }
-
-      if (actor.compendium != undefined && actor.compendium.metadata != undefined) source = actor.compendium.metadata.label;
-      return source;
     },
     spawnOnScene: async function() {
       let tokensToSpawn = [];
@@ -310,51 +178,21 @@ export default {
       console.log(tokensToSpawn);
       await Token.create(tokensToSpawn);
       ui.notifications.info(tokensToSpawn.length + " tokens spawned on " + viewedScene.name);
-    },
-    getSafeLevel: function (actor) {
-      if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.level != undefined) {
-        return actor.data.data.details.level.value;
-      }
-      return 0;
-    },
-    filterAvailableActors(availableActors) {
-      if (this.selectedSources.length > 0) {
-        availableActors = availableActors.filter(x => this.selectedSources.includes(this.getActorSource(x).toLowerCase()));
-      }
-      if (this.selectedName != "") {
-        availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(this.selectedName.toLowerCase()));
-      }
-      if (this.filters.selectedSizes.length > 0)
-      {      
-          availableActors = availableActors.filter(x => { 
-            if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.size != undefined) {
-              return this.filters.selectedSizes.includes(x.data.data.details.size.value);
-            }
-            return false;
-          });
-      }
-      if (this.filters.selectedRoles.length > 0)
-      {
-        availableActors = availableActors.filter(x => { 
-            if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.role != undefined) {
-              return this.filters.selectedRoles.includes(x.data.data.details.role.value);
-            }
-            return false;
-          });
-      }
-      if (this.filters.selectedTypes.length > 0) {
-        availableActors = availableActors.filter(x => { 
-            if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.type != undefined) {
-              return this.filters.selectedTypes.includes(x.data.data.details.type.value);
-            }
-            return false;
-          });
-      }
-
-      return availableActors;
     }
   },
   computed: {
+    actorComponent() {
+      return this.systemName + "-actor";
+    },
+    filtersComponent() {
+      return this.systemName + "-filters";
+    },
+    encounterSettingsComponent() {
+      return this.systemName + "-encounter-settings";
+    },
+    selectedActorComponent() {
+      return this.systemName + "-selected-actor";
+    },
     totalEncounterScore() {
       let totalScore = 0;
       for (let x = 0; x < this.selectedActors.length; x++) {
@@ -364,11 +202,11 @@ export default {
       return totalScore;
     },
     maxEncounterScore() {
-      let max = this.numberOfPartyMembers;
-      if (this.selectedChallenge.toLowerCase() == "double strength") {
+      let max = this.partyInfo.numberOfPartyMembers;
+      if (this.encounterSettings.selectedChallenge.toLowerCase() == "double strength") {
         max *= 2;
       }
-      else if (this.selectedChallenge.toLowerCase() == "killer") {
+      else if (this.encounterSettings.selectedChallenge.toLowerCase() == "killer") {
         max *= 3;
       }
       return max;
@@ -384,19 +222,22 @@ export default {
     availableActors() {
       let availableActors = this.actors;
 
-      availableActors = this.filterAvailableActors(availableActors);
+      let filters = duplicate(this.filters);
+      filters["selectedName"] = this.selectedName;
+      filters["selectedSources"] = this.selectedSources;
+      availableActors = this.system.filterAvailableActors(availableActors, filters);
 
       availableActors = availableActors.filter(x => {     
-          let level = this.getSafeLevel(x);
+          let level = this.system.getSafeLevel(x);
           return level >= this.minSelectedLevel && level <= this.maxSelectedLevel; 
       });
 
       if (this.sortLevelAsc != undefined) {
         if (this.sortLevelAsc) {
-          availableActors.sort((a, b) => (this.getSafeLevel(a) > this.getSafeLevel(b)) ? 1 : -1);
+          availableActors.sort((a, b) => (this.system.getSafeLevel(a) > this.system.getSafeLevel(b)) ? 1 : -1);
         }
         else {
-          availableActors.sort((a, b) => (this.getSafeLevel(a) < this.getSafeLevel(b)) ? 1 : -1);
+          availableActors.sort((a, b) => (this.system.getSafeLevel(a) < this.system.getSafeLevel(b)) ? 1 : -1);
         }
       }
 
@@ -421,11 +262,14 @@ export default {
       let availableActors = this.actors;
       
       // We don't  use this.availableActors because that filters by level, and we always want the histogram to be all levels available
-      availableActors = this.filterAvailableActors(availableActors);
+      let filters = duplicate(this.filters);
+      filters["selectedName"] = this.selectedName;
+      filters["selectedSources"] = this.selectedSources;
+      availableActors = this.system.filterAvailableActors(availableActors, filters);
 
       for (let x = 0; x < availableActors.length; x++) {
         let actor = availableActors[x];
-        let level = actor.data.data.details.level.value;
+        let level = this.system.getSafeLevel(actor);
 
         levels.push(level);
       }
@@ -464,9 +308,9 @@ export default {
       if (!this.levelHasBeenSelected) {
         let tier = this.selectedTier.toLowerCase();
         switch (tier) {
-          case "adventurer": { this.minSelectedLevel = this.averagePartyLevel - 2; this.maxSelectedLevel = this.averagePartyLevel + 4; } break;
-          case "champion": { this.minSelectedLevel = this.averagePartyLevel - 1; this.maxSelectedLevel = this.averagePartyLevel + 5; } break;
-          case "epic": { this.minSelectedLevel = this.averagePartyLevel; this.maxSelectedLevel = this.averagePartyLevel + 6; } break;
+          case "adventurer": { this.minSelectedLevel = this.partyInfo.averagePartyLevel - 2; this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4; } break;
+          case "champion": { this.minSelectedLevel = this.partyInfo.averagePartyLevel - 1; this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 5; } break;
+          case "epic": { this.minSelectedLevel = this.partyInfo.averagePartyLevel; this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 6; } break;
         }
         this.$refs.levelHistogram.update({ from: this.minSelectedLevel, to: this.maxSelectedLevel });
         this.levelHasBeenSelected = false;
@@ -478,11 +322,11 @@ export default {
     let characters = game.actors.entities.filter(x => x.hasPlayerOwner && x.data.type == "character");
     //console.log(characters);
     if (characters.length > 0) {
-        this.numberOfPartyMembers = characters.length;
-        for (let index = 0; index < this.numberOfPartyMembers; index++) {
-            this.averagePartyLevel += characters[index].data.data.details.level.value;
+        this.partyInfo.numberOfPartyMembers = characters.length;
+        for (let index = 0; index < this.partyInfo.numberOfPartyMembers; index++) {
+            this.partyInfo.averagePartyLevel += this.system.getSafeLevel(characters[index]);
         }
-        this.averagePartyLevel = Math.round(this.averagePartyLevel / this.numberOfPartyMembers);
+        this.partyInfo.averagePartyLevel = Math.round(this.partyInfo.averagePartyLevel / this.partyInfo.numberOfPartyMembers);
     }
 
     let npcs = game.actors.entities.filter(x => x.data.type == "npc");
@@ -501,11 +345,11 @@ export default {
 
     for (let x = 0; x < allActors.length; x++) {
       let actor = allActors[x];
-      let level = this.getSafeLevel(actor);
+      let level = this.system.getSafeLevel(actor);
 
       if (level > this.maximumLevel) this.maximumLevel = level;
       if (level < this.minimumLevel) this.minimumLevel = level;
-      this.sources.push(this.getActorSource(actor));
+      this.sources.push(this.system.getActorSource(actor));
     }
 
     function onlyUnique(value, index, self) {
@@ -514,10 +358,10 @@ export default {
 
     this.sources = this.sources.filter(onlyUnique);
 
-    this.minSelectedLevel = this.averagePartyLevel - 2;
+    this.minSelectedLevel = this.partyInfo.averagePartyLevel - 2;
     if (this.minSelectedLevel < this.minimumLevel) this.minSelectedLevel = this.minimumLevel;
 
-    this.maxSelectedLevel = this.averagePartyLevel + 4;
+    this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4;
     if (this.maxSelectedLevel > this.maximumLevel) this.maximumLevel = this.maximumLevel;
 
     //console.log(allActors);
