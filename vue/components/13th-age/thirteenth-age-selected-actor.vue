@@ -1,22 +1,21 @@
 <template>
-  <li
+  <div
     class="member"
     v-on:click.left="$emit('click-left')"
     v-on:click.right="$emit('click-right')"
+    v-if="actor.encounterScore > 0"
   >
     <img :src="actor.data.img" width="50" height="50" />
     <div class="member-details">
       <b>{{ group }}</b>
       <div>
-        Level {{ actor.data.data.details.level.value }}
-        {{ actor.data.data.details.role.value }}
+        Level {{ actor.data.data.details.level.value }} {{ actor.data.data.details.role.value }}
       </div>
       <div>
-        <b>{{ groupsize }}</b> x {{ actor.encounterScore.toFixed(2) }} =
-        {{ (actor.encounterScore * groupsize).toFixed(2) }} ES
+        <b>{{ groupsize }}</b> x {{ actor.encounterScore.toFixed(2) }} = {{ (actor.encounterScore * groupsize).toFixed(2) }} ES
       </div>
     </div>
-  </li>
+  </div>
 </template>
 <script>
 export default {

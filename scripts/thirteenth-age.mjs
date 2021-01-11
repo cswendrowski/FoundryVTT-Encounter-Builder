@@ -1,6 +1,14 @@
 
 export default class ThirteenthAge {
 
+    getPlayerCharacters() {
+        return game.actors.entities.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+    }
+
+    getNpcs() {
+        return game.actors.entities.filter((x) => x.data.type == "npc");
+    }
+
     filterAvailableActors(availableActors, filters) {
         if (filters.selectedSources.length > 0) {
             availableActors = availableActors.filter(x => filters.selectedSources.includes(this.getActorSource(x).toLowerCase()));
@@ -50,6 +58,10 @@ export default class ThirteenthAge {
         if (actor.compendium != undefined && actor.compendium.metadata != undefined) source = actor.compendium.metadata.label;
         return source;
     };
+
+    getUniqueKey(actor, partyInfo, encounterSettings) {
+        return actor._id + partyInfo.averagePartyLevel + partyInfo.numberOfPartyMembers;
+    }
 
     getEncounterScore(actor, partyInfo) {
         if (actor == undefined) return -30;

@@ -52,7 +52,7 @@
         </li>
         <li class="source">
           <span class="trait-value">
-              <i>{{ getActorSource(actor) }}</i>
+              <i>{{ actor.source }}</i>
           </span>
         </li>
       </ul>
@@ -63,29 +63,6 @@
 <script>
 export default {
   name: "thirteenth-age-actor",
-  props: ["actor"],
-  methods: {
-    getActorSource: function (actor) {
-      //console.log(actor.name);
-      let nonCompendiumSourceType = game.settings.get(
-        "vue-encounter-builder",
-        "nonCompendiumSourceType"
-      );
-      let source = game.world.title;
-
-      if (nonCompendiumSourceType == "folderName") {
-        if (actor.folder != undefined) {
-          source = actor.folder.name;
-        }
-      }
-
-      if (
-        actor.compendium != undefined &&
-        actor.compendium.metadata != undefined
-      )
-        source = actor.compendium.metadata.label;
-      return source;
-    },
-  },
+  props: ["actor"]
 };
 </script>
