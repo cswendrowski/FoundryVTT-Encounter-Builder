@@ -3,7 +3,7 @@
   "title": "🌑 Dungeon Moon Encounter Builder",
   "description": "",
   "version": "0.0.1",
-  "manifestPlusVersion": "1.0.0"
+  "manifestPlusVersion": "1.0.0",
   "minimumCoreVersion": "0.7.7",
   "compatibleCoreVersion": "0.7.9",
   "author": "Cody Swendrowski <cody@swendrowski.us>",
