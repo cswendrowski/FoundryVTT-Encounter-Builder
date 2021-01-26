@@ -3,9 +3,19 @@
   "title": "🌑 Dungeon Moon Encounter Builder",
   "description": "",
   "version": "0.0.1",
+  "manifestPlusVersion": "1.0.0"
   "minimumCoreVersion": "0.7.7",
   "compatibleCoreVersion": "0.7.9",
   "author": "Cody Swendrowski <cody@swendrowski.us>",
+  "authors": [
+    {
+      "name": "Cody Swendrowski",
+      "url": "https://swendrowski.us",
+      "email": "cody@swendrowski.us",
+      "discord": "cswendrowski#9701",
+      "patreon": "ironmoose"
+    }
+  ],
   "dependencies": [{
     "name": "dlopen",
     "type": "module",
@@ -16,6 +26,7 @@
       "type": "module",
       "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-vueport/master/module.json"
   }],
+  "systems": ["archmage"],
   "esmodules": [
     "/scripts/module.js"
   ],
@@ -33,5 +44,11 @@
   ],
   "url": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder",
   "manifest": "",
-  "download": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder/releases/download/0.0.1/module.zip"
+  "download": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder/releases/download/0.0.1/module.zip",
+  "media": [
+    {
+      "type": "cover",
+      "url": "https://raw.githubusercontent.com/cswendrowski/FoundryVTT-Encounter-Builder/master/dungeonmoon_cover.png"
+    }
+  ]
 }
