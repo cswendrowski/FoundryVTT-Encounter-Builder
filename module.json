@@ -2,30 +2,31 @@
   "name": "vue-encounter-builder",
   "title": "🌑 Dungeon Moon Encounter Builder",
   "description": "",
-  "version": "",
+  "version": "0.0.1",
+  "manifestPlusVersion": "1.0.0",
   "minimumCoreVersion": "0.7.7",
   "compatibleCoreVersion": "0.7.9",
   "systems": [ "archmage", "pf2e" ],
+  "author": "Cody Swendrowski <cody@swendrowski.us>",
   "authors": [
     {
       "name": "Cody Swendrowski",
+      "url": "https://swendrowski.us",
       "email": "cody@swendrowski.us",
       "discord": "cswendrowski#9701",
       "patreon": "ironmoose"
     }
   ],
-  "dependencies": [
-    {
-      "name": "dlopen",
-      "type": "module",
-      "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-dlopen/master/module.json"
-    },
-    {
+  "dependencies": [{
+    "name": "dlopen",
+    "type": "module",
+    "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-dlopen/master/module.json"
+  },
+  {
       "name": "vueport",
       "type": "module",
       "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-vueport/master/module.json"
-    }
-  ],
+  }],
   "esmodules": [
     "/scripts/module.js"
   ],
@@ -42,12 +43,11 @@
   ],
   "url": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder",
   "manifest": "",
-  "download": "",
-  "manifestPlusVersion": "1.0.0",
+  "download": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder/releases/download/0.0.1/module.zip",
   "media": [
     {
       "type": "cover",
-      "url": "https://media.discordapp.net/attachments/633346126912946239/796863482757906442/unknown.png?width=810&height=452"
+      "url": "https://raw.githubusercontent.com/cswendrowski/FoundryVTT-Encounter-Builder/master/dungeonmoon_cover.png"
     }
   ]
 }
