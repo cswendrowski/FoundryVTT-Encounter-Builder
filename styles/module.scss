@@ -43,6 +43,53 @@ $dark-maroon: #2B0603;
     --text-color: black;
 }
 
+
+.encounter-builder-application.pf2e {
+
+    --title-font-family: 'mason-serif';
+    --title-font-size: 2.5em;
+    --title-background-color: #{$red};
+    --title-background-blend: color-burn;
+
+    //--background-primary-image: url(../../../systems/pf2e/assets/sheet/header.png);
+    --background-primary-image: url(/ui/parchment.jpg);
+    --background-primary-color: white;
+    --background-primary-blend: hard-light;
+    --background-secondary-color: #{$white};
+
+    --color-primary: #171f69;
+    --color-secondary: #E9D7A1;
+    --color-accent: #171f69;
+    --color-accent2: #f7d488;
+
+    --shadow-full-color: black;
+    --shadow-subtle-color: #00000080;
+
+    --text-color: black;
+
+    .window-content {
+        background: var(--background-primary-image) !important;
+    }
+
+    .actor-listing {
+        background: url(../../../systems/pf2e/assets/sheet/header.png) !important;
+    }
+
+    .traits {
+        color: #fff !important;
+    }
+
+    .encounter-info {
+        color: #fff !important;
+    }
+
+    .vue-histogram-slider-wrapper {
+        .irs-bar {
+            background-color: #171f69;
+        }
+    }
+}
+
 .encounter-builder-application.window-app .window-content {
     background: var(--background-primary-image), var(--background-primary-color);
 	background-repeat: repeat;
@@ -185,6 +232,8 @@ $dark-maroon: #2B0603;
             padding: .5em 1ch .5em 1ch;
             box-shadow: 1px 4px 6px 0px var(--shadow-full-color);
             background: var(--background-secondary-color);
+            height: 50em;
+            overflow-y: scroll;
 
             .sortings {
                 .active {
@@ -195,10 +244,11 @@ $dark-maroon: #2B0603;
         .search-results {
             grid-column: 2;
             grid-row: 1;
-            height: 48em;
+            height: 50em;
             padding: 1em 2ch 1em 2ch;
             
             overflow-y: scroll;
+            overflow-x: hidden;
 
             .loading-container {
                 display: flex;

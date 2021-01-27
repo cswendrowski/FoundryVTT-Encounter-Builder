@@ -115,11 +115,11 @@
               :data="levelData"
               :min="0"
               :max="15"
-              primary-color="#78110A"
-              holder-color="#F4F3EA"
-              handle-color="#B9A660"
-              label-color="#2B0603"
-              grid-text-color="#2B0603"
+              :primary-color="colors.primary"
+              :holder-color="colors.holder"
+              :handle-color="colors.handle"
+              :label-color="colors.label"
+              :grid-text-color="colors.gridText"
               :key="levelData.length"
               @finish="sliderFinished"
             >
@@ -147,10 +147,16 @@
 <script>
 export default {
   data: () => ({
-    systemName: "thirteenth-age",
-    system: window.dungeonMoon.thirteenthAge,
+    systemName: "",
+    system: undefined,
 
-    colors: ["#78110A", "#AE8C13", "#B9A660"],
+    colors: {
+      primary: "#78110A",
+      holder: "#F4F3EA",
+      handle: "#B9A660",
+      label: "#2B0603",
+      gridText: "#2B0603"
+    },
 
     actors: [],
     selectedActors: [],
@@ -160,13 +166,9 @@ export default {
     sources: [],
     selectedSources: [],
     filters: {
-      selectedSizes: [],
-      selectedRoles: [],
-      selectedTypes: [],
     },
 
     encounterSettings: {
-      selectedChallenge: "Standard",
     },
 
     partyInfo: {
@@ -274,10 +276,12 @@ export default {
         availableActors[x].source = this.system.getActorSource(actor);
       }
 
-      availableActors = this.system.filterAvailableActors(
-        availableActors,
-        filters
-      );
+      if (this.system != undefined) {
+        availableActors = this.system.filterAvailableActors(
+          availableActors,
+          filters
+        );
+      }
 
       availableActors = availableActors.filter((x) => {
         let level = this.system.getSafeLevel(x);
@@ -351,39 +355,50 @@ export default {
       // If our range changes and we rerender the component, reset the handles to the previous selections
       setTimeout(() => {
         let shouldReset = !this.levelHasBeenSelected;
-        this.$refs.levelHistogram.update({
-          from: this.minSelectedLevel,
-          to: this.maxSelectedLevel,
-        });
-        if (shouldReset) {
-          this.levelHasBeenSelected = false;
+        if (this.$refs.levelHistogram) {
+          this.$refs.levelHistogram.update({
+            from: this.minSelectedLevel,
+            to: this.maxSelectedLevel,
+          });
+        
+          if (shouldReset) {
+            this.levelHasBeenSelected = false;
+          }
         }
       }, 100);
     }
-    // selectedTier() {
-    //   if (!this.levelHasBeenSelected) {
-    //     let tier = this.selectedTier.toLowerCase();
-    //     switch (tier) {
-    //       case "adventurer": { this.minSelectedLevel = this.partyInfo.averagePartyLevel - 2; this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4; } break;
-    //       case "champion": { this.minSelectedLevel = this.partyInfo.averagePartyLevel - 1; this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 5; } break;
-    //       case "epic": { this.minSelectedLevel = this.partyInfo.averagePartyLevel; this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 6; } break;
-    //     }
-    //     this.$refs.levelHistogram.update({ from: this.minSelectedLevel, to: this.maxSelectedLevel });
-    //     this.levelHasBeenSelected = false;
-    //   }
-    // }
+  },
+  async created() {
+    console.log("Loading system");
+    if (game.system.id == "archmage") {
+      this.systemName = "thirteenth-age";
+      this.system = window.dungeonMoon.thirteenthAge;
+      console.log("13th Age Loaded");
+    }
+    else if (game.system.id == "pf2e") {
+      this.systemName = "pf2e";
+      this.system = window.dungeonMoon.pathfinder2E;
+      this.colors.primary = "#171f69";
+      console.log("PF2E Loaded");
+    }
+    else {
+      console.error("Unknown game system - " + game.system.id);
+    }
   },
   async mounted() {
+
     //console.log("Mounted!");
     let characters = this.system.getPlayerCharacters();
     //console.log(characters);
     if (characters.length > 0) {
       this.partyInfo.numberOfPartyMembers = characters.length;
+      let totalLevel = 0;
       for (let index = 0; index < this.partyInfo.numberOfPartyMembers; index++) {
-        this.partyInfo.averagePartyLevel += this.system.getSafeLevel(characters[index]);
+        totalLevel += this.system.getSafeLevel(characters[index]);
       }
+      console.log(this.partyInfo);
       this.partyInfo.averagePartyLevel = Math.round(
-        this.partyInfo.averagePartyLevel / this.partyInfo.numberOfPartyMembers
+        totalLevel / this.partyInfo.numberOfPartyMembers
       );
     }
 
@@ -418,13 +433,24 @@ export default {
 
     this.sources = this.sources.filter(onlyUnique);
 
-    this.minSelectedLevel = this.partyInfo.averagePartyLevel - 2;
-    if (this.minSelectedLevel < this.minimumLevel)
-      this.minSelectedLevel = this.minimumLevel;
+    if (game.system.id == "archmage") {
+      this.minSelectedLevel = this.partyInfo.averagePartyLevel - 2;
+      if (this.minSelectedLevel < this.minimumLevel)
+        this.minSelectedLevel = this.minimumLevel;
 
-    this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4;
-    if (this.maxSelectedLevel > this.maximumLevel)
-      this.maximumLevel = this.maximumLevel;
+      this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4;
+      if (this.maxSelectedLevel > this.maximumLevel)
+        this.maximumLevel = this.maximumLevel;
+    }
+    else if (game.system.id == "pf2e") {
+      this.minSelectedLevel = this.partyInfo.averagePartyLevel - 4;
+      if (this.minSelectedLevel < this.minimumLevel)
+        this.minSelectedLevel = this.minimumLevel;
+
+      this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4;
+      if (this.maxSelectedLevel > this.maximumLevel)
+        this.maximumLevel = this.maximumLevel;
+    }
 
     //console.log(allActors);
     this.actors = allActors;

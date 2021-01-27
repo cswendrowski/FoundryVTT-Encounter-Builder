@@ -1,4 +1,5 @@
 import ThirteenthAge from "./thirteenth-age.mjs";
+import Pathfinder2E from "./pf2e.mjs";
 
 class EncounterBuilder {
     static init() {
@@ -64,7 +65,7 @@ class EncounterBuilder {
             width: '1200',
             resizable: true,
             popOutModuleDisable: true,
-            classes: ["encounter-builder-application"]
+            classes: ["encounter-builder-application", game.system.id]
         }).render(true);
         // Auto resize after 2 seconds
         setTimeout(() => d.setPosition(), 500);
@@ -90,7 +91,8 @@ Hooks.once('ready', function() {
     });
 
     window.dungeonMoon = {
-        thirteenthAge: new ThirteenthAge()
+        thirteenthAge: new ThirteenthAge(),
+        pathfinder2E: new Pathfinder2E()
     };
 });
 
