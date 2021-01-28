@@ -135,6 +135,7 @@
               :actor="t"
               v-on:click-left="addActor(t)"
               v-on:click-right="removeActor(t)"
+              v-on:actor-info="openActorSheet(t)"
               :disabled="t.encounterScore <= 0"
             ></component>
           </ul>
@@ -198,6 +199,9 @@ export default {
     removeActor: function (actor) {
       var index = this.selectedActors.indexOf(actor);
       this.selectedActors.splice(index, 1);
+    },
+    openActorSheet: function(actor) {
+      actor.sheet.render(true);
     },
     setSortLevelAsc: function (value) {
       this.sortLevelAsc = value;

@@ -29,6 +29,9 @@ export default {
     },
     maxEncounterScore() {
       let max = this.partyinfo.numberOfPartyMembers;
+
+      if (this.encountersettings.selectedChallenge == undefined) this.encountersettings.selectedChallenge = "Normal";
+
       if (this.encountersettings.selectedChallenge.toLowerCase() == "double strength") {
         max *= 2;
       }

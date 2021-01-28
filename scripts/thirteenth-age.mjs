@@ -16,7 +16,7 @@ export default class ThirteenthAge {
         if (filters.selectedName != "") {
             availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(filters.selectedName.toLowerCase()));
         }
-        if (filters.selectedSizes.length > 0) {
+        if (filters.selectedSizes != undefined && filters.selectedSizes.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.size != undefined) {
                     return filters.selectedSizes.includes(x.data.data.details.size.value);
@@ -24,7 +24,7 @@ export default class ThirteenthAge {
                 return false;
             });
         }
-        if (filters.selectedRoles.length > 0) {
+        if (filters.selectedRoles != undefined && filters.selectedRoles.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.role != undefined) {
                     return filters.selectedRoles.includes(x.data.data.details.role.value);
@@ -32,7 +32,7 @@ export default class ThirteenthAge {
                 return false;
             });
         }
-        if (filters.selectedTypes.length > 0) {
+        if (filters.selectedTypes != undefined && filters.selectedTypes.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.type != undefined) {
                     return filters.selectedTypes.includes(x.data.data.details.type.value);

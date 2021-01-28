@@ -4,7 +4,10 @@
     v-on:click.left="$emit('click-left')"
     v-on:click.right="$emit('click-right')"
   >
-    <img :src="actor.data.img" width="100" height="100" />
+    <div class="actor-image">
+      <span class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info-circle"></i></span>
+      <img :src="actor.data.img" width="100" height="100" />
+    </div>
     <section class="actor-info">
       <h4 class="name">
         <span class="level" v-if="actor.data.data.details?.level?.value"
