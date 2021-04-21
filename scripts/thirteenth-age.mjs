@@ -169,13 +169,18 @@ export default class ThirteenthAge {
         if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined && enemy.data.data.details.size != '') {
             size = enemy.data.data.details.size.value.toLowerCase();
         }
+
         let sizeToColumn = {
             "weakling": 0,
             "normal": 1,
             "elite": 2,
             "large": 2,
+            "2x": 2,
+            "double": 2,
             "double-strength": 2,
             "huge": 3,
+            "3x": 3,
+            "triple": 3,
             "triple-strength": 3
         };
 
