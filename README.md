@@ -16,8 +16,11 @@ Dungeon Moon allows GMs to quickly and easily build fair encounters in their sys
 # How to add a system
 
 ## Implement the following JS
-* getPlayerCharacters- return list of PC actors
+* histogramStep - what step the histogram should show results in
+* histogramLabelPrettify(level) - a pretty label for the level, if needed
+* getPlayerCharacters - return list of PC actors
 * getNpcs - return list of enemy Actors
+* filterCompendiumActors(pack, packActors) - given a compendium pack being loaded, filter out any desired actors
 * filterAvailableActors(availableActors, filters) - given a list of actors, return a reduced list based on system-specific filters
 * getActorSource(actor) - defaults to returning source compendium / folder, overridable to whatever you prefer for your system
 * getUniqueKey(actor, partyInfo, encounterSettings) - a unique identifier for this actor + party info, used for vue cache breaking
