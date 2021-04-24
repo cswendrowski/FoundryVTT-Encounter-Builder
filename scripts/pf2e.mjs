@@ -1,12 +1,20 @@
 
 export default class Pathfinder2E {
 
+    histogramStep() { return 1; }
+
+    histogramLabelPrettify(level) { return level; }
+
     getPlayerCharacters() {
         return game.actors.entities.filter((x) => x.hasPlayerOwner && x.data.type == "character");
     }
 
     getNpcs() {
-        return game.actors.entities.filter((x) => x.data.type == "npc");
+        return game.actors.entities.filter((x) => x.data.type == "npc" || x.data.type == "hazard");
+    }
+
+    filterCompendiumActors(pack, packActors) {
+        return packActors;
     }
 
     filterAvailableActors(availableActors, filters) {
@@ -89,22 +97,56 @@ export default class Pathfinder2E {
         if (actor == undefined) return -30;
         //console.log(actor);
         try {
-            let xpChart = [
-                10,
-                15,
-                20,
-                30,
-                40, // Same level
-                60,
-                80,
-                120,
-                160
-            ];
+            if (actor.data.type == "hazard") {
+                let simpleChart = [
+                    2,
+                    3,
+                    4,
+                    6,
+                    8, // Same level
+                    12,
+                    16,
+                    24,
+                    30
+                ];
 
-            let levelDifference = this.getSafeLevel(actor) - partyInfo.averagePartyLevel;
-            let xpIndex = levelDifference + 4;
-            
-            return xpChart[xpIndex];
+                let complexChart = [
+                    10,
+                    15,
+                    20,
+                    30,
+                    40, // Same level
+                    60,
+                    80,
+                    120,
+                    150
+                ];
+
+                let xpChart = actor.data.data.details.isComplex ? complexChart : simpleChart;
+
+                let levelDifference = this.getSafeLevel(actor) - partyInfo.averagePartyLevel;
+                let xpIndex = levelDifference + 4;
+
+                return xpChart[xpIndex];
+            }
+            else {
+                let xpChart = [
+                    10,
+                    15,
+                    20,
+                    30,
+                    40, // Same level
+                    60,
+                    80,
+                    120,
+                    160
+                ];
+
+                let levelDifference = this.getSafeLevel(actor) - partyInfo.averagePartyLevel;
+                let xpIndex = levelDifference + 4;
+
+                return xpChart[xpIndex];
+            }
         }
         catch (error) {
             console.error(error);
@@ -113,8 +155,9 @@ export default class Pathfinder2E {
     }
 
     getSafeLevel(actor) {
-        if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.level != undefined) {
-            return actor.data.data.details.level.value;
+        if (actor?.data?.data?.details?.level) {
+            if (actor.data.data.details.level?.value) return actor.data.data.details.level.value;
+            return actor.data.data.details.level;
         }
         return 0;
     }

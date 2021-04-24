@@ -1,5 +1,7 @@
 import ThirteenthAge from "./thirteenth-age.mjs";
 import Pathfinder2E from "./pf2e.mjs";
+import DnD5e from "./dnd5e.mjs";
+import {CompendiumSettingsForm} from "./CompendiumSettingsForm.js";
 
 class EncounterBuilder {
     static init() {
@@ -90,9 +92,29 @@ Hooks.once('ready', function() {
         default: "worldName"
     });
 
+    game.settings.registerMenu(moduleName, 'compendiumSettingsMenu', {
+        name: "Loaded Compendiums",
+        label: "Which compendiums to load from",
+        icon: "fas fa-book",
+        type: CompendiumSettingsForm,
+        restricted: true
+    });
+
+    game.packs.filter((x) => x.metadata.entity == "Actor" && !x.metadata.name.includes("baileywiki"))
+        .forEach(pack => {
+            game.settings.register("vue-encounter-builder", pack.metadata.name, {
+                scope: 'world',
+                config: false,
+                type: Boolean,
+                default: true
+            });
+        });
+
+
     window.dungeonMoon = {
         thirteenthAge: new ThirteenthAge(),
-        pathfinder2E: new Pathfinder2E()
+        pathfinder2E: new Pathfinder2E(),
+        dnd5e: new DnD5e()
     };
 });
 

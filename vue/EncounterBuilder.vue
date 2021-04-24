@@ -113,8 +113,10 @@
             <histogramslider
               ref="levelHistogram"
               :data="levelData"
-              :min="0"
-              :max="15"
+              :min="minimumLevel"
+              :max="maximumLevel"
+              :step="step"
+              :prettify="prettify"
               :primary-color="colors.primary"
               :holder-color="colors.holder"
               :handle-color="colors.handle"
@@ -177,6 +179,7 @@ export default {
       numberOfPartyMembers: 4,
     },
 
+    step: 1,
     minimumLevel: 100,
     maximumLevel: 0,
     minSelectedLevel: 0,
@@ -189,6 +192,9 @@ export default {
     sortNameAsc: undefined,
   }),
   methods: {
+    prettify: function(level) {
+      return this.system.histogramLabelPrettify(level);
+    },
     addActor: function (actor) {
       if (actor.encounterScore > 0) {
         let toPush = duplicate(actor);
@@ -391,6 +397,8 @@ export default {
   },
   async mounted() {
 
+    this.step = this.system.histogramStep();
+
     //console.log("Mounted!");
     let characters = this.system.getPlayerCharacters();
     //console.log(characters);
@@ -410,15 +418,16 @@ export default {
     let allActors = npcs;
     this.sources.push(game.world.title);
     let actorCompendiums = game.packs.filter(
-      (x) => x.metadata.entity == "Actor"
+      (x) => x.metadata.entity == "Actor" && !x.metadata.name.includes("baileywiki")
     );
 
     for (let index = 0; index < actorCompendiums.length; index++) {
       let pack = actorCompendiums[index];
+      if (!game.settings.get("vue-encounter-builder", pack.metadata.name)) continue;
       //console.log(pack);
-      var packActors = await pack.getContent();
+      let packActors = await pack.getContent();
       //console.log(packActors);
-      allActors = allActors.concat(packActors);
+      allActors = allActors.concat(this.system.filterCompendiumActors(pack, packActors));
       this.sources.push(pack.metadata.label);
     }
 

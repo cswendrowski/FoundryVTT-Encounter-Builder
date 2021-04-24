@@ -1,0 +1,11 @@
+<form autocomplete="off" class="customCssSettings" onsubmit="event.preventDefault()">
+    <section class="stylesheet-editor">
+        {{#each compendiums}}
+          <input type="checkbox" id="{{this.name}}" name="{{this.name}}" {{checked this.value}} data-dtype="Boolean">
+          <label for="{{this.name}}">{{this.label}}</label><br>
+        {{/each}}
+    </section>
+    <button type="submit" name="submit">
+        <i class="fas fa-save"></i> Save
+    </button>
+</form>
