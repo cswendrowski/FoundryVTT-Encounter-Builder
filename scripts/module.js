@@ -1,6 +1,5 @@
 import ThirteenthAge from "./thirteenth-age.mjs";
 import Pathfinder2E from "./pf2e.mjs";
-import DnD5e from "./dnd5e.mjs";
 import {CompendiumSettingsForm} from "./CompendiumSettingsForm.js";
 
 class EncounterBuilder {
@@ -113,8 +112,7 @@ Hooks.once('ready', function() {
 
     window.dungeonMoon = {
         thirteenthAge: new ThirteenthAge(),
-        pathfinder2E: new Pathfinder2E(),
-        dnd5e: new DnD5e()
+        pathfinder2E: new Pathfinder2E()
     };
 });
 
