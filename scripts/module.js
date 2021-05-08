@@ -109,11 +109,24 @@ Hooks.once('ready', function() {
             });
         });
 
+    if (game.system.id == "archmage") {
+        window.dungeonMoon = {
+            pathfinder2E: new Pathfinder2E()
+        };
+        console.log("13th Age Init");
+    }
+    else if (game.system.id == "pf2e") {
+        window.dungeonMoon = {
+            pathfinder2E: new Pathfinder2E()
+        };
+        console.log("PF2E Init");
+    }
+    else if (game.system.id == "dnd5e") {
+        window.dungeonMoon = {
+        };
+        console.log("DnD5e Init");
+    }
 
-    window.dungeonMoon = {
-        thirteenthAge: new ThirteenthAge(),
-        pathfinder2E: new Pathfinder2E()
-    };
 });
 
 Hooks.on('renderCombatTracker', () => { 

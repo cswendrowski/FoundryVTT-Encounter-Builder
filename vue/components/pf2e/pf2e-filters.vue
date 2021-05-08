@@ -1,13 +1,13 @@
 <template>
     <div>
         <h4>Traits</h4>
-        <v-select multiple v-model="selectedTraits" :options="Object.values(CONFIG.PF2E.monsterTraits)" :reduce="x => x.toLowerCase()"></v-select>
+        <v-select multiple v-model="selectedTraits" :options="monsterTraits" :reduce="x => x.toLowerCase()"></v-select>
         <h4>Size</h4>
-        <v-select multiple v-model="selectedSizes" :options="Object.values(CONFIG.PF2E.actorSizes)"></v-select>
+        <v-select multiple v-model="selectedSizes" :options="actorSizes"></v-select>
         <h4>Rarity</h4>
-        <v-select multiple v-model="selectedRarities" :options="Object.values(CONFIG.PF2E.rarityTraits)" :reduce="x => x.toLowerCase()"></v-select>
+        <v-select multiple v-model="selectedRarities" :options="rarityTraits" :reduce="x => x.toLowerCase()"></v-select>
         <h4>Alignment</h4>
-        <v-select multiple v-model="selectedAlignments" :options="Object.values(CONFIG.PF2E.alignment)"></v-select>
+        <v-select multiple v-model="selectedAlignments" :options="alignment"></v-select>
     </div>
 </template>
 <script>
@@ -18,8 +18,18 @@ export default {
         selectedTraits: [],
         selectedRarities: [],
         selectedSizes: [],
+        monsterTraits: [],
+        actorSizes: [],
+        rarityTraits: [],
+        alignment: []
     }),
     props: ['value'],
+    created() {
+      this.monsterTraits = window.dungeonMoon.pathfinder2E.monsterTraits;
+      this.actorSizes = window.dungeonMoon.pathfinder2E.actorSizes;
+      this.rarityTraits = window.dungeonMoon.pathfinder2E.rarityTraits;
+      this.alignment = window.dungeonMoon.pathfinder2E.alignment;
+    },
     methods: {
         dataBundle: function () {
             return {

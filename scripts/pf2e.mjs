@@ -1,6 +1,13 @@
 
 export default class Pathfinder2E {
 
+    constructor() {
+        this.monsterTraits = Object.values(CONFIG.PF2E.monsterTraits);
+        this.actorSizes = Object.values(CONFIG.PF2E.actorSizes);
+        this.rarityTraits = Object.values(CONFIG.PF2E.rarityTraits);
+        this.alignment = Object.values(CONFIG.PF2E.alignment);
+    }
+
     histogramStep() { return 1; }
 
     histogramLabelPrettify(level) { return level; }
