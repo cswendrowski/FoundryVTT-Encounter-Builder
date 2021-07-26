@@ -244,6 +244,9 @@ export default {
       let baseY = viewedScene.data.height * viewedScene.data.padding;
       for (let x = 0; x < this.selectedActors.length; x++) {
         let actor = this.selectedActors[x];
+        if (actor.source && !game.actors.get(actor.id)) {
+          actor = await Actor.create(actor.data);
+        }
         let token = duplicate(actor.data.token);
         token.x = baseX + x * viewedScene.data.grid;
         token.y = baseY;

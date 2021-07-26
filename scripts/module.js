@@ -111,7 +111,7 @@ Hooks.once('ready', function() {
 
     if (game.system.id == "archmage") {
         window.dungeonMoon = {
-            pathfinder2E: new Pathfinder2E()
+            thirteenthAge: new ThirteenthAge()
         };
         console.log("13th Age Init");
     }
