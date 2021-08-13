@@ -343,7 +343,7 @@ export default {
 
         levels.push(level);
       }
-      //console.log(levels);
+      console.log(levels);
       return levels;
     },
     groupedSelectedActors() {
@@ -393,6 +393,12 @@ export default {
       this.system = window.dungeonMoon.pathfinder2E;
       this.colors.primary = "#171f69";
       console.log("PF2E Loaded");
+    }
+    else if (game.system.id == "dnd5e") {
+      this.systemName = "dnd5e";
+      this.system = window.dungeonMoon.dnd5e;
+      this.colors.primary = "#171f69";
+      console.log("DnD5e Loaded");
     }
     else {
       console.error("Unknown game system - " + game.system.id);
@@ -467,8 +473,14 @@ export default {
       if (this.maxSelectedLevel > this.maximumLevel)
         this.maximumLevel = this.maximumLevel;
     }
+    else if (game.system.id == "dnd5e") {
+      this.minSelectedLevel = this.minimumLevel;
+      this.maxSelectedLevel = this.maximumLevel;
+    }
 
-    //console.log(allActors);
+    console.log(`Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
+
+    console.log(allActors);
     this.actors = allActors;
     this.loading = false;
 
