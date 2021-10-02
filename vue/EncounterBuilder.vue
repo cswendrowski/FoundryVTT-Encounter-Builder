@@ -133,7 +133,7 @@
               v-model="encounterSettings"
               class="actor-listing"
               v-for="t of availableActors"
-              :key="system.getUniqueKey(t, partyInfo, encounterSettings)"
+              :key="system.getUniqueKey(t, encounterSettings)"
               :actor="t"
               v-on:click-left="addActor(t)"
               v-on:click-right="removeActor(t)"
@@ -178,6 +178,7 @@ export default {
     partyInfo: {
       averagePartyLevel: 4,
       numberOfPartyMembers: 4,
+      partyCharacterInfo: [],
     },
 
     levelName: "Level",
