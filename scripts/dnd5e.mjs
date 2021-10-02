@@ -85,6 +85,10 @@ export default class Dnd5e {
     }
 
     getActorSource(actor) {
+        if (actor.data.data.details.source) {
+            return actor.data.data.details.source.split('pg')[0];
+        }
+
         //console.log(actor.name);
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
         let source = game.world.title;
