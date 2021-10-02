@@ -36,7 +36,7 @@ class EncounterBuilder {
             ],
             styles: [],
             dependencies: [],
-            init: () => Vue.component("vue-numeric-input", window["vue-numeric-input"])
+            init: () => Vue.component("vue-numeric-input", window["vue-numeric-input"].default)
         });
 
         Dlopen.register('vue-loading-spinner', {

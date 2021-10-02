@@ -1,7 +1,7 @@
 <template>
     <div>
         <h4>Threat Level</h4>
-        <v-select v-model="selectedThreat" :options="['Trivial', 'Low', 'Moderate', 'Severe', 'Extreme']"></v-select>
+        <v-select v-model="selectedThreat" :options="['Easy', 'Medium', 'Hard', 'Deadly']"></v-select>
     </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
     name: "dnd5e-encounter-settings",
     props: ["value"],
     data: () => ({
-        selectedThreat: "Moderate"
+        selectedThreat: "Medium"
     }),
     watch: {
         selectedThreat() {
