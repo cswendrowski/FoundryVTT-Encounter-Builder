@@ -130,6 +130,9 @@ Hooks.once('ready', function() {
         console.log("DnD5e Init");
     }
 
+    if (game.modules.get('_dev-mode').active) {
+        EncounterBuilder.run();
+    }
 });
 
 Hooks.on('renderCombatTracker', () => { 

@@ -136,8 +136,15 @@ export default class Dnd5e {
     }
 
     getSafeLevel(actor) {
-        if (actor.data?.data?.details?.cr) {
-            return actor.data.data.details.cr;
+        if (actor.data.type == "character") {
+            if (actor.data?.data?.details?.level) {
+                return actor.data.data.details.level;
+            }
+        }
+        else {
+            if (actor.data?.data?.details?.cr) {
+                return actor.data.data.details.cr;
+            }
         }
         return 0;
     }
