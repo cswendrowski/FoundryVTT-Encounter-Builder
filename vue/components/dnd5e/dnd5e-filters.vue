@@ -6,6 +6,8 @@
       <v-select multiple v-model="selectedTypes" :options="Object.values(CONFIG.DND5E.creatureTypes).map(x => game.i18n.localize(x))"></v-select>
       <h4>Size</h4>
       <v-select multiple v-model="selectedSizes" :options="Object.values(CONFIG.DND5E.actorSizes)"></v-select>
+      <h4>Alignment</h4>
+      <v-select multiple v-model="selectedAlignments" :options="Object.values(CONFIG.DND5E.alignments)"></v-select>
       <h4>Movement</h4>
       <v-select multiple v-model="selectedMovements" :options="['Burrows', 'Climbs', 'Flys', 'Hovers', 'Swims', 'Walks']"></v-select>
       <h4>Special Traits</h4>
@@ -25,6 +27,7 @@ export default {
       selectedEnvironments: [],
       selectedTypes: [],
       selectedSizes: [],
+      selectedAlignments: [],
       selectedMovements: [],
       selectedTraits: [],
       selectedResistances: [],
@@ -43,6 +46,7 @@ export default {
             selectedEnvironments: this.selectedEnvironments,
             selectedTypes: this.selectedTypes,
             selectedSizes: this.selectedSizes,
+            selectedAlignments: this.selectedAlignments,
             selectedMovements: this.selectedMovements,
             selectedTraits: this.selectedTraits,
             selectedResistances: this.selectedResistances,
@@ -59,6 +63,9 @@ export default {
         this.$emit('input', this.dataBundle());
       },
       selectedSizes() {
+        this.$emit('input', this.dataBundle());
+      },
+      selectedAlignments() {
         this.$emit('input', this.dataBundle());
       },
       selectedMovements() {

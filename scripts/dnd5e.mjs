@@ -79,6 +79,17 @@ export default class Dnd5e {
             });
         }
 
+        if (filters.selectedAlignments && filters.selectedAlignments.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data?.details?.alignment != undefined) {
+                    return filters.selectedAlignments.filter(value =>
+                        value == x.data.data.details.alignment
+                    ).length > 0;
+                }
+                return false;
+            });
+        }
+
         if (filters.selectedMovements && filters.selectedMovements.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.attributes?.movement != undefined) {
