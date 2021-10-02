@@ -1,6 +1,8 @@
 
 export default class Dnd5e {
 
+    levelName() { return "CR" }
+
     histogramStep() { return 0.25; }
 
     histogramLabelPrettify(cr) {

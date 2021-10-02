@@ -1,6 +1,8 @@
 
 export default class ThirteenthAge {
 
+    levelName() { return "Level" }
+
     histogramStep() { return 1; }
 
     histogramLabelPrettify(level) { return level; }

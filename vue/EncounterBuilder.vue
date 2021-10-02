@@ -73,7 +73,7 @@
         </div>
         <h2>Sortings</h2>
         <div class="sortings">
-          <h4>Level</h4>
+          <h4>{{ levelName }}</h4>
           <button
             v-bind:class="{ active: sortLevelAsc }"
             v-on:click="setSortLevelAsc(true)"
@@ -109,7 +109,7 @@
         </div>
         <div v-else>
           <div class="level-histogram">
-            <h2>Level</h2>
+            <h2>{{ levelName }}</h2>
             <histogramslider
               ref="levelHistogram"
               :data="levelData"
@@ -178,6 +178,8 @@ export default {
       averagePartyLevel: 4,
       numberOfPartyMembers: 4,
     },
+
+    levelName: "Level",
 
     step: 1,
     minimumLevel: 100,
@@ -407,6 +409,7 @@ export default {
   async mounted() {
 
     this.step = this.system.histogramStep();
+    this.levelName = this.system.levelName();
 
     //console.log("Mounted!");
     let characters = this.system.getPlayerCharacters();

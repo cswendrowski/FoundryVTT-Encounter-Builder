@@ -8,6 +8,8 @@ export default class Pathfinder2E {
         this.alignment = Object.values(CONFIG.PF2E.alignment);
     }
 
+    levelName() { return "Level" }
+
     histogramStep() { return 1; }
 
     histogramLabelPrettify(level) { return level; }

@@ -1,6 +1,7 @@
 import ThirteenthAge from "./thirteenth-age.mjs";
 import Pathfinder2E from "./pf2e.mjs";
 import {CompendiumSettingsForm} from "./CompendiumSettingsForm.js";
+import Dnd5e from "./dnd5e.mjs";
 
 class EncounterBuilder {
     static init() {
@@ -35,7 +36,7 @@ class EncounterBuilder {
             ],
             styles: [],
             dependencies: [],
-            init: () => Vue.component(VueNumericInput.default.name, VueNumericInput.default)
+            init: () => Vue.component("vue-numeric-input", window["vue-numeric-input"])
         });
 
         Dlopen.register('vue-loading-spinner', {
@@ -123,6 +124,7 @@ Hooks.once('ready', function() {
     }
     else if (game.system.id == "dnd5e") {
         window.dungeonMoon = {
+            dnd5e: new Dnd5e()
         };
         console.log("DnD5e Init");
     }
