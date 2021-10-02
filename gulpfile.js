@@ -44,7 +44,12 @@ const VUE_FILES = ["vue/**/*.vue"];
 
 vue = () => gulp.src(VUE_FILES)
         .pipe(vueComponent({ loadCssMethod: 'VuePort.loadCss' }))
-        .pipe(babel({ plugins: ['@babel/plugin-transform-modules-commonjs'] }))
+        .pipe(babel({
+            presets: [["@babel/preset-env", { "targets": {
+                "chrome": "58",
+            } }]],
+            plugins: ['@babel/plugin-transform-modules-commonjs']
+        }))
         .pipe(wrap('Vue.component(<%= processComponentName(file.relative) %>, (function() {const exports = {}; <%= contents %>; return _default;})())', {}, {
             imports: {
                 processComponentName: function (fileName) {
