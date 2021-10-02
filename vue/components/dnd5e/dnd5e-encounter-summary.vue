@@ -31,14 +31,13 @@ export default {
       let budget = 40;
       let perCharacterAdjustment = 10;
 
-      if (this.encountersettings.selectedThreat == undefined) this.encountersettings.selectedThreat = "Moderate";
+      if (this.encountersettings.selectedThreat == undefined) this.encountersettings.selectedThreat = "Medium";
 
       switch (this.encountersettings.selectedThreat.toLowerCase()) {
-        case "trivial": budget = 40; perCharacterAdjustment = 10; break;
-        case "low": budget = 60; perCharacterAdjustment = 15; break;
-        case "moderate": budget = 80; perCharacterAdjustment = 20; break;
-        case "severe": budget = 120; perCharacterAdjustment = 30; break;
-        case "extreme": budget = 160; perCharacterAdjustment = 40; break;
+        case "easy": budget = 40; perCharacterAdjustment = 10; break;
+        case "medium": budget = 60; perCharacterAdjustment = 15; break;
+        case "hard": budget = 80; perCharacterAdjustment = 20; break;
+        case "deadly": budget = 120; perCharacterAdjustment = 30; break;
       }
 
       let numOfCharactersOver4 = this.partyinfo.numberOfPartyMembers - 4;
