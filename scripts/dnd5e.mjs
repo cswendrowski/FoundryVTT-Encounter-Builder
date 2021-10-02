@@ -161,12 +161,6 @@ export default class Dnd5e {
             availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(filters.selectedName.toLowerCase()));
         }
 
-        // selectedAlignments: [],
-        // selectedTraits: [],
-        // selectedRarities: [],
-        // selectedSizes: [],
-        
-
         // if (filters.selectedAlignments && filters.selectedAlignments.length > 0) {
         //     availableActors = availableActors.filter(x => {
         //         if (x.data.data?.details?.alignment != undefined) {
@@ -178,14 +172,14 @@ export default class Dnd5e {
         //     });
         // }
         //
-        // if (filters.selectedTraits && filters.selectedTraits.length > 0) {
-        //     availableActors = availableActors.filter(x => {
-        //         if (x.data.data?.traits?.traits != undefined) {
-        //             return filters.selectedTraits.filter(value => x.data.data.traits.traits.value.includes(value)).length > 0;
-        //         }
-        //         return false;
-        //     });
-        // }
+        if (filters.selectedTypes && filters.selectedTypes.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data?.details?.type != undefined) {
+                    return filters.selectedTypes.filter(value => x.data.data.details.type == value).length > 0;
+                }
+                return false;
+            });
+        }
         //
         // if (filters.selectedRarities && filters.selectedRarities.length > 0) {
         //     availableActors = availableActors.filter(x => {
