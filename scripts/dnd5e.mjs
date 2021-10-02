@@ -91,7 +91,7 @@ export default class Dnd5e {
 
         //console.log(actor.name);
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
-        let source = game.world.title;
+        let source = game.world.data.title;
 
         if (nonCompendiumSourceType == "folderName") {
             if (actor.folder != undefined) {

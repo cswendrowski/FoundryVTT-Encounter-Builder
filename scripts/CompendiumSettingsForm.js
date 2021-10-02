@@ -15,13 +15,13 @@ export class CompendiumSettingsForm extends FormApplication {
     /** @override */
     getData(options) {
         return {
-            compendiums: game.packs
-                .filter((x) => x.metadata.entity == "Actor" && !x.metadata.name.includes("baileywiki"))
+            compendiums: Array.from(game.packs.entries())
+                .filter((x) => x[1].metadata.entity == "Actor" && !x[1].metadata.name.includes("baileywiki"))
                 .map(x => {
                     return {
-                        name: x.metadata.name,
-                        label: x.metadata.label,
-                        value: game.settings.get("vue-encounter-builder", x.metadata.name)
+                        name: x[0],
+                        label: x[1].metadata.label,
+                        value: game.settings.get("vue-encounter-builder", x[0])
                     };
                 })
         };

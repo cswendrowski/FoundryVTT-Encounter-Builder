@@ -429,18 +429,18 @@ export default {
     let npcs = this.system.getNpcs();
     let allActors = npcs;
     this.sources.push(game.world.title);
-    let actorCompendiums = game.packs.filter(
-      (x) => x.metadata.entity == "Actor" && !x.metadata.name.includes("baileywiki")
+    let actorCompendiums = Array.from(game.packs.entries()).filter(
+      (x) => x[1].metadata.entity == "Actor" && !x[1].metadata.name.includes("baileywiki")
     );
 
     for (let index = 0; index < actorCompendiums.length; index++) {
       let pack = actorCompendiums[index];
-      if (!game.settings.get("vue-encounter-builder", pack.metadata.name)) continue;
+      if (!game.settings.get("vue-encounter-builder", pack[0])) continue;
       //console.log(pack);
-      let packActors = await pack.getContent();
+      let packActors = await pack[1].getDocuments();
       //console.log(packActors);
       allActors = allActors.concat(this.system.filterCompendiumActors(pack, packActors));
-      this.sources.push(pack.metadata.label);
+      this.sources.push(pack[1].metadata.label);
     }
 
     for (let x = 0; x < allActors.length; x++) {
