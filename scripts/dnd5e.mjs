@@ -68,6 +68,17 @@ export default class Dnd5e {
             });
         }
 
+        if (filters.selectedSizes && filters.selectedSizes.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data?.traits?.size != undefined) {
+                    return filters.selectedSizes.filter(value =>
+                        Object.entries(CONFIG.DND5E.actorSizes).find(x => x[1] == value)[0] == x.data.data.traits.size
+                    ).length > 0;
+                }
+                return false;
+            });
+        }
+
 
 
         return availableActors;
