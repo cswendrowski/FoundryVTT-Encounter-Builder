@@ -9,6 +9,8 @@ export default class Pathfinder2E {
         this.alignment = Object.values(CONFIG.PF2E.alignment);
     }
 
+    initValuesFromAllActors(allActors) {}
+
     levelName() { return "Level" }
 
     histogramStep() { return 1; }

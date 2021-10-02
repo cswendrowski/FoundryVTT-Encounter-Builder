@@ -457,6 +457,8 @@ export default {
       this.sources.push(pack[1].metadata.label);
     }
 
+    this.system.initValuesFromAllActors(allActors);
+
     for (let x = 0; x < allActors.length; x++) {
       let actor = allActors[x];
       let level = this.system.getSafeLevel(actor);

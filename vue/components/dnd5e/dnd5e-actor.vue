@@ -10,7 +10,7 @@
     <section class="actor-info">
       <h4 class="name">
         <span class="level" v-if="actor.data.data.details?.cr"
-          >[{{ actor.data.data.details.cr}}]</span
+          >[CR {{ window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr) }}]</span
         >
         {{ actor.data.name }}
       </h4>

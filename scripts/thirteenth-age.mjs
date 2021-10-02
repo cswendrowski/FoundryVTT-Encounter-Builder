@@ -2,6 +2,8 @@ import {log} from './module.js';
 
 export default class ThirteenthAge {
 
+    initValuesFromAllActors(allActors) {}
+
     levelName() { return "Level" }
 
     histogramStep() { return 1; }

@@ -2,6 +2,20 @@ import {log} from './module.js';
 
 export default class Dnd5e {
 
+    constructor() {
+        this.environments = [];
+    }
+
+    initValuesFromAllActors(allActors) {
+        let environments = new Set();
+        allActors.forEach(actor => {
+            if (actor.data?.data?.details?.environment) {
+                environments.add(actor.data?.data?.details?.environment);
+            }
+        });
+        this.environments = Array.from(environments);
+    }
+
     levelName() { return "CR" }
 
     histogramStep() { return 0.25; }
@@ -36,17 +50,15 @@ export default class Dnd5e {
             availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(filters.selectedName.toLowerCase()));
         }
 
-        // if (filters.selectedAlignments && filters.selectedAlignments.length > 0) {
-        //     availableActors = availableActors.filter(x => {
-        //         if (x.data.data?.details?.alignment != undefined) {
-        //             return filters.selectedAlignments.filter(value =>
-        //                 Object.entries(CONFIG.PF2E.alignment).find(x => x[1] == value)[0] == x.data.data.details.alignment.value
-        //                 ).length > 0;
-        //         }
-        //         return false;
-        //     });
-        // }
-        //
+        if (filters.selectedEnvironments && filters.selectedEnvironments.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data?.details?.environment != undefined) {
+                    return filters.selectedEnvironments.includes(x.data.data.details.environment);
+                }
+                return false;
+            });
+        }
+
         if (filters.selectedTypes && filters.selectedTypes.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.details?.type != undefined) {
@@ -55,26 +67,8 @@ export default class Dnd5e {
                 return false;
             });
         }
-        //
-        // if (filters.selectedRarities && filters.selectedRarities.length > 0) {
-        //     availableActors = availableActors.filter(x => {
-        //         if (x.data.data?.traits?.rarity != undefined) {
-        //             return filters.selectedRarities.includes(x.data.data.traits.rarity.value);
-        //         }
-        //         return false;
-        //     });
-        // }
-        //
-        // if (filters.selectedSizes && filters.selectedSizes.length > 0) {
-        //     availableActors = availableActors.filter(x => {
-        //         if (x.data.data?.traits?.size != undefined) {
-        //             return filters.selectedSizes.filter(value =>
-        //                 Object.entries(CONFIG.PF2E.actorSizes).find(x => x[1] == value)[0] == x.data.data.traits.size.value
-        //                 ).length > 0;
-        //         }
-        //         return false;
-        //     });
-        // }
+
+
 
         return availableActors;
     }
