@@ -148,6 +148,7 @@
 </template>
 
 <script>
+
 export default {
   data: () => ({
     systemName: "",
@@ -221,7 +222,7 @@ export default {
     },
     getEncounterScore: function (actor) {
       if (actor == undefined) return -30;
-      //console.log(actor);
+      //this.log(false, actor);
       try {
         return this.system.getEncounterScore(actor, this.partyInfo);
       } catch (error) {
@@ -254,7 +255,7 @@ export default {
         token.y = baseY;
         tokensToSpawn.push(token);
       }
-      console.log(tokensToSpawn);
+      this.log(false, tokensToSpawn);
       await Token.create(tokensToSpawn);
       ui.notifications.info(
         tokensToSpawn.length + " tokens spawned on " + viewedScene.name
@@ -323,7 +324,7 @@ export default {
         }
       }
 
-      //console.log(availableActors);
+      //this.log(false, availableActors);
       return availableActors;
     },
     levelData() {
@@ -345,15 +346,15 @@ export default {
 
         levels.push(level);
       }
-      console.log(levels);
+      this.log(false, levels);
       return levels;
     },
     groupedSelectedActors() {
       let grouped = {};
-      //console.log("Grouping");
+      //this.log(false, "Grouping");
       for (let x = 0; x < this.selectedActors.length; x++) {
         let selected = this.selectedActors[x];
-        //console.log(selected);
+        //this.log(false, selected);
         let name = selected.data.name;
         if (!(name in grouped)) {
           grouped[name] = [];
@@ -384,23 +385,25 @@ export default {
     }
   },
   async created() {
-    console.log("Loading system");
+    this.log = window.dungeonMoon.log;
+
+    this.log(true, "Loading system");
     if (game.system.id == "archmage") {
       this.systemName = "thirteenth-age";
       this.system = window.dungeonMoon.thirteenthAge;
-      console.log("13th Age Loaded");
+      this.log(true, "13th Age Loaded");
     }
     else if (game.system.id == "pf2e") {
       this.systemName = "pf2e";
       this.system = window.dungeonMoon.pathfinder2E;
       this.colors.primary = "#171f69";
-      console.log("PF2E Loaded");
+      this.log(true, "PF2E Loaded");
     }
     else if (game.system.id == "dnd5e") {
       this.systemName = "dnd5e";
       this.system = window.dungeonMoon.dnd5e;
       this.colors.primary = "#171f69";
-      console.log("DnD5e Loaded");
+      this.log(true, "DnD5e Loaded");
     }
     else {
       console.error("Unknown game system - " + game.system.id);
@@ -411,16 +414,16 @@ export default {
     this.step = this.system.histogramStep();
     this.levelName = this.system.levelName();
 
-    //console.log("Mounted!");
+    //this.log(false, "Mounted!");
     let characters = this.system.getPlayerCharacters();
-    //console.log(characters);
+    //this.log(false, characters);
     if (characters.length > 0) {
       this.partyInfo.numberOfPartyMembers = characters.length;
       let totalLevel = 0;
       for (let index = 0; index < this.partyInfo.numberOfPartyMembers; index++) {
         totalLevel += this.system.getSafeLevel(characters[index]);
       }
-      console.log(this.partyInfo);
+      this.log(false, this.partyInfo);
       this.partyInfo.averagePartyLevel = Math.round(
         totalLevel / this.partyInfo.numberOfPartyMembers
       );
@@ -436,9 +439,9 @@ export default {
     for (let index = 0; index < actorCompendiums.length; index++) {
       let pack = actorCompendiums[index];
       if (!game.settings.get("vue-encounter-builder", pack[0])) continue;
-      //console.log(pack);
+      //this.log(false, pack);
       let packActors = await pack[1].getDocuments();
-      //console.log(packActors);
+      //this.log(false, packActors);
       allActors = allActors.concat(this.system.filterCompendiumActors(pack, packActors));
       this.sources.push(pack[1].metadata.label);
     }
@@ -481,15 +484,15 @@ export default {
       this.maxSelectedLevel = this.maximumLevel;
     }
 
-    console.log(`Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
+    this.log(false, `Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
 
-    console.log(allActors);
+    this.log(false, allActors);
     this.actors = allActors;
     this.loading = false;
 
     Hooks.on("deleteActor", (actor, meta, id) => {
-      console.log("Handling delete for " + id);
-      console.log(this.selectedActors);
+      this.log(false, "Handling delete for " + id);
+      this.log(false, this.selectedActors);
       this.selectedActors = this.selectedActors.filter((x) => x.id != actor.id);
       this.actors = this.actors.filter((x) => x.id != actor.id);
     });

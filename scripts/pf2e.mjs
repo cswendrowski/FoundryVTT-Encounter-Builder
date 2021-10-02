@@ -1,3 +1,4 @@
+import {log} from './module.js';
 
 export default class Pathfinder2E {
 
@@ -84,7 +85,7 @@ export default class Pathfinder2E {
     }
 
     getActorSource(actor) {
-        //console.log(actor.name);
+        //log(false, actor.name);
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
         let source = game.world.data.title;
 
@@ -104,7 +105,7 @@ export default class Pathfinder2E {
 
     getEncounterScore(actor, partyInfo) {
         if (actor == undefined) return -30;
-        //console.log(actor);
+        //log(false, actor);
         try {
             if (actor.data.type == "hazard") {
                 let simpleChart = [

@@ -1,3 +1,5 @@
+import {log} from './module.js';
+
 export class CompendiumSettingsForm extends FormApplication {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -28,7 +30,7 @@ export class CompendiumSettingsForm extends FormApplication {
     }
 
     async _updateObject(event, data) {
-        console.log(data);
+        log(false, data);
         Object.keys(data).forEach(key => {
            game.settings.set("vue-encounter-builder", key, data[key]);
         });

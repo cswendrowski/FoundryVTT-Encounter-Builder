@@ -1,3 +1,4 @@
+import {log} from './module.js';
 
 export default class ThirteenthAge {
 
@@ -153,11 +154,11 @@ export default class ThirteenthAge {
         levelDifference += 2;
 
         if (levelDifference < 0) {
-            console.log("Enemy too weak!");
+            log(false, "Enemy too weak!");
             return -20;
         }
         else if (levelDifference > 6) {
-            console.log("Enemy too strong!");
+            log(false, "Enemy too strong!");
             return -10;
         }
         return scoreChart[levelDifference][sizeToColumn[size]];

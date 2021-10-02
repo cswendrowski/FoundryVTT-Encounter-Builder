@@ -3,6 +3,20 @@ import Pathfinder2E from "./pf2e.mjs";
 import {CompendiumSettingsForm} from "./CompendiumSettingsForm.js";
 import Dnd5e from "./dnd5e.mjs";
 
+const moduleName = "vue-encounter-builder";
+
+Hooks.on('devModeReady', ({registerPackageDebugFlag}) => registerPackageDebugFlag(moduleName));
+
+export function log(force, ...args) {
+    try {
+        const isDebugging = game.modules.get('_dev-mode')?.api?.getPackageDebugValue(moduleName);
+
+        if (force || isDebugging) {
+            console.log(moduleName, '|', ...args);
+        }
+    } catch (e) { }
+}
+
 class EncounterBuilder {
     static init() {
         Dlopen.register('vue-select', {
@@ -76,7 +90,6 @@ class EncounterBuilder {
 
 Hooks.on('init', () => EncounterBuilder.init());
 
-const moduleName = "vue-encounter-builder";
 
 Hooks.once('ready', function() {
     game.settings.register(moduleName, "nonCompendiumSourceType", {
@@ -115,22 +128,24 @@ Hooks.once('ready', function() {
         window.dungeonMoon = {
             thirteenthAge: new ThirteenthAge()
         };
-        console.log("13th Age Init");
+        log(true, "13th Age Init");
     }
     else if (game.system.id == "pf2e") {
         window.dungeonMoon = {
             pathfinder2E: new Pathfinder2E()
         };
-        console.log("PF2E Init");
+        log(true, "PF2E Init");
     }
     else if (game.system.id == "dnd5e") {
         window.dungeonMoon = {
             dnd5e: new Dnd5e()
         };
-        console.log("DnD5e Init");
+        log(true, "DnD5e Init");
     }
 
-    if (game.modules.get('_dev-mode').active) {
+    window.dungeonMoon.log = log;
+
+    if (game.modules.get('_dev-mode')?.api?.getPackageDebugValue(moduleName)) {
         EncounterBuilder.run();
     }
 });
