@@ -114,6 +114,33 @@ export default class Dnd5e {
             });
         }
 
+        if (filters.selectedResistances && filters.selectedResistances.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data?.traits?.dr != undefined) {
+                    return filters.selectedResistances.filter(value => x.data.data.traits.dr.value.includes(value)).length > 0;
+                }
+                return false;
+            });
+        }
+
+        if (filters.selectedImmunities && filters.selectedImmunities.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data?.traits?.di != undefined) {
+                    return filters.selectedImmunities.filter(value => x.data.data.traits.di.value.includes(value)).length > 0;
+                }
+                return false;
+            });
+        }
+
+        if (filters.selectedVulnerabilities && filters.selectedVulnerabilities.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data?.traits?.dv != undefined) {
+                    return filters.selectedVulnerabilities.filter(value => x.data.data.traits.dv.value.includes(value)).length > 0;
+                }
+                return false;
+            });
+        }
+
         return availableActors;
     }
 

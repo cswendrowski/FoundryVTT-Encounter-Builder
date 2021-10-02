@@ -10,6 +10,12 @@
       <v-select multiple v-model="selectedMovements" :options="['Burrows', 'Climbs', 'Flys', 'Hovers', 'Swims', 'Walks']"></v-select>
       <h4>Special Traits</h4>
       <v-select multiple v-model="selectedTraits" :options="['Spellcaster', 'Legendary', 'Lair Actions']"></v-select>
+      <h4>Resistances</h4>
+      <v-select multiple v-model="selectedResistances" :options="Object.values(CONFIG.DND5E.damageResistanceTypes)" :reduce="x => x.toLowerCase()"></v-select>
+      <h4>Immunities</h4>
+      <v-select multiple v-model="selectedImmunities" :options="Object.values(CONFIG.DND5E.damageResistanceTypes)" :reduce="x => x.toLowerCase()"></v-select>
+      <h4>Vulnerabilities</h4>
+      <v-select multiple v-model="selectedVulnerabilities" :options="Object.values(CONFIG.DND5E.damageResistanceTypes)" :reduce="x => x.toLowerCase()"></v-select>
     </div>
 </template>
 <script>
@@ -20,7 +26,10 @@ export default {
       selectedTypes: [],
       selectedSizes: [],
       selectedMovements: [],
-      selectedTraits: []
+      selectedTraits: [],
+      selectedResistances: [],
+      selectedImmunities: [],
+      selectedVulnerabilities: [],
     }),
     props: ['value'],
     computed: {
@@ -35,7 +44,10 @@ export default {
             selectedTypes: this.selectedTypes,
             selectedSizes: this.selectedSizes,
             selectedMovements: this.selectedMovements,
-            selectedTraits: this.selectedTraits
+            selectedTraits: this.selectedTraits,
+            selectedResistances: this.selectedResistances,
+            selectedImmunities: this.selectedImmunities,
+            selectedVulnerabilities: this.selectedVulnerabilities,
           };
       }
     },
@@ -53,6 +65,15 @@ export default {
         this.$emit('input', this.dataBundle());
       },
       selectedTraits() {
+        this.$emit('input', this.dataBundle());
+      },
+      selectedResistances() {
+        this.$emit('input', this.dataBundle());
+      },
+      selectedImmunities() {
+        this.$emit('input', this.dataBundle());
+      },
+      selectedVulnerabilities() {
         this.$emit('input', this.dataBundle());
       },
     }
