@@ -79,7 +79,40 @@ export default class Dnd5e {
             });
         }
 
+        if (filters.selectedMovements && filters.selectedMovements.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data?.attributes?.movement != undefined) {
+                    let matchingMovements = filters.selectedMovements.filter(value => {
+                        switch (value) {
+                            case "Burrows": return x.data.data.attributes.movement.burrow > 0;
+                            case "Climbs": return x.data.data.attributes.movement.climb > 0;
+                            case "Flys": return x.data.data.attributes.movement.fly > 0;
+                            case "Hovers": return x.data.data.attributes.movement.hover;
+                            case "Swims": return x.data.data.attributes.movement.swim > 0;
+                            case "Walks": return x.data.data.attributes.movement.walk > 0;
+                        }
+                    });
+                    return matchingMovements.length > 0;
+                }
+                return false;
+            });
+        }
 
+        if (filters.selectedTraits && filters.selectedTraits.length > 0) {
+            availableActors = availableActors.filter(x => {
+                if (x.data.data != undefined) {
+                    let matchingTraits = filters.selectedTraits.filter(value => {
+                        switch (value) {
+                            case "Spellcaster": return x.data.data.details.spellLevel > 0;
+                            case "Legendary": return x.data.data.resources?.lair?.value;
+                            case "Lair Actions": return x.data.data.resources?.legact?.max > 0 || x.data.data.resources?.legres?.max > 0;
+                        }
+                    });
+                    return matchingTraits.length > 0;
+                }
+                return false;
+            });
+        }
 
         return availableActors;
     }
