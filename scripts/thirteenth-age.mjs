@@ -71,7 +71,7 @@ export default class ThirteenthAge {
     };
 
     getUniqueKey(actor, partyInfo, encounterSettings) {
-        return actor._id + partyInfo.averagePartyLevel + partyInfo.numberOfPartyMembers;
+        return actor.id;
     }
 
     getEncounterScore(actor, partyInfo) {

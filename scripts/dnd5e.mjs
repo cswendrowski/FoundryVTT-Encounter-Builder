@@ -98,7 +98,7 @@ export default class Dnd5e {
     };
 
     getUniqueKey(actor, partyInfo, encounterSettings) {
-        return actor._id + partyInfo.averagePartyLevel + partyInfo.numberOfPartyMembers;
+        return actor.id;
     }
 
     getEncounterScore(actor) {

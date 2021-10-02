@@ -22,7 +22,7 @@ $dark-maroon: #2B0603;
 }
 
 .encounter-builder-application {
-    --title-font-family: 'mason-serif';
+    --title-font-family: 'mason-serif', inherit;
     --title-font-size: 2.5em;
     --title-background-color: #{$red};
     --title-background-blend: color-burn;
@@ -95,6 +95,36 @@ $dark-maroon: #2B0603;
         .current-threat-level {
             font-weight: bold;
         }
+
+
+        .actor-listing {
+            position: relative;
+
+            &:hover {
+                .actor-info-buttons-overlay {
+                    visibility: visible;
+                }
+            }
+        }
+
+        .actor-info-buttons-overlay {
+            visibility: hidden;
+            position: absolute;
+            top: -0.5em;
+            right: 0;
+            display: flex;
+            gap: 0.5em;
+            background: var(--background-secondary-color);
+            border-radius: 4px;
+            box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
+        }
+
+        .actor-info-button {
+            padding: 0.25em;
+            width: 1.5em;
+            height: 1.5em;
+            text-align: center;
+        }
     }
 
     &.window-app .window-content {
@@ -102,19 +132,28 @@ $dark-maroon: #2B0603;
         background-repeat: repeat;
         background-blend-mode: var(--background-primary-blend);
         height: 100%;
-        overflow: hidden;
+        // overflow: hidden;
         padding: 0;
 
         .dialog-buttons {
             display: none;
+        }
+
+        .dialog-content {
+            flex: 0 0 100%;
+            height: 100%;
         }
     }
 }
 
 .encounter-builder {
 	display: grid;
-	grid-template-columns: 1fr 30ch;
-    grid-template-rows: 5em 1fr;
+	grid-template-columns: 25ch 1fr 30ch;
+    grid-template-rows: 5em 15em 1fr;
+    grid-template-areas: 
+        'header header encounter'
+        'filters histogram encounter'
+        'filters results encounter';
     height: 100%;
     color: var(--text-color);
 
@@ -129,10 +168,9 @@ $dark-maroon: #2B0603;
     }
 
     .encounter-info {
-        grid-row: 1;
-        grid-column: 1;
+        grid-area: header;
 
-        z-index: 1;
+        // z-index: 1;
 
         height: 100%;
         background: var(--color-accent);
@@ -147,7 +185,7 @@ $dark-maroon: #2B0603;
         h1 {
             font-size: var(--title-font-size);
             border: none;
-            font-family: var(--title-font-family);
+            font-family: var(--title-font-family, inherit);
             height: 100%;
             margin: 0;
             line-height: 1.5;
@@ -163,15 +201,15 @@ $dark-maroon: #2B0603;
             }
         }
     }
+
     .encounter-details {
-        grid-column: 2;
-        grid-row-start: 1;
-        grid-row-end: 3;
+        grid-area: encounter;
         padding: .5em 1ch .5em 1ch;
         box-shadow: -1px 3px 6px 0px var(--shadow-full-color);
         background: var(--background-secondary-color);
 
-        z-index: 2;
+        // z-index: 2;
+        overflow: auto;
 
         .numeric-input {
             background: none;
@@ -215,15 +253,15 @@ $dark-maroon: #2B0603;
             }
         }
     }
-    .search-area {
-        grid-column: 1;
-        grid-row: 2;
-        padding-right: 1ch;
+    // .search-area {
+    //     grid-column: 1;
+    //     grid-row: 2;
+    //     padding-right: 1ch;
 
-        display: grid;
-        grid-template-columns: 25ch 1fr;
+    //     display: grid;
+    //     grid-template-columns: 25ch 1fr;
 
-        height: 1fr;
+    //     height: 1fr;
 
         input[type=text] {
             padding: 4px;
@@ -235,13 +273,13 @@ $dark-maroon: #2B0603;
         }
 
         .search-configuration {
-            grid-column: 1;
-            grid-row: 1;
+            grid-area: filters;
+            // grid-column: 1;
+            // grid-row: 1;
             
             padding: .5em 1ch .5em 1ch;
             box-shadow: 1px 4px 6px 0px var(--shadow-full-color);
             background: var(--background-secondary-color);
-            height: 50em;
             overflow-y: scroll;
 
             .sortings {
@@ -250,14 +288,15 @@ $dark-maroon: #2B0603;
                 }
             }
         }
-        .search-results {
-            grid-column: 2;
-            grid-row: 1;
-            height: 50em;
-            padding: 1em 2ch 1em 2ch;
+
+        // .search-results {
+        //     grid-column: 2;
+        //     grid-row: 1;
+        //     height: 50em;
+        //     padding: 1em 2ch 1em 2ch;
             
-            overflow-y: scroll;
-            overflow-x: hidden;
+        //     overflow-y: scroll;
+        //     overflow-x: hidden;
 
             .loading-container {
                 display: flex;
@@ -284,15 +323,24 @@ $dark-maroon: #2B0603;
 
             ul {
                 padding: 0;
+                margin: 0;
                 list-style: none;
             }
+
+
+            .results {
+                grid-area: results;
+                overflow: auto;
+                padding: 0.5em;
+            }
+
             .result-list {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 column-gap: .5em;
                 row-gap: .5em;
-
             }
+
             .actor-listing {
                 display: flex;
                 flex-direction: row;
@@ -305,9 +353,10 @@ $dark-maroon: #2B0603;
                 box-shadow: none;
                 transition: box-shadow .3s;
 
-                &:hover {
-                    box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
-                }
+                // &:hover {
+                //     box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
+                // }
+
                 &[disabled] {
                     cursor: not-allowed;
                     opacity: 40%;
@@ -344,6 +393,7 @@ $dark-maroon: #2B0603;
             }
             
             .level-histogram {
+                grid-area: histogram;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -355,6 +405,6 @@ $dark-maroon: #2B0603;
                     }
                 }
             }      
-        }
-    }
+        // }
+    // }
 }

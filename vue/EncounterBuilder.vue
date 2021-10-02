@@ -4,8 +4,10 @@
       <!-- <h1><input type="text" placeholder="encounter name" value="Encounter Name"></h1> -->
       <h1>Encounter</h1>
     </header>
+
     <section class="encounter-details">
       <h2>Encounter Settings</h2>
+
       <div class="encounterSettings">
         <h4>Average Party Level</h4>
         <vue-numeric-input
@@ -22,13 +24,15 @@
           v-model="encounterSettings"
         ></component>
       </div>
+
       <h2>Enemies</h2>
+
       <div class="encounter-actors">
         <ul class="encounter-members">
           <li
-             v-for="t of groupedSelectedActors"
+            v-for="t of groupedSelectedActors"
             :key="system.getUniqueKey(t[1][0], partyInfo, encounterSettings)"
-            >
+          >
             <component
               v-bind:is="selectedActorComponent"
               v-if="t[1][0].encounterScore > 0"
@@ -41,7 +45,9 @@
           </li>
         </ul>
       </div>
+
       <h2>Summary</h2>
+
       <div class="encounter-results">
         <component
           v-bind:is="encounterSummaryComponent"
@@ -56,94 +62,98 @@
         </button>
       </div>
     </section>
-    <section class="search-area">
-      <header class="search-configuration">
-        <h2>Filters</h2>
-        <div class="filters">
-          <h4>Name</h4>
-          <input type="text" placeholder="Name" v-model="selectedName" />
-          <h4>Source</h4>
-          <v-select
-            multiple
-            v-model="selectedSources"
-            :options="sources"
-            :reduce="(x) => x.toLowerCase()"
-          ></v-select>
-          <component v-bind:is="filtersComponent" v-model="filters"></component>
-        </div>
-        <h2>Sortings</h2>
-        <div class="sortings">
-          <h4>{{ levelName }}</h4>
-          <button
-            v-bind:class="{ active: sortLevelAsc }"
-            v-on:click="setSortLevelAsc(true)"
-          >
-            <i class="btn btn-primary fas fa-sort-up"></i>
-          </button>
-          <button
-            v-bind:class="{
-              active: sortLevelAsc != undefined && !sortLevelAsc,
-            }"
-            v-on:click="setSortLevelAsc(false)"
-          >
-            <i class="btn btn-primary fas fa-sort-down"></i>
-          </button>
-          <h4>Name</h4>
-          <button
-            v-bind:class="{ active: sortNameAsc }"
-            v-on:click="setSortNameAsc(true)"
-          >
-            <i class="btn btn-primary fas fa-sort-up"></i>
-          </button>
-          <button
-            v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
-            v-on:click="setSortNameAsc(false)"
-          >
-            <i class="btn btn-primary fas fa-sort-down"></i>
-          </button>
-        </div>
-      </header>
-      <section class="search-results">
-        <div v-if="loading" class="loading-container">
-          <pencil></pencil>
-        </div>
-        <div v-else>
-          <div class="level-histogram">
-            <h2>{{ levelName }}</h2>
-            <histogramslider
-              ref="levelHistogram"
-              :data="levelData"
-              :min="minimumLevel"
-              :max="maximumLevel"
-              :step="step"
-              :prettify="prettify"
-              :primary-color="colors.primary"
-              :holder-color="colors.holder"
-              :handle-color="colors.handle"
-              :label-color="colors.label"
-              :grid-text-color="colors.gridText"
-              :key="levelData.length"
-              @finish="sliderFinished"
-            >
-            </histogramslider>
-          </div>
-          <ul class="result-list">
-            <component
-              v-bind:is="actorComponent"
-              v-model="encounterSettings"
-              class="actor-listing"
-              v-for="t of availableActors"
-              :key="system.getUniqueKey(t, encounterSettings)"
-              :actor="t"
-              v-on:click-left="addActor(t)"
-              v-on:click-right="removeActor(t)"
-              v-on:actor-info="openActorSheet(t)"
-              :disabled="t.encounterScore <= 0"
-            ></component>
-          </ul>
-        </div>
-      </section>
-    </section>
+
+    <aside class="search-configuration">
+      <h2>Filters</h2>
+      <div class="filters">
+        <h4>Name</h4>
+        <input type="text" placeholder="Name" v-model="selectedName" />
+        <h4>Source</h4>
+        <v-select
+          multiple
+          v-model="selectedSources"
+          :options="sources"
+          :reduce="(x) => x.toLowerCase()"
+        ></v-select>
+        <component v-bind:is="filtersComponent" v-model="filters"></component>
+      </div>
+
+      <h2>Sortings</h2>
+      <div class="sortings">
+        <h4>{{ levelName }}</h4>
+        <button
+          v-bind:class="{ active: sortLevelAsc }"
+          v-on:click="setSortLevelAsc(true)"
+        >
+          <i class="btn btn-primary fas fa-sort-up"></i>
+        </button>
+        <button
+          v-bind:class="{
+            active: sortLevelAsc != undefined && !sortLevelAsc,
+          }"
+          v-on:click="setSortLevelAsc(false)"
+        >
+          <i class="btn btn-primary fas fa-sort-down"></i>
+        </button>
+
+        <h4>Name</h4>
+        <button
+          v-bind:class="{ active: sortNameAsc }"
+          v-on:click="setSortNameAsc(true)"
+        >
+          <i class="btn btn-primary fas fa-sort-up"></i>
+        </button>
+        <button
+          v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
+          v-on:click="setSortNameAsc(false)"
+        >
+          <i class="btn btn-primary fas fa-sort-down"></i>
+        </button>
+      </div>
+    </aside>
+
+    <div v-if="loading" class="loading-container">
+      <pencil></pencil>
+    </div>
+
+    <div class="level-histogram" v-if="!loading">
+      <h2>{{ levelName }}</h2>
+      <histogramslider
+        ref="levelHistogram"
+        :data="levelData"
+        :min="minimumLevel"
+        :max="maximumLevel"
+        :step="step"
+        :prettify="prettify"
+        :primary-color="colors.primary"
+        :holder-color="colors.holder"
+        :handle-color="colors.handle"
+        :label-color="colors.label"
+        :grid-text-color="colors.gridText"
+        :key="levelData.length"
+        @finish="sliderFinished"
+      >
+      </histogramslider>
+    </div>
+
+    <div class="results" v-if="!loading">
+      <ul class="result-list">
+        <component
+          v-bind:is="actorComponent"
+          v-model="encounterSettings"
+          class="actor-listing"
+          v-for="t of availableActors"
+          :key="system.getUniqueKey(t, encounterSettings)"
+          :actor="t"
+          v-on:click-left="addActor(t)"
+          v-on:click-right="removeActor(t)"
+          v-on:add-actor="addActor(t)"
+          v-on:remove-actor="removeActor(t)"
+          v-on:actor-info="openActorSheet(t)"
+          :disabled="t.encounterScore <= 0"
+        ></component>
+      </ul>
+    </div>
   </div>
 </template>
 
