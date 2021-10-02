@@ -41,71 +41,76 @@ $dark-maroon: #2B0603;
     --shadow-subtle-color: #00000080;
 
     --text-color: black;
-}
 
+    &.pf2e {
+        --title-font-family: 'mason-serif';
+        --title-font-size: 2.5em;
+        --title-background-color: #{$red};
+        --title-background-blend: color-burn;
 
-.encounter-builder-application.pf2e {
+        //--background-primary-image: url(../../../systems/pf2e/assets/sheet/header.png);
+        --background-primary-image: url(/ui/parchment.jpg);
+        --background-primary-color: white;
+        --background-primary-blend: hard-light;
+        --background-secondary-color: #{$white};
 
-    --title-font-family: 'mason-serif';
-    --title-font-size: 2.5em;
-    --title-background-color: #{$red};
-    --title-background-blend: color-burn;
+        --color-primary: #171f69;
+        --color-secondary: #E9D7A1;
+        --color-accent: #171f69;
+        --color-accent2: #f7d488;
 
-    //--background-primary-image: url(../../../systems/pf2e/assets/sheet/header.png);
-    --background-primary-image: url(/ui/parchment.jpg);
-    --background-primary-color: white;
-    --background-primary-blend: hard-light;
-    --background-secondary-color: #{$white};
+        --shadow-full-color: black;
+        --shadow-subtle-color: #00000080;
 
-    --color-primary: #171f69;
-    --color-secondary: #E9D7A1;
-    --color-accent: #171f69;
-    --color-accent2: #f7d488;
+        --text-color: black;
 
-    --shadow-full-color: black;
-    --shadow-subtle-color: #00000080;
+        .window-content {
+            background: var(--background-primary-image) !important;
+        }
 
-    --text-color: black;
+        .actor-listing {
+            background: url(../../../systems/pf2e/assets/sheet/header.webp) !important;
+        }
 
-    .window-content {
-        background: var(--background-primary-image) !important;
-    }
+        .traits {
+            color: #fff !important;
+        }
 
-    .actor-listing {
-        background: url(../../../systems/pf2e/assets/sheet/header.webp) !important;
-    }
+        .encounter-info {
+            color: #fff !important;
+        }
 
-    .traits {
-        color: #fff !important;
-    }
+        .vue-histogram-slider-wrapper {
+            .irs-bar {
+                background-color: #171f69;
+            }
+        }
 
-    .encounter-info {
-        color: #fff !important;
-    }
-
-    .vue-histogram-slider-wrapper {
-        .irs-bar {
-            background-color: #171f69;
+        .actor-info-button {
+            color: #f7d488;
         }
     }
 
-    .actor-info-button {
-        color: #f7d488;
+    &.dnd5e {
+        .current-threat-level {
+            font-weight: bold;
+        }
+    }
+
+    &.window-app .window-content {
+        background: var(--background-primary-image), var(--background-primary-color);
+        background-repeat: repeat;
+        background-blend-mode: var(--background-primary-blend);
+        height: 100%;
+        overflow: hidden;
+        padding: 0;
+
+        .dialog-buttons {
+            display: none;
+        }
     }
 }
 
-.encounter-builder-application.window-app .window-content {
-    background: var(--background-primary-image), var(--background-primary-color);
-	background-repeat: repeat;
-	background-blend-mode: var(--background-primary-blend);
-    height: 100%;
-    overflow: hidden;
-    padding: 0;
-
-    .dialog-buttons {
-        display: none;
-    }
-}
 .encounter-builder {
 	display: grid;
 	grid-template-columns: 1fr 30ch;

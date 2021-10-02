@@ -1,8 +1,14 @@
 <template>
     <div>
+        <h4
+          v-bind:class="{'current-threat-level': t.active}"
+          v-for="t of threatLevels"
+           :key="t.label">
+           {{t.label}} ({{t.value}} XP)
+        </h4>
+
         <h4>Total XP: {{totalEncounterScore}}</h4>
         <h4>Adjusted XP: <span :class="totalScoreClass">{{adjustedEncounterScore}} of {{maxEncounterScore}}</span></h4>
-        <!-- <h4>Threat Level: {{threatLevel}}</h4> -->
     </div>
 </template>
 <script>
@@ -132,7 +138,6 @@ const xpThresholdsByLevel = {
     },
 }
 
-
 // all the total score multipliers
 const multipliers = [1, 1.5, 2, 2.5, 3, 4];
 
@@ -160,11 +165,11 @@ export default {
   props: ["selectedactors", "partyinfo", "encountersettings", "system"],
   computed: {
     totalScoreClass() {
-      let difference = Math.abs(this.totalEncounterScore - this.maxEncounterScore);
+      let difference = Math.abs(this.adjustedEncounterScore - this.maxEncounterScore);
       if (difference == 0) return "perfect";
-      if (difference < this.totalEncounterScore * 0.1) return "close";
-      if (difference < this.totalEncounterScore * 0.2) return "straying";
-      if (difference < this.totalEncounterScore * 0.3) return "faraway";
+      if (difference < this.adjustedEncounterScore * 0.1) return "close";
+      if (difference < this.adjustedEncounterScore * 0.2) return "straying";
+      if (difference < this.adjustedEncounterScore * 0.3) return "faraway";
       return "distant";
     },
     adjustedEncounterScore() {
@@ -199,6 +204,74 @@ export default {
 
       return xpThresholdsByLevel[this.partyinfo.averagePartyLevel]?.[selectedThreat] * this.partyinfo.numberOfPartyMembers;
     },
+    threatLevels() {
+      const { numberOfPartyMembers, averagePartyLevel } = this.partyinfo;
+      const easy =
+        numberOfPartyMembers * xpThresholdsByLevel[averagePartyLevel]?.easy;
+      const medium =
+        numberOfPartyMembers * xpThresholdsByLevel[averagePartyLevel]?.medium;
+      const hard =
+        numberOfPartyMembers * xpThresholdsByLevel[averagePartyLevel]?.hard;
+      const deadly =
+        numberOfPartyMembers * xpThresholdsByLevel[averagePartyLevel]?.deadly;
+
+      const threatValues = {
+        easy,
+        medium,
+        hard,
+        deadly
+      }
+
+      const currentThreatValue = Object.values(threatValues).reduce(
+        (prevValue, currentValue) => {
+          const evaluated = this.adjustedEncounterScore - currentValue;
+
+          // 0 means this is an exact match
+          if (evaluated === 0) {
+            return currentValue;
+          }
+
+          // negative sign means we went too far, use 'prev'
+          if (Math.sign(evaluated) < 0) {
+            return prevValue;
+          }
+
+          // positive sign means this might be closest, move on to next
+          if (Math.sign(evaluated) > 0) {
+            return currentValue;
+          }
+        }
+      );
+
+      return {
+        easy: { label: "Easy", value: easy, active: currentThreatValue === easy },
+        medium: { label: "Medium", value: medium, active: currentThreatValue === medium },
+        hard: { label: "Hard", value: hard, active: currentThreatValue === hard },
+        deadly: { label: "Deadly", value: deadly, active: currentThreatValue === deadly },
+      };
+    },
+    // threatLevel() {
+    //   return Object.values(this.threatLevels).reduce(
+    //     (prevThreshold, currentThreshold) => {
+    //       const evaluated = this.adjustedEncounterScore - currentThreshold.value;
+
+    //       // 0 means this is an exact match
+    //       if (evaluated === 0) {
+    //         return currentThreshold;
+    //       }
+
+    //       // negative sign means we went too far, use 'prev'
+    //       if (Math.sign(evaluated) < 0) {
+    //         return prevThreshold;
+    //       }
+
+    //       // positive sign means this might be closest, move on to next
+    //       if (Math.sign(evaluated) > 0) {
+    //         return currentThreshold;
+    //       }
+    //     }
+    //   );
+    // },
   },
 }
 </script>
