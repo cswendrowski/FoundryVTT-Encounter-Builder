@@ -17,10 +17,6 @@
       </h4>
       <ul class="traits">
         <li class="score" v-if="actor.encounterScore > 0">
-          <label class="trait-label">Traits</label>
-          <span class="trait-value">{{ actor.data.data.traits.traits.value.join(", ") }}</span>
-        </li>
-        <li class="score" v-if="actor.encounterScore > 0">
           <label class="trait-label">XP</label>
           <span class="trait-value">{{ actor.encounterScore }}</span>
         </li>

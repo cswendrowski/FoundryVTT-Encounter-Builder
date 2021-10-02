@@ -125,7 +125,6 @@ const xpThresholdsByLevel = {
     },
 }
 
-
 export default class Dnd5e {
 
     levelName() { return "CR" }
@@ -234,28 +233,10 @@ export default class Dnd5e {
         return actor._id + partyInfo.averagePartyLevel + partyInfo.numberOfPartyMembers;
     }
 
-    getEncounterScore(actor, partyInfo) {
+    getEncounterScore(actor) {
         if (actor == undefined) return -30;
-        //console.log(actor);
         try {
-
-            // let xpChart = [
-            //     10,
-            //     15,
-            //     20,
-            //     30,
-            //     40, // Same level
-            //     60,
-            //     80,
-            //     120,
-            //     160
-            // ];
-            //
-            // let levelDifference = this.getSafeLevel(actor) - partyInfo.averagePartyLevel;
-            // let xpIndex = levelDifference + 4;
-            //
-            // return xpChart[xpIndex];
-            return 0;
+            return actor.data.data.details.xp.value;
         }
         catch (error) {
             console.error(error);
