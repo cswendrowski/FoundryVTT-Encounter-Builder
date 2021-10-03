@@ -53,7 +53,7 @@ export default class Dnd5e {
         if (filters.selectedEnvironments && filters.selectedEnvironments.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.details?.environment != undefined) {
-                    return filters.selectedEnvironments.includes(x.data.data.details.environment);
+                    return filters.selectedEnvironments.filter(value => x.data.data.details.environment.includes(value)).length > 0;
                 }
                 return false;
             });
