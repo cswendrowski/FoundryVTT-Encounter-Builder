@@ -1,27 +1,27 @@
 <template>
   <li class="actor-listing">
-    <div class="actor-image">
-      <img :src="actor.data.img" width="100" height="100" />
-    </div>
     <section class="actor-info">
       <h4 class="name">
-        <span class="level" v-if="actor.data.data.details?.cr"
-          >[CR {{ window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr) }}]</span
-        >
         {{ actor.data.name }}
       </h4>
+      <span class="trait-value">
+          <i>{{CONFIG.DND5E.actorSizes[actor.data.data.traits.size]}} {{ actor.labels.creatureType }}</i>
+      </span>
+
+      <hr />
+
+
       <ul class="traits">
-        <li class="score" v-if="actor.encounterScore > 0">
-          <label class="trait-label">XP</label>
-          <span class="trait-value">{{ actor.encounterScore }}</span>
-        </li>
-        <li class="source">
-          <span class="trait-value">
-              <i>{{ actor.source }}</i>
-          </span>
+        <li><label class="trait-label">Challenge</label> <span class="trait-value">{{ window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr) }} ({{ actor.encounterScore }} XP)</span>
         </li>
       </ul>
+
+      <small class="actor-source">{{ actor.data.data.details.source }}</small>
     </section>
+
+    <div class="actor-image">
+      <img :src="actor.data.img" />
+    </div>
 
     <div class="actor-info-buttons-overlay">
       <span class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info"></i></span>
