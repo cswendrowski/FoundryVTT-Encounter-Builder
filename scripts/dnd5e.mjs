@@ -98,7 +98,6 @@ export default class Dnd5e {
                             case "Burrows": return x.data.data.attributes.movement.burrow > 0;
                             case "Climbs": return x.data.data.attributes.movement.climb > 0;
                             case "Flys": return x.data.data.attributes.movement.fly > 0;
-                            case "Hovers": return x.data.data.attributes.movement.hover;
                             case "Swims": return x.data.data.attributes.movement.swim > 0;
                             case "Walks": return x.data.data.attributes.movement.walk > 0;
                         }

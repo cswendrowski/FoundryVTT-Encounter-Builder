@@ -1,11 +1,6 @@
 <template>
-  <li
-    class="actor-listing"
-    v-on:click.left="$emit('click-left')"
-    v-on:click.right="$emit('click-right')"
-  >
+  <li class="actor-listing">
     <div class="actor-image">
-      <span class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info-circle"></i></span>
       <img :src="actor.data.img" width="100" height="100" />
     </div>
     <section class="actor-info">
@@ -31,6 +26,12 @@
         </li>
       </ul>
     </section>
+
+    <div class="actor-info-buttons-overlay">
+      <span class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info"></i></span>
+      <span class="actor-info-button" v-on:click.left="$emit('add-actor')"><i class="fas fa-plus"></i></span>
+      <span class="actor-info-button" v-on:click.left="$emit('remove-actor')"><i class="fas fa-minus"></i></span>
+    </div>
   </li>
 </template>
 

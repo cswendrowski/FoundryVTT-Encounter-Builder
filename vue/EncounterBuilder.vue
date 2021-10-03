@@ -31,7 +31,7 @@
         <ul class="encounter-members">
           <li
             v-for="t of groupedSelectedActors"
-            :key="system.getUniqueKey(t[1][0], partyInfo, encounterSettings)"
+                        :key="system.getUniqueKey(t[1][0], partyInfo, encounterSettings)"
           >
             <component
               v-bind:is="selectedActorComponent"
@@ -143,10 +143,8 @@
           v-model="encounterSettings"
           class="actor-listing"
           v-for="t of availableActors"
-          :key="system.getUniqueKey(t, encounterSettings)"
+                        :key="system.getUniqueKey(t, partyInfo, encounterSettings)"
           :actor="t"
-          v-on:click-left="addActor(t)"
-          v-on:click-right="removeActor(t)"
           v-on:add-actor="addActor(t)"
           v-on:remove-actor="removeActor(t)"
           v-on:actor-info="openActorSheet(t)"

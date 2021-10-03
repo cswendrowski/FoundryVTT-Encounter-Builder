@@ -4,9 +4,6 @@ $gold: #B9A660;
 $white: #F4F3EA;
 $dark-maroon: #2B0603;
 
-// #combat #combat-controls {
-//     flex-direction: column;
-// }
 
 .dungeon-moon-launcher-smol {
     display: none;
@@ -26,119 +23,88 @@ $dark-maroon: #2B0603;
     --title-font-size: 2.5em;
     --title-background-color: #{$red};
     --title-background-blend: color-burn;
-
+    
     --background-primary-image: url(/ui/parchment.jpg);
     --background-primary-color: #{$gold};
     --background-primary-blend: hard-light;
     --background-secondary-color: #{$white};
-
+    
     --color-primary: #{$gold};
     --color-secondary: #{$yellow};
     --color-accent: #{$red};
     --color-accent2: #{$dark-maroon};
-
+    
     --shadow-full-color: black;
     --shadow-subtle-color: #00000080;
-
+    
     --text-color: black;
-
+    
     &.pf2e {
         --title-font-family: 'mason-serif';
         --title-font-size: 2.5em;
         --title-background-color: #{$red};
         --title-background-blend: color-burn;
-
+        
         //--background-primary-image: url(../../../systems/pf2e/assets/sheet/header.png);
         --background-primary-image: url(/ui/parchment.jpg);
         --background-primary-color: white;
         --background-primary-blend: hard-light;
         --background-secondary-color: #{$white};
-
+        
         --color-primary: #171f69;
         --color-secondary: #E9D7A1;
         --color-accent: #171f69;
         --color-accent2: #f7d488;
-
+        
         --shadow-full-color: black;
         --shadow-subtle-color: #00000080;
-
+        
         --text-color: black;
-
+        
         .window-content {
             background: var(--background-primary-image) !important;
         }
-
+        
         .actor-listing {
             background: url(../../../systems/pf2e/assets/sheet/header.webp) !important;
         }
-
+        
         .traits {
             color: #fff !important;
         }
-
+        
         .encounter-info {
             color: #fff !important;
         }
-
+        
         .vue-histogram-slider-wrapper {
             .irs-bar {
                 background-color: #171f69;
             }
         }
-
+        
         .actor-info-button {
             color: #f7d488;
         }
     }
-
+    
     &.dnd5e {
         .current-threat-level {
             font-weight: bold;
         }
-
-
-        .actor-listing {
-            position: relative;
-
-            &:hover {
-                .actor-info-buttons-overlay {
-                    visibility: visible;
-                }
-            }
-        }
-
-        .actor-info-buttons-overlay {
-            visibility: hidden;
-            position: absolute;
-            top: -0.5em;
-            right: 0;
-            display: flex;
-            gap: 0.5em;
-            background: var(--background-secondary-color);
-            border-radius: 4px;
-            box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
-        }
-
-        .actor-info-button {
-            padding: 0.25em;
-            width: 1.5em;
-            height: 1.5em;
-            text-align: center;
-        }
     }
-
+    
     &.window-app .window-content {
         background: var(--background-primary-image), var(--background-primary-color);
         background-repeat: repeat;
         background-blend-mode: var(--background-primary-blend);
         height: 100%;
-        // overflow: hidden;
         padding: 0;
-
+        
         .dialog-buttons {
             display: none;
         }
-
+        
         .dialog-content {
             flex: 0 0 100%;
             height: 100%;
@@ -147,41 +113,39 @@ $dark-maroon: #2B0603;
 }
 
 .encounter-builder {
-	display: grid;
-	grid-template-columns: 25ch 1fr 30ch;
+    display: grid;
+    grid-template-columns: 25ch 1fr 30ch;
     grid-template-rows: 5em 15em 1fr;
     grid-template-areas: 
-        'header header encounter'
-        'filters histogram encounter'
-        'filters results encounter';
+    'header header encounter'
+    'filters histogram encounter'
+    'filters results encounter';
     height: 100%;
     color: var(--text-color);
-
+    
     h2 {
         border-bottom: 1px solid var(--color-accent);
         box-shadow: 0px 8px 16px -11px var(--shadow-full-color);
         margin-top: .25em;
-    	margin-bottom: .8em;
+        margin-bottom: .8em;
     }
     h4 {
         margin-top: .5em;
     }
-
+    
     .encounter-info {
         grid-area: header;
-
-        // z-index: 1;
-
+        
         height: 100%;
         background: var(--color-accent);
         background: var(--background-primary-image), var(--title-background-color);
-	    background-repeat: repeat;
-	    background-blend-mode: var(--title-background-blend);
-
+        background-repeat: repeat;
+        background-blend-mode: var(--title-background-blend);
+        
         color: var(--color-primary);
         box-shadow: 0px 2px 6px 0px var(--shadow-full-color);
         padding: .5em;
-
+        
         h1 {
             font-size: var(--title-font-size);
             border: none;
@@ -193,30 +157,29 @@ $dark-maroon: #2B0603;
                 color: inherit;
                 border: 0;
                 background: none;
-
+                
                 &:focus {
                     text-decoration: underline dashed;
-	                box-shadow: none;
+                    box-shadow: none;
                 }
             }
         }
     }
-
+    
     .encounter-details {
         grid-area: encounter;
         padding: .5em 1ch .5em 1ch;
         box-shadow: -1px 3px 6px 0px var(--shadow-full-color);
         background: var(--background-secondary-color);
-
-        // z-index: 2;
+        
         overflow: auto;
-
+        
         .numeric-input {
             background: none;
             border: 1px solid rgba(60,60,60,.26);
             border-radius: 4px;
         }
-
+        
         .vs__actions > svg {
             width: 28px;
         }
@@ -228,13 +191,13 @@ $dark-maroon: #2B0603;
             .member {
                 display: flex;
                 margin-bottom: 5px;
-
+                
                 .member-details {
                     padding-left: 5px;
                 }
             }
         }
-
+        
         .encounter-results {
             .perfect {
                 color: green;
@@ -253,158 +216,159 @@ $dark-maroon: #2B0603;
             }
         }
     }
-    // .search-area {
-    //     grid-column: 1;
-    //     grid-row: 2;
-    //     padding-right: 1ch;
 
-    //     display: grid;
-    //     grid-template-columns: 25ch 1fr;
-
-    //     height: 1fr;
-
-        input[type=text] {
-            padding: 4px;
-            background: none;
-            border: 1px solid rgba(60,60,60,.26);
-            border-radius: 4px;
-            height: 2.5em;
-            width: 100%;
-        }
-
-        .search-configuration {
-            grid-area: filters;
-            // grid-column: 1;
-            // grid-row: 1;
-            
-            padding: .5em 1ch .5em 1ch;
-            box-shadow: 1px 4px 6px 0px var(--shadow-full-color);
-            background: var(--background-secondary-color);
-            overflow-y: scroll;
-
-            .sortings {
-                .active {
-                    background: var(--color-primary);
-                }
+    input[type=text] {
+        padding: 4px;
+        background: none;
+        border: 1px solid rgba(60,60,60,.26);
+        border-radius: 4px;
+        height: 2.5em;
+        width: 100%;
+    }
+    
+    .search-configuration {
+        grid-area: filters;
+        
+        padding: .5em 1ch .5em 1ch;
+        box-shadow: 1px 4px 6px 0px var(--shadow-full-color);
+        background: var(--background-secondary-color);
+        overflow-y: scroll;
+        
+        .sortings {
+            .active {
+                background: var(--color-primary);
             }
         }
-
-        // .search-results {
-        //     grid-column: 2;
-        //     grid-row: 1;
-        //     height: 50em;
-        //     padding: 1em 2ch 1em 2ch;
+    }
+    
+    .loading-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        
+        .spinner {
+            width: 75% !important;
+            fill: $red !important;
+        }
+        .line {
+            animation: linePencil .8s infinite linear;
+        }
+        @keyframes linePencil {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-150px);
+            }
+        }
+    }
+    
+    ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    
+    .results {
+        grid-area: results;
+        overflow: auto;
+        padding: 0.5em;
+    }
+    
+    .result-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        column-gap: .5em;
+        row-gap: .5em;
+    }
+    
+    .actor-listing {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        background: var(--background-primary-image), var(--color-secondary);
+        cursor: pointer;
+        
+        border: 1px solid $dark-maroon;
+        background-repeat: repeat;
+        background-blend-mode: var(--background-primary-blend);
+        box-shadow: none;
+        transition: box-shadow .3s;
+        
+        &[disabled] {
+            cursor: not-allowed;
+            opacity: 40%;
+            &:hover { box-shadow: none; }
+        }
+        
+        
+        &:hover {
+            .actor-info-buttons-overlay {
+                visibility: visible;
+            }
+        }
+        
+        .name {
+            font-weight: bold;
+            color: var(--color-accent2);
             
-        //     overflow-y: scroll;
-        //     overflow-x: hidden;
-
-            .loading-container {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-
-                .spinner {
-                    width: 75% !important;
-                    fill: $red !important;
-                }
-                .line {
-                    animation: linePencil .8s infinite linear;
-                }
-                @keyframes linePencil {
-                    0% {
-                        transform: translateY(0);
-                    }
-                    100% {
-                        transform: translateY(-150px);
-                    }
-                }
+            .level {
+                padding-right: 3px;
             }
-
-            ul {
-                padding: 0;
-                margin: 0;
-                list-style: none;
+        }
+        .actor-info {
+            margin-left: 1ch;
+            padding: .5em 0 .5em 0;
+        }
+        img { 
+            width: 100px;
+            height: 100px;
+            border: none;
+        }
+        .trait-label {
+            font-style: italic;
+            font-weight: bold;
+            &:after {
+                content: " - "
             }
-
-
-            .results {
-                grid-area: results;
-                overflow: auto;
-                padding: 0.5em;
+        }
+        .trait-value.missing {
+            color: red;
+        }
+    }
+    
+    .actor-info-buttons-overlay {
+        visibility: hidden;
+        position: absolute;
+        top: -0.5em;
+        right: 0;
+        display: flex;
+        gap: 0.5em;
+        background: var(--background-secondary-color);
+        border-radius: 4px;
+        box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
+    }
+    
+    
+    .actor-info-button {
+        padding: 0.25em;
+        width: 1.5em;
+        height: 1.5em;
+        text-align: center;
+    }
+    .level-histogram {
+        grid-area: histogram;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        
+        .vue-histogram-slider-wrapper {
+            .irs-bar {
+                background-color: $yellow;
             }
-
-            .result-list {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                column-gap: .5em;
-                row-gap: .5em;
-            }
-
-            .actor-listing {
-                display: flex;
-                flex-direction: row;
-                background: var(--background-primary-image), var(--color-secondary);
-                cursor: pointer;
-               
-                border: 1px solid $dark-maroon;
-	            background-repeat: repeat;
-	            background-blend-mode: var(--background-primary-blend);
-                box-shadow: none;
-                transition: box-shadow .3s;
-
-                // &:hover {
-                //     box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
-                // }
-
-                &[disabled] {
-                    cursor: not-allowed;
-                    opacity: 40%;
-                    &:hover { box-shadow: none; }
-                }
-
-                .name {
-                    font-weight: bold;
-                    color: var(--color-accent2);
-
-                    .level {
-                        padding-right: 3px;
-                    }
-                }
-                .actor-info {
-                    margin-left: 1ch;
-                    padding: .5em 0 .5em 0;
-                }
-                img { 
-                    width: 100px;
-                    height: 100px;
-                    border: none;
-                }
-                .trait-label {
-                    font-style: italic;
-                    font-weight: bold;
-                    &:after {
-                        content: " - "
-                    }
-                }
-                .trait-value.missing {
-                    color: red;
-                }
-            }
-            
-            .level-histogram {
-                grid-area: histogram;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-
-                .vue-histogram-slider-wrapper {
-                    .irs-bar {
-                        background-color: $yellow;
-                    }
-                }
-            }      
-        // }
-    // }
+        }
+    }
 }

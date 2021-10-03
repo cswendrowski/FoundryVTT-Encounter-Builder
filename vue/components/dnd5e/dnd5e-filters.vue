@@ -5,11 +5,11 @@
       <h4>Type</h4>
       <v-select multiple v-model="selectedTypes" :options="Object.values(CONFIG.DND5E.creatureTypes).map(x => game.i18n.localize(x))"></v-select>
       <h4>Size</h4>
-      <v-select multiple v-model="selectedSizes" :options="Object.values(CONFIG.DND5E.actorSizes)"></v-select>
+      <v-select multiple v-model="selectedSizes" :options="Object.values(CONFIG.DND5E.actorSizes).reverse()"></v-select>
       <h4>Alignment</h4>
       <v-select multiple v-model="selectedAlignments" :options="Object.values(CONFIG.DND5E.alignments)"></v-select>
       <h4>Movement</h4>
-      <v-select multiple v-model="selectedMovements" :options="['Burrows', 'Climbs', 'Flys', 'Hovers', 'Swims', 'Walks']"></v-select>
+      <v-select multiple v-model="selectedMovements" :options="['Burrows', 'Climbs', 'Flys', 'Swims', 'Walks']"></v-select>
       <h4>Special Traits</h4>
       <v-select multiple v-model="selectedTraits" :options="['Spellcaster', 'Legendary', 'Lair Actions']"></v-select>
       <h4>Resistances</h4>
