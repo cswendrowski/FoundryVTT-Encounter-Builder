@@ -220,4 +220,19 @@ export default class ThirteenthAge {
         }
         return scoreChart[levelDifference][sizeToColumn[size]];
     }
+
+    getDefaultLevelRange(partyInfo, minimumLevel, maximumLevel) {
+        let minSelectedLevel = partyInfo.averagePartyLevel - 2;
+        if (minSelectedLevel < minimumLevel)
+            minSelectedLevel = minimumLevel;
+
+        let maxSelectedLevel = partyInfo.averagePartyLevel + 4;
+        if (this.maxSelectedLevel > maximumLevel)
+            maxSelectedLevel = maximumLevel;
+
+        return {
+            minSelectedLevel: minSelectedLevel,
+            maxSelectedLevel: maxSelectedLevel
+        }
+    }
 }

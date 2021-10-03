@@ -201,5 +201,11 @@ export default class Dnd5e {
         return 0;
     }
 
+    getDefaultLevelRange(partyInfo, minimumLevel, maximumLevel) {
+        return {
+            minSelectedLevel: 0.25,
+            maxSelectedLevel: partyInfo.averagePartyLevel + 1
+        }
+    }
     
 }

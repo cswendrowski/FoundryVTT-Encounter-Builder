@@ -174,5 +174,19 @@ export default class Pathfinder2E {
         return 0;
     }
 
+    getDefaultLevelRange(partyInfo, minimumLevel, maximumLevel) {
+        let minSelectedLevel = partyInfo.averagePartyLevel - 4;
+        if (minSelectedLevel < minimumLevel)
+            minSelectedLevel = minimumLevel;
+
+        let maxSelectedLevel = partyInfo.averagePartyLevel + 4;
+        if (maxSelectedLevel > maximumLevel)
+            maxSelectedLevel = maximumLevel;
+
+        return {
+            minSelectedLevel: minSelectedLevel,
+            maxSelectedLevel: maxSelectedLevel
+        }
+    }
     
 }

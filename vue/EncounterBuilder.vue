@@ -472,28 +472,9 @@ export default {
 
     this.sources = this.sources.filter(onlyUnique);
 
-    if (game.system.id == "archmage") {
-      this.minSelectedLevel = this.partyInfo.averagePartyLevel - 2;
-      if (this.minSelectedLevel < this.minimumLevel)
-        this.minSelectedLevel = this.minimumLevel;
-
-      this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4;
-      if (this.maxSelectedLevel > this.maximumLevel)
-        this.maximumLevel = this.maximumLevel;
-    }
-    else if (game.system.id == "pf2e") {
-      this.minSelectedLevel = this.partyInfo.averagePartyLevel - 4;
-      if (this.minSelectedLevel < this.minimumLevel)
-        this.minSelectedLevel = this.minimumLevel;
-
-      this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4;
-      if (this.maxSelectedLevel > this.maximumLevel)
-        this.maximumLevel = this.maximumLevel;
-    }
-    else if (game.system.id == "dnd5e") {
-      this.minSelectedLevel = this.minimumLevel;
-      this.maxSelectedLevel = this.maximumLevel;
-    }
+    let defaultRange = this.system.getDefaultLevelRange(this.partyInfo, this.minimumLevel, this.maximumLevel);
+    this.minSelectedLevel = defaultRange.minSelectedLevel;
+    this.maxSelectedLevel = defaultRange.maxSelectedLevel;
 
     this.log(false, `Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
 
