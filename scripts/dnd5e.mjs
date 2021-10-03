@@ -60,9 +60,12 @@ export default class Dnd5e {
         }
 
         if (filters.selectedTypes && filters.selectedTypes.length > 0) {
+            log(false, 'selectedFilter', {
+                selectedFilter: filters.selectedTypes
+            });
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.details?.type != undefined) {
-                    return filters.selectedTypes.filter(value => x.data.data.details.type == value).length > 0;
+                    return filters.selectedTypes.filter(({value}) => x.data.data.details.type.value.includes(value)).length > 0;
                 }
                 return false;
             });
