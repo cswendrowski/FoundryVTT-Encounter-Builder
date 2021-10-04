@@ -40,7 +40,7 @@ $dark-maroon: #2B0603;
     --text-color: black;
     
     &.pf2e {
-        --title-font-family: 'mason-serif';
+        --title-font-family: 'mason-serif', inherit;
         --title-font-size: 2.5em;
         --title-background-color: #{$red};
         --title-background-blend: color-burn;
@@ -143,10 +143,16 @@ $dark-maroon: #2B0603;
         font-family: inherit;
         line-height: unset;
         font-size: inherit;
+        background-color: transparentize($gold, 1);
+        transition: background-color 0.3s;
 
-
-        &:hover {
+        &:hover, &:focus {
             box-shadow: none;
+            background-color: transparentize($gold, 0.5);
+        }
+
+        > svg {
+            display: block;
         }
     }
 }
@@ -162,9 +168,24 @@ $dark-maroon: #2B0603;
     height: 100%;
     color: var(--text-color);
     
-    .vs__actions > svg {
-        cursor: pointer;
-        flex: 1 0 auto;
+    .vs__actions {
+
+        button {
+            padding: 0.2em;
+        }
+
+        > svg {
+            cursor: pointer;
+            flex: 1 0 auto;
+        }
+    }
+
+    .vs__selected {
+        > button {
+            padding: 0.2em;
+            margin-left: auto;
+            width: fit-content;
+        }
     }
 
     h2 {
@@ -276,13 +297,20 @@ $dark-maroon: #2B0603;
         
         .sortings {
             .active {
-                background: var(--color-primary);
+                background-color: $gold;
             }
         }
 
         .sort-group {
             display: flex;
+
+            .toggle-button-group {
+                margin-left: auto;
+                width: 50%;
+                flex: 0 0 50%;
+            }
         }
+
     }
     
     .loading-container {
@@ -426,7 +454,9 @@ $dark-maroon: #2B0603;
         height: 1.5em;
         text-align: center;
         cursor: pointer;
+        color: var(--text-color);
     }
+
     .level-histogram {
         grid-area: histogram;
         display: flex;
@@ -440,11 +470,19 @@ $dark-maroon: #2B0603;
             }
         }
     }
-
-    .vs__dropdown-menu {
-        position: fixed;
-        top: unset;
-        left: unset;
-        width: unset;
+    
+    .toggle-button-group {
+        background-color: transparentize($gold, 1);
+        border: 1px solid var(--background-primary-color);
+        border-radius: 4px;
+        padding: 2px;
+        display: flex;
     }
+
+    .toggle-button {
+        border-radius: 2px;
+        padding: 0.2em 0.7em;
+        cursor: pointer;
+    }
+
 }

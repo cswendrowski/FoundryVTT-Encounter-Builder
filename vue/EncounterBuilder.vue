@@ -78,6 +78,7 @@
           :options="sources"
           :reduce="(x) => x.toLowerCase()"
         ></v-select>
+
         <component v-bind:is="filtersComponent" v-model="filters"></component>
       </div>
 
@@ -85,36 +86,44 @@
       <div class="sortings">
         <div class="sort-group">
         <h4>{{ levelName }}</h4>
-        <button
-          v-bind:class="{ active: sortLevelAsc }"
-          v-on:click="setSortLevelAsc(true)"
-        >
-          <i class="btn btn-primary fas fa-sort-numeric-down"></i>
-        </button>
-        <button
-          v-bind:class="{
-            active: sortLevelAsc != undefined && !sortLevelAsc,
-          }"
-          v-on:click="setSortLevelAsc(false)"
-        >
-          <i class="btn btn-primary fas fa-sort-numeric-up"></i>
-        </button>
+        <div class="toggle-button-group">
+          <button
+          class="toggle-button"
+            v-bind:class="{ active: sortLevelAsc }"
+            v-on:click="setSortLevelAsc(true)"
+          >
+            <i class="btn btn-primary fas fa-sort-numeric-down"></i>
+          </button>
+          <button
+          class="toggle-button"
+            v-bind:class="{
+              active: sortLevelAsc != undefined && !sortLevelAsc,
+            }"
+            v-on:click="setSortLevelAsc(false)"
+          >
+            <i class="btn btn-primary fas fa-sort-numeric-up"></i>
+          </button>
         </div>
-        <div class="sort-group">
+        </div>
 
+        <div class="sort-group">
         <h4>Name</h4>
-        <button
-          v-bind:class="{ active: sortNameAsc }"
-          v-on:click="setSortNameAsc(true)"
-        >
-          <i class="btn btn-primary fas fa-sort-alpha-down"></i>
-        </button>
-        <button
-          v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
-          v-on:click="setSortNameAsc(false)"
-        >
-          <i class="btn btn-primary fas fa-sort-alpha-up"></i>
-        </button>
+        <div class="toggle-button-group">
+          <button
+            class="toggle-button"
+            v-bind:class="{ active: sortNameAsc }"
+            v-on:click="setSortNameAsc(true)"
+          >
+            <i class="btn btn-primary fas fa-sort-alpha-down"></i>
+          </button>
+          <button
+            class="toggle-button"
+            v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
+            v-on:click="setSortNameAsc(false)"
+          >
+            <i class="btn btn-primary fas fa-sort-alpha-up"></i>
+          </button>
+        </div>
         </div>
       </div>
     </aside>

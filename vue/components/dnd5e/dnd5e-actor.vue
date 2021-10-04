@@ -24,9 +24,9 @@
     </div>
 
     <div class="actor-info-buttons-overlay">
-      <span class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info"></i></span>
-      <span class="actor-info-button" v-on:click.left="$emit('add-actor')"><i class="fas fa-plus"></i></span>
-      <span class="actor-info-button" v-on:click.left="$emit('remove-actor')"><i class="fas fa-minus"></i></span>
+      <button class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info"></i></button>
+      <button class="actor-info-button" v-on:click.left="$emit('add-actor')"><i class="fas fa-plus"></i></button>
+      <button class="actor-info-button" v-on:click.left="$emit('remove-actor')"><i class="fas fa-minus"></i></button>
     </div>
   </li>
 </template>
