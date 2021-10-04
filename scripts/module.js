@@ -22,10 +22,10 @@ class EncounterBuilder {
         Dlopen.register('vue-select', {
             scripts: [
                 // "https://unpkg.com/classnames@2.2.6/index.js", // can't load it this way because of the classnames/classNames issue in the file definition
-                "https://unpkg.com/vue-select@3.0.0"
+                "https://unpkg.com/vue-select@3"
             ],
             styles: [
-                "https://unpkg.com/vue-select@3.0.0/dist/vue-select.css"
+                "https://unpkg.com/vue-select@3/dist/vue-select.css"
             ],
             dependencies: [],
             init: () => Vue.component("v-select", VueSelect.default)

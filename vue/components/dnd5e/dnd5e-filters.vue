@@ -1,24 +1,95 @@
 <template>
-    <div>
-      <h4>Environment</h4>
-      <v-select multiple v-model="selectedEnvironments" :options="environments"></v-select>
-      <h4>Type</h4>
-      <v-select multiple v-model="selectedTypes" :options="Object.keys(CONFIG.DND5E.creatureTypes).map(x => ({label: game.i18n.localize(CONFIG.DND5E.creatureTypes[x]), value: x}))"></v-select>
-      <h4>Size</h4>
-      <v-select multiple v-model="selectedSizes" :options="Object.values(CONFIG.DND5E.actorSizes).reverse()"></v-select>
-      <h4>Alignment</h4>
-      <v-select multiple v-model="selectedAlignments" :options="Object.values(CONFIG.DND5E.alignments)"></v-select>
-      <h4>Movement</h4>
-      <v-select multiple v-model="selectedMovements" :options="['Burrows', 'Climbs', 'Flys', 'Swims', 'Walks']"></v-select>
-      <h4>Special Traits</h4>
-      <v-select multiple v-model="selectedTraits" :options="['Spellcaster', 'Legendary', 'Lair Actions']"></v-select>
-      <h4>Resistances</h4>
-      <v-select multiple v-model="selectedResistances" :options="Object.values(CONFIG.DND5E.damageResistanceTypes)" :reduce="x => x.toLowerCase()"></v-select>
-      <h4>Immunities</h4>
-      <v-select multiple v-model="selectedImmunities" :options="Object.values(CONFIG.DND5E.damageResistanceTypes)" :reduce="x => x.toLowerCase()"></v-select>
-      <h4>Vulnerabilities</h4>
-      <v-select multiple v-model="selectedVulnerabilities" :options="Object.values(CONFIG.DND5E.damageResistanceTypes)" :reduce="x => x.toLowerCase()"></v-select>
+  <div>
+    <div class="filters-primary">
+
+    <label>Type</label>
+    <v-select
+      multiple
+      v-model="selectedTypes"
+      :options="
+        Object.keys(CONFIG.DND5E.creatureTypes).map((x) => ({
+          label: game.i18n.localize(CONFIG.DND5E.creatureTypes[x]),
+          value: x,
+        }))
+      "
+      :reduce="(x) => x.value"
+    ></v-select>
+
+    <label>Environment</label>
+    <v-select
+      multiple
+      v-model="selectedEnvironments"
+      :options="environments"
+    ></v-select>
+
+    <label>Size</label>
+    <v-select
+      multiple
+      v-model="selectedSizes"
+      :options="Object.values(CONFIG.DND5E.actorSizes).reverse()"
+    ></v-select>
+
+    <label>Movement</label>
+    <v-select
+      multiple
+      v-model="selectedMovements"
+      :options="['Burrows', 'Climbs', 'Flys', 'Swims', 'Walks']"
+    ></v-select>
+
+    <label>Alignment</label>
+    <div class='flexrow'>
+    <v-select
+      multiple
+      v-model="selectedAlignmentsLaw"
+      placeholder="Any"
+      :options="['Lawful', 'Neutral', 'Chaotic']"
+      :reduce="(x) => x.toLowerCase()"
+    ></v-select>
+    <v-select
+      multiple
+      v-model="selectedAlignmentsGood"
+      placeholder="Any"
+      :options="['Good', 'Neutral', 'Evil']"
+      :reduce="(x) => x.toLowerCase()"
+    ></v-select>
     </div>
+    </div>
+
+    <div class="filters-secondary">
+
+    <label>Special Traits</label>
+    <v-select
+      multiple
+      v-model="selectedTraits"
+      :options="['Spellcaster', 'Legendary', 'Lair Actions']"
+    ></v-select>
+    </div>
+    <div class="filters-defenses">
+      <h3>Defenses</h3>
+
+    <label>Resistances</label>
+    <v-select
+      multiple
+      v-model="selectedResistances"
+      :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+      :reduce="(x) => x.toLowerCase()"
+    ></v-select>
+    <label>Immunities</label>
+    <v-select
+      multiple
+      v-model="selectedImmunities"
+      :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+      :reduce="(x) => x.toLowerCase()"
+    ></v-select>
+    <label>Vulnerabilities</label>
+    <v-select
+      multiple
+      v-model="selectedVulnerabilities"
+      :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+      :reduce="(x) => x.toLowerCase()"
+    ></v-select>
+    </div>
+  </div>
 </template>
 <script>
 export default {
@@ -27,7 +98,8 @@ export default {
       selectedEnvironments: [],
       selectedTypes: [],
       selectedSizes: [],
-      selectedAlignments: [],
+      selectedAlignmentsLaw: [],
+      selectedAlignmentsGood: [],
       selectedMovements: [],
       selectedTraits: [],
       selectedResistances: [],
@@ -38,7 +110,7 @@ export default {
     computed: {
       environments() {
         return window.dungeonMoon.dnd5e.environments;
-      }
+      },
     },
     methods: {
       dataBundle: function () {
@@ -46,7 +118,8 @@ export default {
             selectedEnvironments: this.selectedEnvironments,
             selectedTypes: this.selectedTypes,
             selectedSizes: this.selectedSizes,
-            selectedAlignments: this.selectedAlignments,
+            selectedAlignmentsLaw: this.selectedAlignmentsLaw,
+            selectedAlignmentsGood: this.selectedAlignmentsGood,
             selectedMovements: this.selectedMovements,
             selectedTraits: this.selectedTraits,
             selectedResistances: this.selectedResistances,
@@ -65,7 +138,10 @@ export default {
       selectedSizes() {
         this.$emit('input', this.dataBundle());
       },
-      selectedAlignments() {
+      selectedAlignmentsLaw() {
+        this.$emit('input', this.dataBundle());
+      },
+      selectedAlignmentsGood() {
         this.$emit('input', this.dataBundle());
       },
       selectedMovements() {

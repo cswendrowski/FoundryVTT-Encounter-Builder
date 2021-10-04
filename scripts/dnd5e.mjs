@@ -42,39 +42,56 @@ export default class Dnd5e {
         return packActors;
     }
 
-    filterAvailableActors(availableActors, filters) {
-        if (filters.selectedSources.length > 0) {
-            availableActors = availableActors.filter(x => filters.selectedSources.includes(this.getActorSource(x).toLowerCase()));
-        }
-        if (filters.selectedName != "") {
-            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(filters.selectedName.toLowerCase()));
+    filterAvailableActors(availableActors, {
+        selectedAlignmentsGood,
+        selectedAlignmentsLaw,
+        selectedSources,
+        selectedName,
+        selectedTypes,
+        selectedSizes,
+        selectedMovements,
+        selectedEnvironments,
+        selectedTraits,
+        selectedResistances,
+        selectedImmunities,
+        selectedVulnerabilities
+    }) {
+        if (selectedSources?.length > 0) {
+            availableActors = availableActors.filter(x => {
+                const matchesSourceDetail = selectedSources.includes(this.getActorSource(x).toLowerCase());
+
+                const matchesNormalSource = selectedSources.includes(this.getActorSource(x, true).toLowerCase());
+
+                return matchesSourceDetail || matchesNormalSource;
+            });
         }
 
-        if (filters.selectedEnvironments && filters.selectedEnvironments.length > 0) {
+        if (!!selectedName) {
+            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(selectedName.toLowerCase()));
+        }
+
+        if (selectedEnvironments?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.details?.environment != undefined) {
-                    return filters.selectedEnvironments.filter(value => x.data.data.details.environment.includes(value)).length > 0;
+                    return selectedEnvironments.filter(value => x.data.data.details.environment.includes(value)).length > 0;
                 }
                 return false;
             });
         }
 
-        if (filters.selectedTypes && filters.selectedTypes.length > 0) {
-            log(false, 'selectedFilter', {
-                selectedFilter: filters.selectedTypes
-            });
+        if (selectedTypes?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.details?.type != undefined) {
-                    return filters.selectedTypes.filter(({value}) => x.data.data.details.type.value.includes(value)).length > 0;
+                    return selectedTypes.filter(value => x.data.data.details.type.value == value).length > 0;
                 }
                 return false;
             });
         }
 
-        if (filters.selectedSizes && filters.selectedSizes.length > 0) {
+        if (selectedSizes?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.traits?.size != undefined) {
-                    return filters.selectedSizes.filter(value =>
+                    return selectedSizes.filter(value =>
                         Object.entries(CONFIG.DND5E.actorSizes).find(x => x[1] == value)[0] == x.data.data.traits.size
                     ).length > 0;
                 }
@@ -82,21 +99,43 @@ export default class Dnd5e {
             });
         }
 
-        if (filters.selectedAlignments && filters.selectedAlignments.length > 0) {
+        if (selectedAlignmentsLaw?.length || selectedAlignmentsGood?.length) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.details?.alignment != undefined) {
-                    return filters.selectedAlignments.filter(value =>
-                        value == x.data.data.details.alignment
-                    ).length > 0;
+                const alignment = x.data.data.details.alignment.toLowerCase();
+
+                if (alignment === 'unaligned') {
+                    return false;
                 }
-                return false;
+
+                if (alignment === 'any') {
+                    return true;
+                }
+
+                const alignmentArray = alignment.split(' ');
+
+                if (alignmentArray.length !== 2) {
+                    return false;
+                }
+
+                if (alignmentArray[0] === 'any') {
+                    return [...selectedAlignmentsGood, ...selectedAlignmentsLaw].includes(alignmentArray[1]);
+                }
+
+                // BRITTLE ASSUMPTION
+                const [lawfulness, goodness] = alignmentArray;
+                
+                const matchLaw = selectedAlignmentsLaw.length ? selectedAlignmentsLaw.includes(lawfulness) : true;
+
+                const matchGood = selectedAlignmentsGood.length ? selectedAlignmentsGood.includes(goodness) : true;
+
+                return matchLaw && matchGood;
             });
         }
 
-        if (filters.selectedMovements && filters.selectedMovements.length > 0) {
+        if (selectedMovements?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.attributes?.movement != undefined) {
-                    let matchingMovements = filters.selectedMovements.filter(value => {
+                    let matchingMovements = selectedMovements.filter(value => {
                         switch (value) {
                             case "Burrows": return x.data.data.attributes.movement.burrow > 0;
                             case "Climbs": return x.data.data.attributes.movement.climb > 0;
@@ -111,10 +150,10 @@ export default class Dnd5e {
             });
         }
 
-        if (filters.selectedTraits && filters.selectedTraits.length > 0) {
+        if (selectedTraits?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data != undefined) {
-                    let matchingTraits = filters.selectedTraits.filter(value => {
+                    let matchingTraits = selectedTraits.filter(value => {
                         switch (value) {
                             case "Spellcaster": return x.data.data.details.spellLevel > 0;
                             case "Legendary": return x.data.data.resources?.lair?.value;
@@ -127,28 +166,28 @@ export default class Dnd5e {
             });
         }
 
-        if (filters.selectedResistances && filters.selectedResistances.length > 0) {
+        if (selectedResistances?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.traits?.dr != undefined) {
-                    return filters.selectedResistances.filter(value => x.data.data.traits.dr.value.includes(value)).length > 0;
+                    return selectedResistances.filter(value => x.data.data.traits.dr.value.includes(value)).length > 0;
                 }
                 return false;
             });
         }
 
-        if (filters.selectedImmunities && filters.selectedImmunities.length > 0) {
+        if (selectedImmunities?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.traits?.di != undefined) {
-                    return filters.selectedImmunities.filter(value => x.data.data.traits.di.value.includes(value)).length > 0;
+                    return selectedImmunities.filter(value => x.data.data.traits.di.value.includes(value)).length > 0;
                 }
                 return false;
             });
         }
 
-        if (filters.selectedVulnerabilities && filters.selectedVulnerabilities.length > 0) {
+        if (selectedVulnerabilities?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.data.data?.traits?.dv != undefined) {
-                    return filters.selectedVulnerabilities.filter(value => x.data.data.traits.dv.value.includes(value)).length > 0;
+                    return selectedVulnerabilities.filter(value => x.data.data.traits.dv.value.includes(value)).length > 0;
                 }
                 return false;
             });
@@ -157,8 +196,8 @@ export default class Dnd5e {
         return availableActors;
     }
 
-    getActorSource(actor) {
-        if (actor.data.data.details.source) {
+    getActorSource(actor, skipDetails) {
+        if (actor.data.data.details.source && !skipDetails) {
             return actor.data.data.details.source.split('pg')[0];
         }
 

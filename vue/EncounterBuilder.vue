@@ -9,16 +9,18 @@
       <h2>Encounter Settings</h2>
 
       <div class="encounterSettings">
-        <h4>Average Party Level</h4>
+        <label>Average Party Level</label>
         <vue-numeric-input
           v-model="partyInfo.averagePartyLevel"
           :min="1"
         ></vue-numeric-input>
-        <h4>Number of Party Members</h4>
+
+        <label>Number of Party Members</label>
         <vue-numeric-input
           v-model="partyInfo.numberOfPartyMembers"
           :min="1"
         ></vue-numeric-input>
+
         <component
           v-bind:is="encounterSettingsComponent"
           v-model="encounterSettings"
@@ -68,6 +70,7 @@
       <div class="filters">
         <h4>Name</h4>
         <input type="text" placeholder="Name" v-model="selectedName" />
+
         <h4>Source</h4>
         <v-select
           multiple
@@ -78,14 +81,15 @@
         <component v-bind:is="filtersComponent" v-model="filters"></component>
       </div>
 
-      <h2>Sortings</h2>
+      <h2>Sort</h2>
       <div class="sortings">
+        <div class="sort-group">
         <h4>{{ levelName }}</h4>
         <button
           v-bind:class="{ active: sortLevelAsc }"
           v-on:click="setSortLevelAsc(true)"
         >
-          <i class="btn btn-primary fas fa-sort-up"></i>
+          <i class="btn btn-primary fas fa-sort-numeric-down"></i>
         </button>
         <button
           v-bind:class="{
@@ -93,22 +97,25 @@
           }"
           v-on:click="setSortLevelAsc(false)"
         >
-          <i class="btn btn-primary fas fa-sort-down"></i>
+          <i class="btn btn-primary fas fa-sort-numeric-up"></i>
         </button>
+        </div>
+        <div class="sort-group">
 
         <h4>Name</h4>
         <button
           v-bind:class="{ active: sortNameAsc }"
           v-on:click="setSortNameAsc(true)"
         >
-          <i class="btn btn-primary fas fa-sort-up"></i>
+          <i class="btn btn-primary fas fa-sort-alpha-down"></i>
         </button>
         <button
           v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
           v-on:click="setSortNameAsc(false)"
         >
-          <i class="btn btn-primary fas fa-sort-down"></i>
+          <i class="btn btn-primary fas fa-sort-alpha-up"></i>
         </button>
+        </div>
       </div>
     </aside>
 
@@ -440,7 +447,7 @@ export default {
 
     let npcs = this.system.getNpcs();
     let allActors = npcs;
-    this.sources.push(game.world.title);
+    this.sources.push(game.world.data.title);
     let actorCompendiums = Array.from(game.packs.entries()).filter(
       (x) => x[1].metadata.entity == "Actor" && !x[1].metadata.name.includes("baileywiki")
     );
