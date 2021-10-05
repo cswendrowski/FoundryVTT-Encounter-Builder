@@ -107,7 +107,7 @@ export default class Dnd5e {
                     return false;
                 }
 
-                if (alignment === 'any') {
+                if (['any', 'any alignment'].includes(alignment)) {
                     return true;
                 }
 
@@ -156,8 +156,8 @@ export default class Dnd5e {
                     let matchingTraits = selectedTraits.filter(value => {
                         switch (value) {
                             case "Spellcaster": return x.data.data.details.spellLevel > 0;
-                            case "Legendary": return x.data.data.resources?.lair?.value;
-                            case "Lair Actions": return x.data.data.resources?.legact?.max > 0 || x.data.data.resources?.legres?.max > 0;
+                            case "Lair Actions": return x.data.data.resources?.lair?.value;
+                            case "Legendary Actions": return x.data.data.resources?.legact?.max > 0 || x.data.data.resources?.legres?.max > 0;
                         }
                     });
                     return matchingTraits.length > 0;

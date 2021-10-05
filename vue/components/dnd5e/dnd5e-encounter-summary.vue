@@ -7,6 +7,8 @@
            {{t.label}} ({{t.value}} XP)
         </h4>
 
+        <hr>
+
         <h4>Total XP: {{totalEncounterScore}}</h4>
         <h4>Adjusted XP: <span :class="totalScoreClass">{{adjustedEncounterScore}} of {{maxEncounterScore}}</span></h4>
     </div>
