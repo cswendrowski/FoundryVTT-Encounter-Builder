@@ -62,6 +62,9 @@
         <button class="btn btn-primary" v-on:click="spawnOnScene()">
           Spawn on current Scene
         </button>
+        <button class="btn btn-primary" v-if="warpgateEnabled" v-on:click="warpOnScene()">
+          Warp on current Scene
+        </button>
       </div>
     </section>
 
@@ -218,6 +221,8 @@ export default {
 
     sortLevelAsc: true,
     sortNameAsc: undefined,
+
+    warpgateEnabled: game.modules.get("warpgate")?.active
   }),
   methods: {
     prettify: function(level) {
@@ -284,6 +289,38 @@ export default {
       await Token.create(tokensToSpawn);
       ui.notifications.info(
         tokensToSpawn.length + " tokens spawned on " + viewedScene.name
+      );
+    },
+    warpOnScene: async function () {
+      let tokensToWarp = {};
+      let viewedScene = game.scenes.get(game.user.viewedScene);
+      if (viewedScene == undefined) {
+        ui.notifications.warn("No viewed scene to spawn into");
+        return;
+      }
+      let total = 0;
+
+      for (let x = 0; x < this.selectedActors.length; x++) {
+        let actor = this.selectedActors[x];
+        if (actor.source && !game.actors.get(actor.id)) {
+          actor = await Actor.create(actor.data, {keepId: true});
+        }
+        if (Object.keys(tokensToWarp).includes(actor.data.name)) {
+          tokensToWarp[actor.data.name]++;
+        }
+        else {
+          tokensToWarp[actor.data.name] = 1;
+        }
+        total++;
+      }
+      this.log(false, tokensToWarp);
+
+      for (let name in tokensToWarp) {
+        await warpgate.spawn(name, {}, {}, {duplicates: tokensToWarp[name]});
+      }
+
+      ui.notifications.info(
+          total + " tokens spawned on " + viewedScene.name
       );
     },
   },
