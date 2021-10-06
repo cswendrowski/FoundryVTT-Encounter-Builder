@@ -1,93 +1,105 @@
 <template>
-  <div>
-    <div class="filters-primary">
+  <div class="system-filters">
 
-    <label>Type</label>
-    <v-select
-      multiple
-      v-model="selectedTypes"
-      :options="
-        Object.keys(CONFIG.DND5E.creatureTypes).map((x) => ({
-          label: game.i18n.localize(CONFIG.DND5E.creatureTypes[x]),
-          value: x,
-        }))
-      "
-      :reduce="(x) => x.value"
-    ></v-select>
-
-    <label>Environment</label>
-    <v-select
-      multiple
-      v-model="selectedEnvironments"
-      :options="environments"
-    ></v-select>
-
-    <label>Size</label>
-    <v-select
-      multiple
-      v-model="selectedSizes"
-      :options="Object.values(CONFIG.DND5E.actorSizes).reverse()"
-    ></v-select>
-
-    <label>Movement</label>
-    <v-select
-      multiple
-      v-model="selectedMovements"
-      :options="['Burrows', 'Climbs', 'Flys', 'Swims', 'Walks']"
-    ></v-select>
-
-    <label>Alignment</label>
-    <div class='flexrow'>
-    <v-select
-      multiple
-      v-model="selectedAlignmentsLaw"
-      placeholder="Any"
-      :options="['Lawful', 'Neutral', 'Chaotic']"
-      :reduce="(x) => x.toLowerCase()"
-    ></v-select>
-    <v-select
-      multiple
-      v-model="selectedAlignmentsGood"
-      placeholder="Any"
-      :options="['Good', 'Neutral', 'Evil']"
-      :reduce="(x) => x.toLowerCase()"
-    ></v-select>
-    </div>
+    <div>
+      <label>Type</label>
+      <v-select
+        multiple
+        v-model="selectedTypes"
+        :options="
+          Object.keys(CONFIG.DND5E.creatureTypes).map((x) => ({
+            label: game.i18n.localize(CONFIG.DND5E.creatureTypes[x]),
+            value: x,
+          }))
+        "
+        :reduce="(x) => x.value"
+      ></v-select>
     </div>
 
-    <div class="filters-secondary">
-
-    <label>Special Traits</label>
-    <v-select
-      multiple
-      v-model="selectedTraits"
-      :options="['Spellcaster', 'Legendary', 'Lair Actions']"
-    ></v-select>
+    <div>
+      <label>Environment</label>
+      <v-select
+        multiple
+        v-model="selectedEnvironments"
+        :options="environments"
+      ></v-select>
     </div>
-    <div class="filters-defenses">
-      <h3>Defenses</h3>
 
-    <label>Resistances</label>
-    <v-select
-      multiple
-      v-model="selectedResistances"
-      :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
-      :reduce="(x) => x.toLowerCase()"
-    ></v-select>
-    <label>Immunities</label>
-    <v-select
-      multiple
-      v-model="selectedImmunities"
-      :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
-      :reduce="(x) => x.toLowerCase()"
-    ></v-select>
-    <label>Vulnerabilities</label>
-    <v-select
-      multiple
-      v-model="selectedVulnerabilities"
-      :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
-      :reduce="(x) => x.toLowerCase()"
-    ></v-select>
+    <div>
+      <label>Size</label>
+      <v-select
+        multiple
+        v-model="selectedSizes"
+        :options="Object.values(CONFIG.DND5E.actorSizes).reverse()"
+      ></v-select>
+    </div>
+
+    <div>
+      <label>Movement</label>
+      <v-select
+        multiple
+        v-model="selectedMovements"
+        :options="['Burrows', 'Climbs', 'Flys', 'Swims', 'Walks']"
+      ></v-select>
+    </div>
+
+    <div>
+      <label>Alignment</label>
+      <div class='flexrow'>
+        <v-select
+          multiple
+          v-model="selectedAlignmentsLaw"
+          placeholder="Any"
+          :options="['Lawful', 'Neutral', 'Chaotic']"
+          :reduce="(x) => x.toLowerCase()"
+        ></v-select>
+        <v-select
+          multiple
+          v-model="selectedAlignmentsGood"
+          placeholder="Any"
+          :options="['Good', 'Neutral', 'Evil']"
+          :reduce="(x) => x.toLowerCase()"
+        ></v-select>
+      </div>
+    </div>
+
+    <div>
+      <label>Special Traits</label>
+      <v-select
+        multiple
+        v-model="selectedTraits"
+        :options="['Spellcaster', 'Legendary', 'Lair Actions']"
+      ></v-select>
+    </div>
+    
+    <h3>Defenses</h3>
+
+    <div>
+      <label>Resistances</label>
+      <v-select
+        multiple
+        v-model="selectedResistances"
+        :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+        :reduce="(x) => x.toLowerCase()"
+      ></v-select>
+    </div>
+    <div>
+      <label>Immunities</label>
+      <v-select
+        multiple
+        v-model="selectedImmunities"
+        :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+        :reduce="(x) => x.toLowerCase()"
+      ></v-select>
+    </div>
+    <div>
+      <label>Vulnerabilities</label>
+      <v-select
+        multiple
+        v-model="selectedVulnerabilities"
+        :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+        :reduce="(x) => x.toLowerCase()"
+      ></v-select>
     </div>
   </div>
 </template>

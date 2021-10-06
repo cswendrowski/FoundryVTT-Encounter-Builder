@@ -177,7 +177,7 @@ $dark-maroon: #2B0603;
 
 .encounter-builder {
     display: grid;
-    grid-template-columns: 25ch 1fr 30ch;
+    grid-template-columns: 1fr 4fr 30ch;
     grid-template-rows: 5em 15em 1fr;
     grid-template-areas: 
     'header header encounter'
@@ -297,12 +297,25 @@ $dark-maroon: #2B0603;
     }
 
     input[type=text] {
-        padding: 4px;
+        padding: 5px;
         background: none;
         border: 1px solid rgba(60,60,60,.26);
         border-radius: 4px;
-        height: 2.5em;
+        height: auto;
+        line-height: 1.4;
         width: 100%;
+
+        &:hover, &:focus {
+            box-shadow: none;
+            border: 1px solid rgba(60,60,60,.6);
+        }
+    }
+
+    .vs__dropdown-toggle {
+        &:focus-within, &:hover {
+
+            border: 1px solid rgba(60,60,60,.6);
+        }
     }
     
     .search-configuration {
@@ -314,6 +327,10 @@ $dark-maroon: #2B0603;
         overflow-y: scroll;
         
         .sortings {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+
             .active {
                 background-color: $gold;
             }
@@ -374,6 +391,25 @@ $dark-maroon: #2B0603;
         row-gap: .5em;
     }
     
+    .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.5em;
+
+        h3 {
+            grid-column-start: 1;
+            grid-column-end: -1;
+        }
+    }
+
+    .system-filters {
+        grid-column-start: 1;
+        grid-column-end: -1;
+        gap: 0.5em;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
     .actor-listing {
         position: relative;
         background: var(--background-primary-image), var(--color-secondary);
@@ -411,8 +447,14 @@ $dark-maroon: #2B0603;
                 padding-right: 3px;
             }
         }
+    }
 
-        .trait-label {
+    .trait-list {
+        dt, dd {
+            display: inline;
+        }
+
+        dt {
             font-style: italic;
             font-weight: bold;
             &:after {
@@ -420,11 +462,16 @@ $dark-maroon: #2B0603;
             }
         }
 
-        .trait-value.missing {
+        dd {
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .missing {
             color: red;
         }
     }
-    
+
     .actor-listing-contents {
         display: flex;
         flex-direction: row;
@@ -479,8 +526,7 @@ $dark-maroon: #2B0603;
         transition-delay: 0.3s;
         pointer-events: none;
     }
-    
-    
+
     .actor-info-button {
         font-size: 2em;
         border-radius: 50%;

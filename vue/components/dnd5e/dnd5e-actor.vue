@@ -1,18 +1,22 @@
 <template>
   <li class="actor-listing">
-    <div class="actor-listing-contents" v-on:click.left="$emit('add-actor')">
+    <div class="actor-listing-contents" v-on:click.left="$emit('add-actor')"  v-on:click.right="$emit('remove-actor')">
       <section class="actor-info">
         <h4 class="name">
           {{ actor.data.name }}
         </h4>
-        <span class="trait-value">
-            <i>{{CONFIG.DND5E.actorSizes[actor.data.data.traits.size]}} {{ actor.labels.creatureType }}</i>
-        </span>
+        <em class="trait-value">
+            {{CONFIG.DND5E.actorSizes[actor.data.data.traits.size]}} {{ actor.labels.creatureType }}
+        </em>
 
         <hr />
 
-
-        <label class="trait-label">Challenge</label> <span class="trait-value">{{ window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr) }} ({{ actor.encounterScore }} XP)</span>
+        <dl class="trait-list">
+          <div class="trait-entry">
+            <dt>Challenge</dt>
+            <dd>{{ window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr) }} ({{ actor.encounterScore }} XP)</dd>
+          </div>
+        </dl>
 
         <ul class="tags">
           <li v-for="tag of tags"
@@ -28,9 +32,9 @@
     </div>
 
     <div class="actor-info-buttons-overlay">
-      <button class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info"></i></button>
-      <button class="actor-info-button" v-on:click.left="$emit('add-actor')"><i class="fas fa-plus"></i></button>
-      <button class="actor-info-button" v-on:click.left="$emit('remove-actor')"><i class="fas fa-minus"></i></button>
+      <button type="button" class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info"></i></button>
+      <button type="button" class="actor-info-button" v-on:click.left="$emit('add-actor')"><i class="fas fa-plus"></i></button>
+      <button type="button" class="actor-info-button" v-on:click.left="$emit('remove-actor')"><i class="fas fa-minus"></i></button>
     </div>
   </li>
 </template>

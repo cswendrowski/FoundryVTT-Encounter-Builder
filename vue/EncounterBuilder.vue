@@ -70,17 +70,22 @@
 
     <aside class="search-configuration">
       <h2>Filters</h2>
-      <div class="filters">
-        <h4>Name</h4>
-        <input type="text" placeholder="Name" v-model="selectedName" />
+      <div class="filters-grid">
+        
+        <div>
+          <label>Name</label>
+          <input type="text" placeholder="Name" v-model="selectedName" />
+        </div>
 
-        <h4>Source</h4>
-        <v-select
-          multiple
-          v-model="selectedSources"
-          :options="sources"
-          :reduce="(x) => x.toLowerCase()"
-        ></v-select>
+        <div>
+          <label>Source</label>
+          <v-select
+            multiple
+            v-model="selectedSources"
+            :options="sources"
+            :reduce="(x) => x.toLowerCase()"
+          ></v-select>
+        </div>
 
         <component v-bind:is="filtersComponent" v-model="filters"></component>
       </div>
@@ -88,45 +93,45 @@
       <h2>Sort</h2>
       <div class="sortings">
         <div class="sort-group">
-        <h4>{{ levelName }}</h4>
-        <div class="toggle-button-group">
-          <button
-          class="toggle-button"
-            v-bind:class="{ active: sortLevelAsc }"
-            v-on:click="setSortLevelAsc(true)"
-          >
-            <i class="btn btn-primary fas fa-sort-numeric-down"></i>
-          </button>
-          <button
-          class="toggle-button"
-            v-bind:class="{
-              active: sortLevelAsc != undefined && !sortLevelAsc,
-            }"
-            v-on:click="setSortLevelAsc(false)"
-          >
-            <i class="btn btn-primary fas fa-sort-numeric-up"></i>
-          </button>
-        </div>
+          <h4>{{ levelName }}</h4>
+          <div class="toggle-button-group">
+            <button
+            class="toggle-button"
+              v-bind:class="{ active: sortLevelAsc }"
+              v-on:click="setSortLevelAsc(true)"
+            >
+              <i class="btn btn-primary fas fa-sort-numeric-down"></i>
+            </button>
+            <button
+            class="toggle-button"
+              v-bind:class="{
+                active: sortLevelAsc != undefined && !sortLevelAsc,
+              }"
+              v-on:click="setSortLevelAsc(false)"
+            >
+              <i class="btn btn-primary fas fa-sort-numeric-up"></i>
+            </button>
+          </div>
         </div>
 
         <div class="sort-group">
-        <h4>Name</h4>
-        <div class="toggle-button-group">
-          <button
-            class="toggle-button"
-            v-bind:class="{ active: sortNameAsc }"
-            v-on:click="setSortNameAsc(true)"
-          >
-            <i class="btn btn-primary fas fa-sort-alpha-down"></i>
-          </button>
-          <button
-            class="toggle-button"
-            v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
-            v-on:click="setSortNameAsc(false)"
-          >
-            <i class="btn btn-primary fas fa-sort-alpha-up"></i>
-          </button>
-        </div>
+          <h4>Name</h4>
+          <div class="toggle-button-group">
+            <button
+              class="toggle-button"
+              v-bind:class="{ active: sortNameAsc }"
+              v-on:click="setSortNameAsc(true)"
+            >
+              <i class="btn btn-primary fas fa-sort-alpha-down"></i>
+            </button>
+            <button
+              class="toggle-button"
+              v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
+              v-on:click="setSortNameAsc(false)"
+            >
+              <i class="btn btn-primary fas fa-sort-alpha-up"></i>
+            </button>
+          </div>
         </div>
       </div>
     </aside>
@@ -361,30 +366,63 @@ export default {
         );
       }
 
+      // availableActors = availableActors.filter((x) => {
+      //   let level = this.system.getSafeLevel(x);
+      //   return level >= this.minSelectedLevel && level <= this.maxSelectedLevel;
+      // });
+
+
       availableActors = availableActors.filter((x) => {
         let level = this.system.getSafeLevel(x);
         return level >= this.minSelectedLevel && level <= this.maxSelectedLevel;
-      });
+      }).sort(
+        (a, b) => {
+          const aLevel = this.system.getSafeLevel(a);
+          const bLevel = this.system.getSafeLevel(b);
+          const aName = a.data.name;
+          const bName = b.data.name;
 
-      if (this.sortLevelAsc != undefined) {
-        if (this.sortLevelAsc) {
-          availableActors.sort((a, b) =>
-            this.system.getSafeLevel(a) > this.system.getSafeLevel(b) ? 1 : -1
-          );
-        } else {
-          availableActors.sort((a, b) =>
-            this.system.getSafeLevel(a) < this.system.getSafeLevel(b) ? 1 : -1
-          );
+          switch (true) {
+            // if both levels are the same, sort by name
+            case (this.sortLevelAsc != undefined && aLevel === bLevel): {
+              return aName.localeCompare(bName);
+            }
+            case (this.sortLevelAsc != undefined && this.sortLevelAsc): {
+              return aLevel - bLevel;
+            }
+            case (this.sortLevelAsc != undefined && !this.sortLevelAsc): {
+              return bLevel - aLevel;
+            }
+            case (this.sortNameAsc != undefined && this.sortNameAsc): {
+              return aName.localeCompare(bName);
+            }
+            default: {
+              return bName.localeCompare(aName);
+            }
+          }
         }
-      }
+      );
 
-      if (this.sortNameAsc != undefined) {
-        if (this.sortNameAsc) {
-          availableActors.sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
-        } else {
-          availableActors.sort((a, b) => (a.data.name < b.data.name ? 1 : -1));
-        }
-      }
+
+      // if (this.sortLevelAsc != undefined) {
+      //   if (this.sortLevelAsc) {
+      //     availableActors.sort((a, b) =>
+      //       this.system.getSafeLevel(a) > this.system.getSafeLevel(b) ? 1 : -1
+      //     );
+      //   } else {
+      //     availableActors.sort((a, b) =>
+      //       this.system.getSafeLevel(a) < this.system.getSafeLevel(b) ? 1 : -1
+      //     );
+      //   }
+      // }
+
+      // if (this.sortNameAsc != undefined) {
+      //   if (this.sortNameAsc) {
+      //     availableActors.sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
+      //   } else {
+      //     availableActors.sort((a, b) => (a.data.name < b.data.name ? 1 : -1));
+      //   }
+      // }
 
       //this.log(false, availableActors);
       return availableActors;
