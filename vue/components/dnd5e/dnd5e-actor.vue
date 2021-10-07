@@ -5,6 +5,7 @@
         <h4 class="name">
           {{ actor.data.name }}
         </h4>
+
         <em class="trait-value">
             {{CONFIG.DND5E.actorSizes[actor.data.data.traits.size]}} {{ actor.labels.creatureType }}
         </em>
@@ -12,10 +13,10 @@
         <hr />
 
         <dl class="trait-list">
-          <div class="trait-entry">
-            <dt>Challenge</dt>
-            <dd>{{ window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr) }} ({{ actor.encounterScore }} XP)</dd>
-          </div>
+          <div
+            is="actor-trait"
+            :label="'Challenge'"
+            :value="`${window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr)}   (${actor.encounterScore} XP)`"></div>
         </dl>
 
         <ul class="tags">

@@ -165,7 +165,6 @@
         <component
           v-bind:is="actorComponent"
           v-model="encounterSettings"
-          class="actor-listing"
           v-for="t of availableActors"
                         :key="system.getUniqueKey(t, partyInfo, encounterSettings)"
           :actor="t"

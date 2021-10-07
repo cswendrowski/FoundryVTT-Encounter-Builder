@@ -1,6 +1,6 @@
 <template>
   <li class="actor-listing">
-    <div class="actor-listing-contents" v-on:click.left="$emit('actor-info')">
+    <div class="actor-listing-contents" v-on:click.left="$emit('add-actor')"  v-on:click.right="$emit('remove-actor')">
       <div class="actor-image">
         <img :src="actor.data.img" width="100" height="100" />
       </div>
@@ -11,21 +11,21 @@
           >
           {{ actor.data.name }}
         </h4>
-        <ul class="traits">
-          <li class="score" v-if="actor.encounterScore > 0">
-            <label class="trait-label">Traits</label>
-            <span class="trait-value">{{ actor.data.data.traits.traits.value.join(", ") }}</span>
-          </li>
-          <li class="score" v-if="actor.encounterScore > 0">
-            <label class="trait-label">XP</label>
-            <span class="trait-value">{{ actor.encounterScore }}</span>
-          </li>
-          <li class="source">
-            <span class="trait-value">
-                <i>{{ actor.source }}</i>
-            </span>
-          </li>
+
+
+      <dl class="trait-list">
+        <div
+          is="actor-trait"
+          :label="'XP'"
+          :value="actor.encounterScore"></div>
+      </dl>
+
+        <ul class="tags">
+          <li v-for="tag of actor.data.data.traits.traits.value"
+            :key="tag">{{tag}}</li>
         </ul>
+
+        <small class="actor-source">{{ actor.source }}</small>
       </section>
     </div>
 

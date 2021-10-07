@@ -1,13 +1,44 @@
 <template>
-    <div>
-        <h4>Traits</h4>
-        <v-select multiple v-model="selectedTraits" :options="monsterTraits" :reduce="x => x.toLowerCase()"></v-select>
-        <h4>Size</h4>
-        <v-select multiple v-model="selectedSizes" :options="actorSizes"></v-select>
-        <h4>Rarity</h4>
-        <v-select multiple v-model="selectedRarities" :options="rarityTraits" :reduce="x => x.toLowerCase()"></v-select>
-        <h4>Alignment</h4>
-        <v-select multiple v-model="selectedAlignments" :options="alignment"></v-select>
+    <div class="system-filters">
+
+        <div>
+        <label>Traits</label>
+        <v-select
+            multiple
+            v-model="selectedTraits"
+            :options="monsterTraits"
+            :reduce="x => x.toLowerCase()"
+        ></v-select>
+        </div>
+
+        <div>
+        <label>Size</label>
+        <v-select
+            multiple
+            v-model="selectedSizes"
+            :options="actorSizes"
+        ></v-select>
+        </div>
+
+        <div>
+        <label>Rarity</label>
+        <v-select
+            multiple
+            v-model="selectedRarities"
+            :options="rarityTraits"
+        ></v-select>
+        </div>
+
+        <div>
+        <label>Alignment</label>
+        <v-select
+            multiple
+            v-model="selectedAlignments"
+            :options="alignment"
+            :reduce="x => x.toLowerCase()"
+        ></v-select>
+        </div>
+
     </div>
 </template>
 <script>

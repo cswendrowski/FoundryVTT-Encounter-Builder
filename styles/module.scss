@@ -4,6 +4,11 @@ $gold: #B9A660;
 $white: #F4F3EA;
 $dark-maroon: #2B0603;
 
+@mixin background-primary {
+    background: var(--background-primary-image), var(--background-primary-color);
+    background-repeat: repeat;
+    background-blend-mode: var(--background-primary-blend);
+}
 
 .dungeon-moon-launcher-smol {
     display: none;
@@ -19,8 +24,9 @@ $dark-maroon: #2B0603;
 }
 
 .encounter-builder-application {
-    --title-font-family: 'mason-serif', inherit;
+    --title-font-family: 'mason-serif';
     --title-font-size: 2.5em;
+    --title-background-image: url(/ui/parchment.jpg);
     --title-background-color: #{$red};
     --title-background-blend: color-burn;
     
@@ -38,17 +44,25 @@ $dark-maroon: #2B0603;
     --shadow-subtle-color: #00000030;
     
     --text-color: black;
-    
-    &.pf2e {
-        --title-font-family: 'mason-serif', inherit;
-        --title-font-size: 2.5em;
-        --title-background-color: #{$red};
-        --title-background-blend: color-burn;
-        
-        //--background-primary-image: url(../../../systems/pf2e/assets/sheet/header.png);
+
+    &.archmage {
+        --title-font-family: 'mason-serif';
         --background-primary-image: url(/ui/parchment.jpg);
-        --background-primary-color: white;
+        --background-primary-color: hsl(46 71% 83% / 0.8); // from character sheet
         --background-primary-blend: hard-light;
+    }
+
+    &.pf2e {
+        --title-font-family: unset;
+        --title-font-size: 2.5em;
+        --title-background-image: url(../../../systems/pf2e/assets/sheet/header.webp);
+        --title-background-color: var(--primary, #{$red}); // uses pf2 theme vars
+        --title-background-blend: normal;
+        
+        --background-primary-image: url(../../../systems/pf2e/assets/sheet/header.webp);
+        // --background-primary-image: url(/ui/parchment.jpg);
+        --background-primary-color: white;
+        --background-primary-blend: normal;
         --background-secondary-color: #{$white};
         
         --color-primary: #171f69;
@@ -61,16 +75,21 @@ $dark-maroon: #2B0603;
         
         --text-color: black;
         
-        .window-content {
-            background: var(--background-primary-image) !important;
-        }
+        // .window-content {
+        //     background: '/ui/parchment.jpg' !important;
+        // }
         
         .actor-listing {
-            background: url(../../../systems/pf2e/assets/sheet/header.webp) !important;
+            // background: url(../../../systems/pf2e/assets/sheet/header.webp) !important;
+            color: var(--color-accent2);
         }
         
-        .traits {
+        .traits, .traits-list {
             color: #fff !important;
+        }
+
+        .tags {
+            color: black;
         }
         
         .encounter-info {
@@ -89,6 +108,8 @@ $dark-maroon: #2B0603;
     }
     
     &.dnd5e {
+        --title-font-family: unset;
+
         .current-threat-level {
             font-weight: bold;
         }
@@ -117,28 +138,10 @@ $dark-maroon: #2B0603;
             margin: 0.2em 0;
         }
 
-        .tags {
-            font-size: 0.8em;
-            display: flex;
-            gap: 0.2em;
-            line-height: 1;
-            flex-wrap: wrap;
-
-            > li {
-                background-color: var(--background-primary-color);
-                // color: var(--color-secondary);
-                text-transform: capitalize;
-                padding: 0.2em;
-                margin-bottom: 0.2em;
-                border-radius: 4px;
-            }
-        }
     }
     
     &.window-app .window-content {
-        background: var(--background-primary-image), var(--background-primary-color);
-        background-repeat: repeat;
-        background-blend-mode: var(--background-primary-blend);
+        // @include background-primary;
         height: 100%;
         padding: 0;
         z-index: 0;
@@ -220,8 +223,7 @@ $dark-maroon: #2B0603;
         grid-area: header;
         
         height: 100%;
-        background: var(--color-accent);
-        background: var(--background-primary-image), var(--title-background-color);
+        background: var(--title-background-image), var(--title-background-color);
         background-repeat: repeat;
         background-blend-mode: var(--title-background-blend);
         z-index: 1;
@@ -411,13 +413,12 @@ $dark-maroon: #2B0603;
     }
 
     .actor-listing {
+        @include background-primary;
+
         position: relative;
-        background: var(--background-primary-image), var(--color-secondary);
 
         border-radius: 4px;
 
-        background-repeat: repeat;
-        background-blend-mode: var(--background-primary-blend);
                     box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
 
 
@@ -449,6 +450,11 @@ $dark-maroon: #2B0603;
         }
     }
 
+    
+    .actor-source {
+        font-style: italic;
+    }
+
     .trait-list {
         dt, dd {
             display: inline;
@@ -469,6 +475,24 @@ $dark-maroon: #2B0603;
 
         .missing {
             color: red;
+        }
+    }
+
+    
+    .tags {
+        font-size: 0.8em;
+        display: flex;
+        gap: 0.2em;
+        line-height: 1;
+        flex-wrap: wrap;
+
+        > li {
+            background-color: var(--background-primary-color);
+            // color: var(--color-secondary);
+            text-transform: capitalize;
+            padding: 0.2em;
+            margin-bottom: 0.2em;
+            border-radius: 4px;
         }
     }
 
