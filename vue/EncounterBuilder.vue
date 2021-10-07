@@ -41,8 +41,9 @@
               :group="t[0]"
               :actor="t[1][0]"
               :groupSize="t[1].length"
-              v-on:click-left="addActor(t[1][0])"
-              v-on:click-right="removeActor(t[1][0])"
+              v-on:add-actor="addActor(t[1][0])"
+              v-on:remove-actor="removeActor(t[1][0])"
+              v-on:actor-info="openActorSheet(t[1][0])"
             ></component>
           </li>
         </ul>
@@ -100,7 +101,7 @@
               v-bind:class="{ active: sortLevelAsc }"
               v-on:click="setSortLevelAsc(true)"
             >
-              <i class="btn btn-primary fas fa-sort-numeric-down"></i>
+              <i class="fas fa-sort-numeric-down"></i>
             </button>
             <button
             class="toggle-button"
@@ -109,7 +110,7 @@
               }"
               v-on:click="setSortLevelAsc(false)"
             >
-              <i class="btn btn-primary fas fa-sort-numeric-up"></i>
+              <i class="fas fa-sort-numeric-up"></i>
             </button>
           </div>
         </div>
@@ -122,14 +123,14 @@
               v-bind:class="{ active: sortNameAsc }"
               v-on:click="setSortNameAsc(true)"
             >
-              <i class="btn btn-primary fas fa-sort-alpha-down"></i>
+              <i class="fas fa-sort-alpha-down"></i>
             </button>
             <button
               class="toggle-button"
               v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
               v-on:click="setSortNameAsc(false)"
             >
-              <i class="btn btn-primary fas fa-sort-alpha-up"></i>
+              <i class="fas fa-sort-alpha-up"></i>
             </button>
           </div>
         </div>
