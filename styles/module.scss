@@ -38,7 +38,7 @@ $dark-maroon: #2B0603;
     --color-primary: #{$gold};
     --color-secondary: #{$yellow};
     --color-accent: #{$red};
-    --color-accent2: #{$dark-maroon};
+    --color-accent2: #{$dark-maroon}; // contrasts color-primary: used for text on a primary field
     
     --shadow-full-color: #00000060;
     --shadow-subtle-color: #00000030;
@@ -57,23 +57,18 @@ $dark-maroon: #2B0603;
     &.pf2e {
         --title-font-family: unset;
         --title-background-image: url(../../../systems/pf2e/assets/sheet/header.webp);
-        --title-background-color: var(--primary, #{$red}); // uses pf2 theme vars
+        --title-background-color: var(--primary, #{$red}); // overriden by image
         --title-background-blend: normal;
-        
+
         --background-primary-image: url(../../../systems/pf2e/assets/sheet/header.webp);
-        // --background-primary-image: url(/ui/parchment.jpg);
-        --background-primary-color: white;
+        --background-primary-color: white; // overridden by image
         --background-primary-blend: normal;
-        
+
         --color-primary: #171f69;
         --color-secondary: #E9D7A1;
         --color-accent: #171f69;
         --color-accent2: #f7d488;
-        
-        // .window-content {
-        //     background: '/ui/parchment.jpg' !important;
-        // }
-        
+
         .actor-listing {
             // background: url(../../../systems/pf2e/assets/sheet/header.webp) !important;
             color: var(--color-accent2);
@@ -606,7 +601,7 @@ $dark-maroon: #2B0603;
         }
 
         &:hover {
-            background: $red;
+            background: var(--color-accent);
         }
     }
 
@@ -644,12 +639,12 @@ $dark-maroon: #2B0603;
 
     .btn-primary {
         background: var(--color-primary);
-        color: var(--color-secondary);
+        color: var(--color-accent2);
 
         &:hover {
             box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.4);
             background: var(--color-primary);
-            color: var(--color-secondary);
+            color: var(--color-accent2);
         }
     }
 
