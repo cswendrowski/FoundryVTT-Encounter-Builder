@@ -43,7 +43,7 @@
       ></v-select>
     </div>
 
-    <div>
+    <div class="full-width-filter">
       <label>Alignment</label>
       <div class='flexrow'>
         <v-select
@@ -53,6 +53,7 @@
           :options="['Lawful', 'Neutral', 'Chaotic']"
           :reduce="(x) => x.toLowerCase()"
         ></v-select>
+        <div class="filter-divider"></div>
         <v-select
           multiple
           v-model="selectedAlignmentsGood"

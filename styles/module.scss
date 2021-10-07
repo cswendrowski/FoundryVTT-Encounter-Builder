@@ -45,6 +45,8 @@ $dark-maroon: #2B0603;
     
     --text-color: black;
 
+    width: 1200px; // base width, overriden by resize, allows system specific base width
+
     &.archmage {
         --title-font-family: 'mason-serif';
         --background-primary-image: url(/ui/parchment.jpg);
@@ -109,6 +111,8 @@ $dark-maroon: #2B0603;
     
     &.dnd5e {
         --title-font-family: unset;
+
+        width: 70vw;
 
         .current-threat-level {
             font-weight: bold;
@@ -189,6 +193,10 @@ $dark-maroon: #2B0603;
     height: 100%;
     color: var(--text-color);
     
+    .dnd5e & {
+        grid-template-columns: minmax(280px, 1fr) 4fr 30ch;
+    }
+
     .vs__actions {
 
         button {
@@ -263,6 +271,7 @@ $dark-maroon: #2B0603;
             background: none;
             border: 1px solid rgba(60,60,60,.26);
             border-radius: 4px;
+            height: inherit;
         }
 
         .encounter-members {
@@ -355,6 +364,8 @@ $dark-maroon: #2B0603;
         align-items: center;
         justify-content: center;
         height: 100%;
+        grid-row-end: -1;
+        grid-row-start: 2;
         
         .spinner {
             width: 75% !important;
@@ -399,8 +410,24 @@ $dark-maroon: #2B0603;
         gap: 0.5em;
 
         h3 {
+            margin-bottom: 0;
             grid-column-start: 1;
             grid-column-end: -1;
+        }
+
+        .full-width-filter {
+            grid-column-start: 1;
+            grid-column-end: -1;
+            > .flexrow {
+                gap: 0.2em;
+            }
+        }
+        .filter-divider {
+            width: 1em;
+            flex: 0 0 1em;
+            height: 2px;
+            background: var(--color-primary);
+            align-self: center;
         }
     }
 

@@ -78,7 +78,7 @@ class EncounterBuilder {
         },
         {
             height: '800',
-            width: '1200',
+            width: 'auto',
             resizable: true,
             popOutModuleDisable: true,
             classes: ["encounter-builder-application", game.system.id]
