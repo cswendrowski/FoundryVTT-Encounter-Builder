@@ -22,33 +22,39 @@ export default class ThirteenthAge {
         return packActors;
     }
 
-    filterAvailableActors(availableActors, filters) {
-        if (filters.selectedSources.length > 0) {
-            availableActors = availableActors.filter(x => filters.selectedSources.includes(this.getActorSource(x).toLowerCase()));
+    filterAvailableActors(availableActors, {
+        selectedName,
+        selectedRoles,
+        selectedSizes,
+        selectedSources,
+        selectedTypes
+    }) {
+        if (selectedSources?.length > 0) {
+            availableActors = availableActors.filter(x => selectedSources.includes(this.getActorSource(x).toLowerCase()));
         }
-        if (filters.selectedName != "") {
-            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(filters.selectedName.toLowerCase()));
+        if (!!selectedName) {
+            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(selectedName.toLowerCase()));
         }
-        if (filters.selectedSizes != undefined && filters.selectedSizes.length > 0) {
+        if (selectedSizes?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.size != undefined) {
-                    return filters.selectedSizes.includes(x.data.data.details.size.value);
+                if (!!x.data.data?.details?.size) {
+                    return selectedSizes.includes(x.data.data.details.size.value.toLowerCase());
                 }
                 return false;
             });
         }
-        if (filters.selectedRoles != undefined && filters.selectedRoles.length > 0) {
+        if (selectedRoles?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.role != undefined) {
-                    return filters.selectedRoles.includes(x.data.data.details.role.value);
+                if (!!x.data.data?.details?.role) {
+                    return selectedRoles.includes(x.data.data.details.role.value.toLowerCase());
                 }
                 return false;
             });
         }
-        if (filters.selectedTypes != undefined && filters.selectedTypes.length > 0) {
+        if (selectedTypes?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.type != undefined) {
-                    return filters.selectedTypes.includes(x.data.data.details.type.value);
+                if (!!x.data.data?.details?.type) {
+                    return selectedTypes.includes(x.data.data.details.type.value.toLowerCase());
                 }
                 return false;
             });

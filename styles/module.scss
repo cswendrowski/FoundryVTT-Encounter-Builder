@@ -125,6 +125,12 @@ $dark-maroon: #2B0603;
             padding-bottom: 0;
         }
 
+        .trait-list {
+            dd {
+                font-style: italic;
+            }
+        }
+
         hr {
             border-top: 1px solid transparent;
             border-bottom: 1px solid transparent;
@@ -494,7 +500,6 @@ $dark-maroon: #2B0603;
         }
 
         dt {
-            font-style: italic;
             font-weight: bold;
             &:after {
                 content: " - "
@@ -504,6 +509,7 @@ $dark-maroon: #2B0603;
         dd {
             padding-left: 0;
             margin: 0;
+            text-transform: capitalize;
         }
 
         .missing {

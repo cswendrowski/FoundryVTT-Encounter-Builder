@@ -39,6 +39,7 @@
 
       <small class="actor-source">{{ actor.source }}</small>
     </section>
+    </div>
 
     <div class="actor-info-buttons-overlay">
       <span class="actor-info-button" v-on:click.left="$emit('actor-info')"><i class="fas fa-info"></i></span>

@@ -45,15 +45,15 @@ export default class Dnd5e {
     filterAvailableActors(availableActors, {
         selectedAlignmentsGood,
         selectedAlignmentsLaw,
-        selectedSources,
-        selectedName,
-        selectedTypes,
-        selectedSizes,
-        selectedMovements,
         selectedEnvironments,
-        selectedTraits,
-        selectedResistances,
         selectedImmunities,
+        selectedMovements,
+        selectedName,
+        selectedResistances,
+        selectedSizes,
+        selectedSources,
+        selectedTraits,
+        selectedTypes,
         selectedVulnerabilities
     }) {
         if (selectedSources?.length > 0) {
