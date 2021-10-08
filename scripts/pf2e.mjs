@@ -73,7 +73,7 @@ export default class Pathfinder2E {
     }
 
     getActorSource(actor, skipDetails) {
-        if (actor.data.data.details.source.value && !skipDetails) {
+        if (actor.data.data.details.source?.value && !skipDetails) {
             return actor.data.data.details.source.value;
         }
 

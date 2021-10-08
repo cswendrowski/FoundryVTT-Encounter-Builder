@@ -491,6 +491,7 @@ export default {
     if (game.system.id == "archmage") {
       this.systemName = "thirteenth-age";
       this.system = window.dungeonMoon.thirteenthAge;
+      this.colors.holder = "#dfd095";
       this.log(true, "13th Age Loaded");
     }
     else if (game.system.id == "pf2e") {
