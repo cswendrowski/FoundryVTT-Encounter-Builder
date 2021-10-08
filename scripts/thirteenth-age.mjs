@@ -29,13 +29,13 @@ export default class ThirteenthAge {
         selectedSources,
         selectedTypes
     }) {
-        if (selectedSources?.length > 0) {
+        if (selectedSources?.length) {
             availableActors = availableActors.filter(x => selectedSources.includes(this.getActorSource(x).toLowerCase()));
         }
         if (!!selectedName) {
             availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(selectedName.toLowerCase()));
         }
-        if (selectedSizes?.length > 0) {
+        if (selectedSizes?.length) {
             availableActors = availableActors.filter(x => {
                 if (!!x.data.data?.details?.size) {
                     return selectedSizes.includes(x.data.data.details.size.value.toLowerCase());
@@ -43,7 +43,7 @@ export default class ThirteenthAge {
                 return false;
             });
         }
-        if (selectedRoles?.length > 0) {
+        if (selectedRoles?.length) {
             availableActors = availableActors.filter(x => {
                 if (!!x.data.data?.details?.role) {
                     return selectedRoles.includes(x.data.data.details.role.value.toLowerCase());
@@ -51,7 +51,7 @@ export default class ThirteenthAge {
                 return false;
             });
         }
-        if (selectedTypes?.length > 0) {
+        if (selectedTypes?.length) {
             availableActors = availableActors.filter(x => {
                 if (!!x.data.data?.details?.type) {
                     return selectedTypes.includes(x.data.data.details.type.value.toLowerCase());

@@ -21,7 +21,12 @@
       </dl>
 
         <ul class="tags">
-          <li v-for="tag of actor.data.data.traits.traits.value"
+          <li v-for="tag of primaryTags"
+            :key="tag">{{tag}}</li>
+        </ul>
+
+        <ul class="tags">
+          <li v-for="tag of tags"
             :key="tag">{{tag}}</li>
         </ul>
 
@@ -40,6 +45,31 @@
 <script>
 export default {
   name: "pf2e-actor",
-  props: ["actor"]
+  props: ["actor"],
+  computed: {
+    primaryTags() {
+      const {traits, details} = this.actor.data.data;
+      const ret = [];
+
+      if (!!traits?.rarity?.value) {
+        ret.push(game.i18n.localize(CONFIG.PF2E.rarityTraits[traits.rarity?.value]))
+      }
+
+      if (!!details?.alignment?.value) {
+        ret.push(game.i18n.localize(CONFIG.PF2E.alignment[details.alignment.value]))
+      }
+
+      if (!!traits?.size?.value) {
+        ret.push(game.i18n.localize(CONFIG.PF2E.actorSizes[traits?.size?.value]))
+      }
+
+      return ret;
+    },
+    tags() {
+      return this.actor.data.data?.traits?.traits?.value
+        .map((tag) => game.i18n.localize(CONFIG.PF2E.monsterTraits[tag]))
+        .filter((tag) => !!tag)
+    },
+  }
 };
 </script>

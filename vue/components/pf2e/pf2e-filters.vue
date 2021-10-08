@@ -7,7 +7,8 @@
             multiple
             v-model="selectedTraits"
             :options="monsterTraits"
-            :reduce="x => x.toLowerCase()"
+            :reduce="(x) => x.value"
+
         ></v-select>
         </div>
 
@@ -17,6 +18,8 @@
             multiple
             v-model="selectedSizes"
             :options="actorSizes"
+            :reduce="(x) => x.value"
+
         ></v-select>
         </div>
 
@@ -26,6 +29,8 @@
             multiple
             v-model="selectedRarities"
             :options="rarityTraits"
+            :reduce="(x) => x.value"
+
         ></v-select>
         </div>
 
@@ -35,7 +40,8 @@
             multiple
             v-model="selectedAlignments"
             :options="alignment"
-            :reduce="x => x.toLowerCase()"
+            :reduce="(x) => x.value"
+
         ></v-select>
         </div>
 
