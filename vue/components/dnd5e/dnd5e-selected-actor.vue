@@ -13,7 +13,7 @@
       <div class="member-details">
         <strong class="name">{{ group }}</strong>
         <div>
-          {{window.dungeonMoon.dnd5e.levelName()}} {{window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr)}}
+          {{system.levelName()}} {{system.histogramLabelPrettify(actor.data.data.details.cr)}}
         </div>
         <div>
           <strong>{{ groupsize }}</strong> x {{ actor.encounterScore }} = {{ (actor.encounterScore * groupsize) }} XP
@@ -31,6 +31,6 @@
 <script>
 export default {
     name: "dnd5e-selected-actor",
-    props: ["group", "actor", "groupsize"],
+    props: ["group", "actor", "groupsize", "system"],
 };
 </script>

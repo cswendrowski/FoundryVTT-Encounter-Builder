@@ -7,7 +7,7 @@
         </h4>
 
         <em class="trait-value">
-            {{CONFIG.DND5E.actorSizes[actor.data.data.traits.size]}} {{ actor.labels.creatureType }}
+            {{actorSizes[actor.data.data.traits.size]}} {{ actor.labels.creatureType }}
         </em>
 
         <hr />
@@ -16,7 +16,7 @@
           <div
             is="actor-trait"
             :label="'Challenge'"
-            :value="`${window.dungeonMoon.dnd5e.histogramLabelPrettify(actor.data.data.details.cr)}   (${actor.encounterScore} XP)`"></div>
+            :value="`${system.histogramLabelPrettify(actor.data.data.details.cr)}   (${actor.encounterScore} XP)`"></div>
         </dl>
 
         <ul class="tags">
@@ -43,7 +43,15 @@
 <script>
 export default {
   name: "dnd5e-actor",
-  props: ["actor"],
+  props: ["actor", "system"],
+  data: () => ({
+    actorSizes: [],
+    movementTypes: []
+  }),
+  created() {
+    this.actorSizes = window.dungeonMoon.dnd5e.actorSizes;
+    this.movementTypes = window.dungeonMoon.dnd5e.movementTypes;
+  },
   computed: {
     tags() {
       const {attributes, details, resources} = this.actor.data.data;
@@ -53,10 +61,10 @@ export default {
       const environments = !!details.environment && details.environment?.split(',').map(env => env.trim());
       environments && ret.push(...environments);
 
-      const movements = Object.keys(CONFIG.DND5E.movementTypes)
+      const movements = this.movementTypes
         .filter(movementType => movementType !== 'walk')
         .filter(movementType => attributes.movement[movementType] > 0)
-        .map(movementType => CONFIG.DND5E.movementTypes[movementType]);
+        .map(movementType => this.movementTypes[movementType]);
 
       movements.length && ret.push(...movements);
 
@@ -74,7 +82,7 @@ export default {
 
       ret.push(details.alignment);
 
-      ret.filter(tag => !!tag.trim());
+      ret.filter(tag => tag && !!tag.trim());
 
       return ret;
     }

@@ -4,6 +4,13 @@ export default class Dnd5e {
 
     constructor() {
         this.environments = [];
+        this.creatureTypes = Object.keys(CONFIG.DND5E.creatureTypes).map((x) => ({
+            label: game.i18n.localize(CONFIG.DND5E.creatureTypes[x]),
+            value: x,
+        }));
+        this.actorSizes = Object.values(CONFIG.DND5E.actorSizes).reverse();
+        this.damageResistanceTypes = Object.values(CONFIG.DND5E.damageResistanceTypes);
+        this.movementTypes = Object.keys(CONFIG.DND5E.movementTypes);
     }
 
     initValuesFromAllActors(allActors) {
@@ -232,12 +239,12 @@ export default class Dnd5e {
     getSafeLevel(actor) {
         if (actor.data.type == "character") {
             if (actor.data?.data?.details?.level) {
-                return actor.data.data.details.level;
+                return Number(actor.data.data.details.level);
             }
         }
         else {
             if (actor.data?.data?.details?.cr) {
-                return actor.data.data.details.cr;
+                return Number(actor.data.data.details.cr);
             }
         }
         return 0;

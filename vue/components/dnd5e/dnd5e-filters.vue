@@ -6,12 +6,7 @@
       <v-select
         multiple
         v-model="selectedTypes"
-        :options="
-          Object.keys(CONFIG.DND5E.creatureTypes).map((x) => ({
-            label: game.i18n.localize(CONFIG.DND5E.creatureTypes[x]),
-            value: x,
-          }))
-        "
+        :options="creatureTypes"
         :reduce="(x) => x.value"
       ></v-select>
     </div>
@@ -30,7 +25,7 @@
       <v-select
         multiple
         v-model="selectedSizes"
-        :options="Object.values(CONFIG.DND5E.actorSizes).reverse()"
+        :options="actorSizes"
       ></v-select>
     </div>
 
@@ -80,7 +75,7 @@
       <v-select
         multiple
         v-model="selectedResistances"
-        :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+        :options="damageResistanceTypes"
         :reduce="(x) => x.toLowerCase()"
       ></v-select>
     </div>
@@ -89,7 +84,7 @@
       <v-select
         multiple
         v-model="selectedImmunities"
-        :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+        :options="damageResistanceTypes"
         :reduce="(x) => x.toLowerCase()"
       ></v-select>
     </div>
@@ -98,7 +93,7 @@
       <v-select
         multiple
         v-model="selectedVulnerabilities"
-        :options="Object.values(CONFIG.DND5E.damageResistanceTypes)"
+        :options="damageResistanceTypes"
         :reduce="(x) => x.toLowerCase()"
       ></v-select>
     </div>
@@ -108,22 +103,27 @@
 export default {
     name: 'dnd5e-filters',
     data: () => ({
+      environments: [],
       selectedEnvironments: [],
+      creatureTypes: [],
       selectedTypes: [],
+      actorSizes: [],
       selectedSizes: [],
       selectedAlignmentsLaw: [],
       selectedAlignmentsGood: [],
       selectedMovements: [],
       selectedTraits: [],
+      damageResistanceTypes: [],
       selectedResistances: [],
       selectedImmunities: [],
       selectedVulnerabilities: [],
     }),
     props: ['value'],
-    computed: {
-      environments() {
-        return window.dungeonMoon.dnd5e.environments;
-      },
+    created() {
+      this.environments = window.dungeonMoon.dnd5e.environments;
+      this.creatureTypes = window.dungeonMoon.dnd5e.creatureTypes;
+      this.actorSizes = window.dungeonMoon.dnd5e.actorSizes;
+      this.damageResistanceTypes = window.dungeonMoon.dnd5e.damageResistanceTypes;
     },
     methods: {
       dataBundle: function () {
