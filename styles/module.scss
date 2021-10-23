@@ -45,7 +45,8 @@ $dark-maroon: #2B0603;
     
     --text-color: black;
 
-    width: 1200px; // base width, overriden by resize, allows system specific base width
+    min-width: 1130px;
+    width: 70vw; // base width, overriden by resize, allows system specific base width
 
     &.archmage {
         --title-font-family: 'mason-serif';
@@ -99,8 +100,6 @@ $dark-maroon: #2B0603;
     
     &.dnd5e {
         --title-font-family: unset;
-
-        width: 70vw;
 
         .current-threat-level {
             font-weight: bold;
