@@ -1,11 +1,32 @@
 <template>
-    <div>
-        <h4>Size</h4>
-        <v-select multiple v-model="selectedSizes" :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']" :reduce="x => x.toLowerCase()"></v-select>
-        <h4>Role</h4>
-        <v-select multiple v-model="selectedRoles" :options="['Archer', 'Blocker', 'Caster', 'Leader', 'Mook', 'Spoiler', 'Troop', 'Wrecker']" :reduce="x => x.toLowerCase()"></v-select>
-        <h4>Type</h4>
-        <v-select multiple v-model="selectedTypes" :options="['Aberration', 'Beast', 'Celestial', 'Construct', 'Demon', 'Devil', 'Dragon', 'Elemental', 'Fey', 'Giant', 'Humanoid', 'Monstrosity', 'Ooze', 'Plant', 'Undead']" :reduce="x => x.toLowerCase()"></v-select>
+    <div class="system-filters">
+        <div>
+        <label>Size</label>
+        <v-select
+            multiple
+            v-model="selectedSizes"
+            :options="['Weakling', 'Normal', 'Elite', 'Large', 'Double-Strength', 'Triple-Strength']"
+            :reduce="x => x.toLowerCase()"
+        ></v-select>
+        </div>
+        <div>
+        <label>Role</label>
+        <v-select
+            multiple
+            v-model="selectedRoles"
+            :options="['Archer', 'Blocker', 'Caster', 'Leader', 'Mook', 'Spoiler', 'Troop', 'Wrecker']"
+            :reduce="x => x.toLowerCase()"
+        ></v-select>
+        </div>
+        <div>
+        <label>Type</label>
+        <v-select
+            multiple
+            v-model="selectedTypes"
+            :options="['Aberration', 'Beast', 'Celestial', 'Construct', 'Demon', 'Devil', 'Dragon', 'Elemental', 'Fey', 'Giant', 'Humanoid', 'Monstrosity', 'Ooze', 'Plant', 'Undead']"
+            :reduce="x => x.toLowerCase()"
+        ></v-select>
+        </div>
     </div>
 </template>
 <script>

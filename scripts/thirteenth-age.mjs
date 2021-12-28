@@ -1,49 +1,60 @@
+import {log} from './module.js';
 
 export default class ThirteenthAge {
+
+    initValuesFromAllActors(allActors) {}
+
+    levelName() { return "Level" }
 
     histogramStep() { return 1; }
 
     histogramLabelPrettify(level) { return level; }
 
     getPlayerCharacters() {
-        return game.actors.entities.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+        return game.actors.filter((x) => x.hasPlayerOwner && x.data.type == "character");
     }
 
     getNpcs() {
-        return game.actors.entities.filter((x) => x.data.type == "npc");
+        return game.actors.filter((x) => x.data.type == "npc");
     }
 
     filterCompendiumActors(pack, packActors) {
         return packActors;
     }
 
-    filterAvailableActors(availableActors, filters) {
-        if (filters.selectedSources.length > 0) {
-            availableActors = availableActors.filter(x => filters.selectedSources.includes(this.getActorSource(x).toLowerCase()));
+    filterAvailableActors(availableActors, {
+        selectedName,
+        selectedRoles,
+        selectedSizes,
+        selectedSources,
+        selectedTypes
+    }) {
+        if (selectedSources?.length) {
+            availableActors = availableActors.filter(x => selectedSources.includes(this.getActorSource(x).toLowerCase()));
         }
-        if (filters.selectedName != "") {
-            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(filters.selectedName.toLowerCase()));
+        if (!!selectedName) {
+            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(selectedName.toLowerCase()));
         }
-        if (filters.selectedSizes != undefined && filters.selectedSizes.length > 0) {
+        if (selectedSizes?.length) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.size != undefined) {
-                    return filters.selectedSizes.includes(x.data.data.details.size.value);
+                if (!!x.data.data?.details?.size) {
+                    return selectedSizes.includes(x.data.data.details.size.value.toLowerCase());
                 }
                 return false;
             });
         }
-        if (filters.selectedRoles != undefined && filters.selectedRoles.length > 0) {
+        if (selectedRoles?.length) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.role != undefined) {
-                    return filters.selectedRoles.includes(x.data.data.details.role.value);
+                if (!!x.data.data?.details?.role) {
+                    return selectedRoles.includes(x.data.data.details.role.value.toLowerCase());
                 }
                 return false;
             });
         }
-        if (filters.selectedTypes != undefined && filters.selectedTypes.length > 0) {
+        if (selectedTypes?.length) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data != undefined && x.data.data.details != undefined && x.data.data.details.type != undefined) {
-                    return filters.selectedTypes.includes(x.data.data.details.type.value);
+                if (!!x.data.data?.details?.type) {
+                    return selectedTypes.includes(x.data.data.details.type.value.toLowerCase());
                 }
                 return false;
             });
@@ -55,7 +66,7 @@ export default class ThirteenthAge {
     getActorSource(actor) {
         //console.log(actor.name);
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
-        let source = game.world.title;
+        let source = game.world.data.title;
 
         if (nonCompendiumSourceType == "folderName") {
             if (actor.folder != undefined) {
@@ -68,7 +79,7 @@ export default class ThirteenthAge {
     };
 
     getUniqueKey(actor, partyInfo, encounterSettings) {
-        return actor._id + partyInfo.averagePartyLevel + partyInfo.numberOfPartyMembers;
+        return actor.id;
     }
 
     getEncounterScore(actor, partyInfo) {
@@ -151,11 +162,11 @@ export default class ThirteenthAge {
         levelDifference += 2;
 
         if (levelDifference < 0) {
-            console.log("Enemy too weak!");
+            log(false, "Enemy too weak!");
             return -20;
         }
         else if (levelDifference > 6) {
-            console.log("Enemy too strong!");
+            log(false, "Enemy too strong!");
             return -10;
         }
         return scoreChart[levelDifference][sizeToColumn[size]];
@@ -214,5 +225,20 @@ export default class ThirteenthAge {
             return -10;
         }
         return scoreChart[levelDifference][sizeToColumn[size]];
+    }
+
+    getDefaultLevelRange(partyInfo, minimumLevel, maximumLevel) {
+        let minSelectedLevel = partyInfo.averagePartyLevel - 2;
+        if (minSelectedLevel < minimumLevel)
+            minSelectedLevel = minimumLevel;
+
+        let maxSelectedLevel = partyInfo.averagePartyLevel + 4;
+        if (this.maxSelectedLevel > maximumLevel)
+            maxSelectedLevel = maximumLevel;
+
+        return {
+            minSelectedLevel: minSelectedLevel,
+            maxSelectedLevel: maxSelectedLevel
+        }
     }
 }

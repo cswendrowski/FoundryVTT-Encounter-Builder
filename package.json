@@ -28,5 +28,8 @@
     "vue-select": "^3.10.8",
     "vue-slider-component": "^3.2.11",
     "vuejs-smart-table": "0.0.5"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.15.6"
   }
 }

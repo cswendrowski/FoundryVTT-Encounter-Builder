@@ -1,13 +1,50 @@
 <template>
-    <div>
-        <h4>Traits</h4>
-        <v-select multiple v-model="selectedTraits" :options="monsterTraits" :reduce="x => x.toLowerCase()"></v-select>
-        <h4>Size</h4>
-        <v-select multiple v-model="selectedSizes" :options="actorSizes"></v-select>
-        <h4>Rarity</h4>
-        <v-select multiple v-model="selectedRarities" :options="rarityTraits" :reduce="x => x.toLowerCase()"></v-select>
-        <h4>Alignment</h4>
-        <v-select multiple v-model="selectedAlignments" :options="alignment"></v-select>
+    <div class="system-filters">
+
+        <div>
+        <label>Traits</label>
+        <v-select
+            multiple
+            v-model="selectedTraits"
+            :options="monsterTraits"
+            :reduce="(x) => x.value"
+
+        ></v-select>
+        </div>
+
+        <div>
+        <label>Size</label>
+        <v-select
+            multiple
+            v-model="selectedSizes"
+            :options="actorSizes"
+            :reduce="(x) => x.value"
+
+        ></v-select>
+        </div>
+
+        <div>
+        <label>Rarity</label>
+        <v-select
+            multiple
+            v-model="selectedRarities"
+            :options="rarityTraits"
+            :reduce="(x) => x.value"
+
+        ></v-select>
+        </div>
+
+        <div>
+        <label>Alignment</label>
+        <v-select
+            multiple
+            v-model="selectedAlignments"
+            :options="alignment"
+            :reduce="(x) => x.value"
+
+        ></v-select>
+        </div>
+
     </div>
 </template>
 <script>
@@ -28,7 +65,7 @@ export default {
       this.monsterTraits = window.dungeonMoon.pathfinder2E.monsterTraits;
       this.actorSizes = window.dungeonMoon.pathfinder2E.actorSizes;
       this.rarityTraits = window.dungeonMoon.pathfinder2E.rarityTraits;
-      this.alignment = window.dungeonMoon.pathfinder2E.alignment;
+      this.alignment = window.dungeonMoon.pathfinder2E.alignments;
     },
     methods: {
         dataBundle: function () {

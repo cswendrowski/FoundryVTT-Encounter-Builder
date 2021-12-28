@@ -1,16 +1,31 @@
 import ThirteenthAge from "./thirteenth-age.mjs";
 import Pathfinder2E from "./pf2e.mjs";
 import {CompendiumSettingsForm} from "./CompendiumSettingsForm.js";
+import Dnd5e from "./dnd5e.mjs";
+
+const moduleName = "vue-encounter-builder";
+
+Hooks.on('devModeReady', ({registerPackageDebugFlag}) => registerPackageDebugFlag(moduleName));
+
+export function log(force, ...args) {
+    try {
+        const isDebugging = game.modules.get('_dev-mode')?.api?.getPackageDebugValue(moduleName);
+
+        if (force || isDebugging) {
+            console.log(moduleName, '|', ...args);
+        }
+    } catch (e) { }
+}
 
 class EncounterBuilder {
     static init() {
         Dlopen.register('vue-select', {
             scripts: [
                 // "https://unpkg.com/classnames@2.2.6/index.js", // can't load it this way because of the classnames/classNames issue in the file definition
-                "https://unpkg.com/vue-select@3.0.0"
+                "https://unpkg.com/vue-select@3"
             ],
             styles: [
-                "https://unpkg.com/vue-select@3.0.0/dist/vue-select.css"
+                "https://unpkg.com/vue-select@3/dist/vue-select.css"
             ],
             dependencies: [],
             init: () => Vue.component("v-select", VueSelect.default)
@@ -35,7 +50,7 @@ class EncounterBuilder {
             ],
             styles: [],
             dependencies: [],
-            init: () => Vue.component(VueNumericInput.default.name, VueNumericInput.default)
+            init: () => Vue.component("vue-numeric-input", window["vue-numeric-input"].default)
         });
 
         Dlopen.register('vue-loading-spinner', {
@@ -63,7 +78,7 @@ class EncounterBuilder {
         },
         {
             height: '800',
-            width: '1200',
+            width: 'auto',
             resizable: true,
             popOutModuleDisable: true,
             classes: ["encounter-builder-application", game.system.id]
@@ -75,7 +90,6 @@ class EncounterBuilder {
 
 Hooks.on('init', () => EncounterBuilder.init());
 
-const moduleName = "vue-encounter-builder";
 
 Hooks.once('ready', function() {
     game.settings.register(moduleName, "nonCompendiumSourceType", {
@@ -99,9 +113,10 @@ Hooks.once('ready', function() {
         restricted: true
     });
 
-    game.packs.filter((x) => x.metadata.entity == "Actor" && !x.metadata.name.includes("baileywiki"))
+    Array.from(game.packs.entries())
+        .filter((x) => x[1].metadata.entity == "Actor" && !x[1].metadata.name.includes("baileywiki"))
         .forEach(pack => {
-            game.settings.register("vue-encounter-builder", pack.metadata.name, {
+            game.settings.register("vue-encounter-builder", pack[0], {
                 scope: 'world',
                 config: false,
                 type: Boolean,
@@ -113,20 +128,26 @@ Hooks.once('ready', function() {
         window.dungeonMoon = {
             thirteenthAge: new ThirteenthAge()
         };
-        console.log("13th Age Init");
+        log(true, "13th Age Init");
     }
     else if (game.system.id == "pf2e") {
         window.dungeonMoon = {
             pathfinder2E: new Pathfinder2E()
         };
-        console.log("PF2E Init");
+        log(true, "PF2E Init");
     }
     else if (game.system.id == "dnd5e") {
         window.dungeonMoon = {
+            dnd5e: new Dnd5e()
         };
-        console.log("DnD5e Init");
+        log(true, "DnD5e Init");
     }
 
+    window.dungeonMoon.log = log;
+
+    if (game.modules.get('_dev-mode')?.api?.getPackageDebugValue(moduleName)) {
+        EncounterBuilder.run();
+    }
 });
 
 Hooks.on('renderCombatTracker', () => { 

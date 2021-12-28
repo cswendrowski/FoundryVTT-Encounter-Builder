@@ -4,44 +4,54 @@
       <!-- <h1><input type="text" placeholder="encounter name" value="Encounter Name"></h1> -->
       <h1>Encounter</h1>
     </header>
+
     <section class="encounter-details">
       <h2>Encounter Settings</h2>
+
       <div class="encounterSettings">
-        <h4>Average Party Level</h4>
+        <label>Average Party Level</label>
         <vue-numeric-input
           v-model="partyInfo.averagePartyLevel"
           :min="1"
         ></vue-numeric-input>
-        <h4>Number of Party Members</h4>
+
+        <label>Number of Party Members</label>
         <vue-numeric-input
           v-model="partyInfo.numberOfPartyMembers"
           :min="1"
         ></vue-numeric-input>
+
         <component
           v-bind:is="encounterSettingsComponent"
           v-model="encounterSettings"
         ></component>
       </div>
+
       <h2>Enemies</h2>
+
       <div class="encounter-actors">
         <ul class="encounter-members">
           <li
-             v-for="t of groupedSelectedActors"
-            :key="system.getUniqueKey(t[1][0], partyInfo, encounterSettings)"
-            >
+            v-for="t of groupedSelectedActors"
+                        :key="system.getUniqueKey(t[1][0], partyInfo, encounterSettings)"
+          >
             <component
               v-bind:is="selectedActorComponent"
               v-if="t[1][0].encounterScore > 0"
               :group="t[0]"
               :actor="t[1][0]"
               :groupSize="t[1].length"
-              v-on:click-left="addActor(t[1][0])"
-              v-on:click-right="removeActor(t[1][0])"
+              :system="system"
+              v-on:add-actor="addActor(t[1][0])"
+              v-on:remove-actor="removeActor(t[1][0])"
+              v-on:actor-info="openActorSheet(t[1][0])"
             ></component>
           </li>
         </ul>
       </div>
+
       <h2>Summary</h2>
+
       <div class="encounter-results">
         <component
           v-bind:is="encounterSummaryComponent"
@@ -51,103 +61,125 @@
           :encountersettings="encounterSettings"
         >
         </component>
-        <button class="btn btn-primary" v-on:click="spawnOnScene()">
-          Spawn on current Scene
+        <button class="btn btn-primary" v-if="warpgateEnabled" v-on:click="warpOnScene()">
+          Warp on current Scene
         </button>
       </div>
     </section>
-    <section class="search-area">
-      <header class="search-configuration">
-        <h2>Filters</h2>
-        <div class="filters">
-          <h4>Name</h4>
+
+    <aside class="search-configuration">
+      <h2>Filters</h2>
+      <div class="filters-grid">
+        
+        <div>
+          <label>Name</label>
           <input type="text" placeholder="Name" v-model="selectedName" />
-          <h4>Source</h4>
+        </div>
+
+        <div>
+          <label>Source</label>
           <v-select
             multiple
             v-model="selectedSources"
             :options="sources"
             :reduce="(x) => x.toLowerCase()"
           ></v-select>
-          <component v-bind:is="filtersComponent" v-model="filters"></component>
         </div>
-        <h2>Sortings</h2>
-        <div class="sortings">
-          <h4>Level</h4>
-          <button
-            v-bind:class="{ active: sortLevelAsc }"
-            v-on:click="setSortLevelAsc(true)"
-          >
-            <i class="btn btn-primary fas fa-sort-up"></i>
-          </button>
-          <button
-            v-bind:class="{
-              active: sortLevelAsc != undefined && !sortLevelAsc,
-            }"
-            v-on:click="setSortLevelAsc(false)"
-          >
-            <i class="btn btn-primary fas fa-sort-down"></i>
-          </button>
-          <h4>Name</h4>
-          <button
-            v-bind:class="{ active: sortNameAsc }"
-            v-on:click="setSortNameAsc(true)"
-          >
-            <i class="btn btn-primary fas fa-sort-up"></i>
-          </button>
-          <button
-            v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
-            v-on:click="setSortNameAsc(false)"
-          >
-            <i class="btn btn-primary fas fa-sort-down"></i>
-          </button>
-        </div>
-      </header>
-      <section class="search-results">
-        <div v-if="loading" class="loading-container">
-          <pencil></pencil>
-        </div>
-        <div v-else>
-          <div class="level-histogram">
-            <h2>Level</h2>
-            <histogramslider
-              ref="levelHistogram"
-              :data="levelData"
-              :min="minimumLevel"
-              :max="maximumLevel"
-              :step="step"
-              :prettify="prettify"
-              :primary-color="colors.primary"
-              :holder-color="colors.holder"
-              :handle-color="colors.handle"
-              :label-color="colors.label"
-              :grid-text-color="colors.gridText"
-              :key="levelData.length"
-              @finish="sliderFinished"
+
+        <component v-bind:is="filtersComponent" v-model="filters"></component>
+      </div>
+
+      <h2>Sort</h2>
+      <div class="sortings">
+        <div class="sort-group">
+          <h4>{{ levelName }}</h4>
+          <div class="toggle-button-group">
+            <button
+            class="toggle-button"
+              v-bind:class="{ active: sortLevelAsc }"
+              v-on:click="setSortLevelAsc(true)"
             >
-            </histogramslider>
+              <i class="fas fa-sort-numeric-down"></i>
+            </button>
+            <button
+            class="toggle-button"
+              v-bind:class="{
+                active: sortLevelAsc != undefined && !sortLevelAsc,
+              }"
+              v-on:click="setSortLevelAsc(false)"
+            >
+              <i class="fas fa-sort-numeric-up"></i>
+            </button>
           </div>
-          <ul class="result-list">
-            <component
-              v-bind:is="actorComponent"
-              v-model="encounterSettings"
-              class="actor-listing"
-              v-for="t of availableActors"
-              :key="system.getUniqueKey(t, partyInfo, encounterSettings)"
-              :actor="t"
-              v-on:click-left="addActor(t)"
-              v-on:click-right="removeActor(t)"
-              v-on:actor-info="openActorSheet(t)"
-              :disabled="t.encounterScore <= 0"
-            ></component>
-          </ul>
         </div>
-      </section>
-    </section>
+
+        <div class="sort-group">
+          <h4>Name</h4>
+          <div class="toggle-button-group">
+            <button
+              class="toggle-button"
+              v-bind:class="{ active: sortNameAsc }"
+              v-on:click="setSortNameAsc(true)"
+            >
+              <i class="fas fa-sort-alpha-down"></i>
+            </button>
+            <button
+              class="toggle-button"
+              v-bind:class="{ active: sortNameAsc != undefined && !sortNameAsc }"
+              v-on:click="setSortNameAsc(false)"
+            >
+              <i class="fas fa-sort-alpha-up"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div v-if="loading" class="loading-container">
+      <pencil></pencil>
+    </div>
+
+    <div class="level-histogram" v-if="!loading">
+      <h2>{{ levelName }}</h2>
+      <histogramslider
+        ref="levelHistogram"
+        :data="levelData"
+        :min="minimumLevel"
+        :max="maximumLevel"
+        :step="step"
+        :prettify="prettify"
+        :primary-color="colors.primary"
+        :holder-color="colors.holder"
+        :handle-color="colors.handle"
+        :label-color="colors.label"
+        :grid-text-color="colors.gridText"
+        :key="levelData.length"
+        @finish="sliderFinished"
+      >
+      </histogramslider>
+    </div>
+
+    <div class="results" v-if="!loading">
+      <ul class="result-list">
+        <component
+          v-bind:is="actorComponent"
+          v-model="encounterSettings"
+          v-for="t of availableActors"
+                        :key="system.getUniqueKey(t, partyInfo, encounterSettings)"
+          :actor="t"
+          :system="system"
+          v-on:add-actor="addActor(t)"
+          v-on:remove-actor="removeActor(t)"
+          v-on:actor-info="openActorSheet(t)"
+          :disabled="t.encounterScore <= 0"
+        ></component>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+
 export default {
   data: () => ({
     systemName: "",
@@ -177,7 +209,10 @@ export default {
     partyInfo: {
       averagePartyLevel: 4,
       numberOfPartyMembers: 4,
+      partyCharacterInfo: [],
     },
+
+    levelName: "Level",
 
     step: 1,
     minimumLevel: 100,
@@ -190,6 +225,8 @@ export default {
 
     sortLevelAsc: true,
     sortNameAsc: undefined,
+
+    warpgateEnabled: game.modules.get("warpgate")?.active
   }),
   methods: {
     prettify: function(level) {
@@ -219,7 +256,7 @@ export default {
     },
     getEncounterScore: function (actor) {
       if (actor == undefined) return -30;
-      //console.log(actor);
+      //this.log(false, actor);
       try {
         return this.system.getEncounterScore(actor, this.partyInfo);
       } catch (error) {
@@ -233,29 +270,36 @@ export default {
       this.minSelectedLevel = values.from;
       this.maxSelectedLevel = values.to;
     },
-    spawnOnScene: async function () {
-      let tokensToSpawn = [];
+    warpOnScene: async function () {
+      let tokensToWarp = {};
       let viewedScene = game.scenes.get(game.user.viewedScene);
       if (viewedScene == undefined) {
         ui.notifications.warn("No viewed scene to spawn into");
         return;
       }
-      let baseX = viewedScene.data.width * viewedScene.data.padding;
-      let baseY = viewedScene.data.height * viewedScene.data.padding;
+      let total = 0;
+
       for (let x = 0; x < this.selectedActors.length; x++) {
         let actor = this.selectedActors[x];
         if (actor.source && !game.actors.get(actor.id)) {
-          actor = await Actor.create(actor.data);
+          actor = await Actor.create(actor.data, {keepId: true});
         }
-        let token = duplicate(actor.data.token);
-        token.x = baseX + x * viewedScene.data.grid;
-        token.y = baseY;
-        tokensToSpawn.push(token);
+        if (Object.keys(tokensToWarp).includes(actor.data.name)) {
+          tokensToWarp[actor.data.name]++;
+        }
+        else {
+          tokensToWarp[actor.data.name] = 1;
+        }
+        total++;
       }
-      console.log(tokensToSpawn);
-      await Token.create(tokensToSpawn);
+      this.log(false, tokensToWarp);
+
+      for (let name in tokensToWarp) {
+        await warpgate.spawn(name, {}, {}, {duplicates: tokensToWarp[name]});
+      }
+
       ui.notifications.info(
-        tokensToSpawn.length + " tokens spawned on " + viewedScene.name
+          total + " tokens spawned on " + viewedScene.name
       );
     },
   },
@@ -296,32 +340,65 @@ export default {
         );
       }
 
+      // availableActors = availableActors.filter((x) => {
+      //   let level = this.system.getSafeLevel(x);
+      //   return level >= this.minSelectedLevel && level <= this.maxSelectedLevel;
+      // });
+
+
       availableActors = availableActors.filter((x) => {
         let level = this.system.getSafeLevel(x);
         return level >= this.minSelectedLevel && level <= this.maxSelectedLevel;
-      });
+      }).sort(
+        (a, b) => {
+          const aLevel = this.system.getSafeLevel(a);
+          const bLevel = this.system.getSafeLevel(b);
+          const aName = a.data.name;
+          const bName = b.data.name;
 
-      if (this.sortLevelAsc != undefined) {
-        if (this.sortLevelAsc) {
-          availableActors.sort((a, b) =>
-            this.system.getSafeLevel(a) > this.system.getSafeLevel(b) ? 1 : -1
-          );
-        } else {
-          availableActors.sort((a, b) =>
-            this.system.getSafeLevel(a) < this.system.getSafeLevel(b) ? 1 : -1
-          );
+          switch (true) {
+            // if both levels are the same, sort by name
+            case (this.sortLevelAsc != undefined && aLevel === bLevel): {
+              return aName.localeCompare(bName);
+            }
+            case (this.sortLevelAsc != undefined && this.sortLevelAsc): {
+              return aLevel - bLevel;
+            }
+            case (this.sortLevelAsc != undefined && !this.sortLevelAsc): {
+              return bLevel - aLevel;
+            }
+            case (this.sortNameAsc != undefined && this.sortNameAsc): {
+              return aName.localeCompare(bName);
+            }
+            default: {
+              return bName.localeCompare(aName);
+            }
+          }
         }
-      }
+      );
 
-      if (this.sortNameAsc != undefined) {
-        if (this.sortNameAsc) {
-          availableActors.sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
-        } else {
-          availableActors.sort((a, b) => (a.data.name < b.data.name ? 1 : -1));
-        }
-      }
 
-      //console.log(availableActors);
+      // if (this.sortLevelAsc != undefined) {
+      //   if (this.sortLevelAsc) {
+      //     availableActors.sort((a, b) =>
+      //       this.system.getSafeLevel(a) > this.system.getSafeLevel(b) ? 1 : -1
+      //     );
+      //   } else {
+      //     availableActors.sort((a, b) =>
+      //       this.system.getSafeLevel(a) < this.system.getSafeLevel(b) ? 1 : -1
+      //     );
+      //   }
+      // }
+
+      // if (this.sortNameAsc != undefined) {
+      //   if (this.sortNameAsc) {
+      //     availableActors.sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
+      //   } else {
+      //     availableActors.sort((a, b) => (a.data.name < b.data.name ? 1 : -1));
+      //   }
+      // }
+
+      //this.log(false, availableActors);
       return availableActors;
     },
     levelData() {
@@ -343,15 +420,15 @@ export default {
 
         levels.push(level);
       }
-      //console.log(levels);
+      this.log(false, levels);
       return levels;
     },
     groupedSelectedActors() {
       let grouped = {};
-      //console.log("Grouping");
+      //this.log(false, "Grouping");
       for (let x = 0; x < this.selectedActors.length; x++) {
         let selected = this.selectedActors[x];
-        //console.log(selected);
+        //this.log(false, selected);
         let name = selected.data.name;
         if (!(name in grouped)) {
           grouped[name] = [];
@@ -382,17 +459,26 @@ export default {
     }
   },
   async created() {
-    console.log("Loading system");
+    this.log = window.dungeonMoon.log;
+
+    this.log(true, "Loading system");
     if (game.system.id == "archmage") {
       this.systemName = "thirteenth-age";
       this.system = window.dungeonMoon.thirteenthAge;
-      console.log("13th Age Loaded");
+      this.colors.holder = "#dfd095";
+      this.log(true, "13th Age Loaded");
     }
     else if (game.system.id == "pf2e") {
       this.systemName = "pf2e";
       this.system = window.dungeonMoon.pathfinder2E;
       this.colors.primary = "#171f69";
-      console.log("PF2E Loaded");
+      this.log(true, "PF2E Loaded");
+    }
+    else if (game.system.id == "dnd5e") {
+      this.systemName = "dnd5e";
+      this.system = window.dungeonMoon.dnd5e;
+      this.colors.primary = "#171f69";
+      this.log(true, "DnD5e Loaded");
     }
     else {
       console.error("Unknown game system - " + game.system.id);
@@ -401,17 +487,18 @@ export default {
   async mounted() {
 
     this.step = this.system.histogramStep();
+    this.levelName = this.system.levelName();
 
-    //console.log("Mounted!");
+    //this.log(false, "Mounted!");
     let characters = this.system.getPlayerCharacters();
-    //console.log(characters);
+    //this.log(false, characters);
     if (characters.length > 0) {
       this.partyInfo.numberOfPartyMembers = characters.length;
       let totalLevel = 0;
       for (let index = 0; index < this.partyInfo.numberOfPartyMembers; index++) {
         totalLevel += this.system.getSafeLevel(characters[index]);
       }
-      console.log(this.partyInfo);
+      this.log(false, this.partyInfo);
       this.partyInfo.averagePartyLevel = Math.round(
         totalLevel / this.partyInfo.numberOfPartyMembers
       );
@@ -419,20 +506,22 @@ export default {
 
     let npcs = this.system.getNpcs();
     let allActors = npcs;
-    this.sources.push(game.world.title);
-    let actorCompendiums = game.packs.filter(
-      (x) => x.metadata.entity == "Actor" && !x.metadata.name.includes("baileywiki")
+    this.sources.push(game.world.data.title);
+    let actorCompendiums = Array.from(game.packs.entries()).filter(
+      (x) => x[1].metadata.entity == "Actor" && !x[1].metadata.name.includes("baileywiki")
     );
 
     for (let index = 0; index < actorCompendiums.length; index++) {
       let pack = actorCompendiums[index];
-      if (!game.settings.get("vue-encounter-builder", pack.metadata.name)) continue;
-      //console.log(pack);
-      let packActors = await pack.getContent();
-      //console.log(packActors);
+      if (!game.settings.get("vue-encounter-builder", pack[0])) continue;
+      //this.log(false, pack);
+      let packActors = await pack[1].getDocuments();
+      //this.log(false, packActors);
       allActors = allActors.concat(this.system.filterCompendiumActors(pack, packActors));
-      this.sources.push(pack.metadata.label);
+      this.sources.push(pack[1].metadata.label);
     }
+
+    this.system.initValuesFromAllActors(allActors);
 
     for (let x = 0; x < allActors.length; x++) {
       let actor = allActors[x];
@@ -449,32 +538,19 @@ export default {
 
     this.sources = this.sources.filter(onlyUnique);
 
-    if (game.system.id == "archmage") {
-      this.minSelectedLevel = this.partyInfo.averagePartyLevel - 2;
-      if (this.minSelectedLevel < this.minimumLevel)
-        this.minSelectedLevel = this.minimumLevel;
+    let defaultRange = this.system.getDefaultLevelRange(this.partyInfo, this.minimumLevel, this.maximumLevel);
+    this.minSelectedLevel = defaultRange.minSelectedLevel;
+    this.maxSelectedLevel = defaultRange.maxSelectedLevel;
 
-      this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4;
-      if (this.maxSelectedLevel > this.maximumLevel)
-        this.maximumLevel = this.maximumLevel;
-    }
-    else if (game.system.id == "pf2e") {
-      this.minSelectedLevel = this.partyInfo.averagePartyLevel - 4;
-      if (this.minSelectedLevel < this.minimumLevel)
-        this.minSelectedLevel = this.minimumLevel;
+    this.log(false, `Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
 
-      this.maxSelectedLevel = this.partyInfo.averagePartyLevel + 4;
-      if (this.maxSelectedLevel > this.maximumLevel)
-        this.maximumLevel = this.maximumLevel;
-    }
-
-    //console.log(allActors);
+    this.log(false, allActors);
     this.actors = allActors;
     this.loading = false;
 
     Hooks.on("deleteActor", (actor, meta, id) => {
-      console.log("Handling delete for " + id);
-      console.log(this.selectedActors);
+      this.log(false, "Handling delete for " + id);
+      this.log(false, this.selectedActors);
       this.selectedActors = this.selectedActors.filter((x) => x.id != actor.id);
       this.actors = this.actors.filter((x) => x.id != actor.id);
     });

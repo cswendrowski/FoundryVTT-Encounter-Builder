@@ -1,90 +1,85 @@
+import {log} from './module.js';
+
+const configToOptions = ([value, localizationString]) => ({ 
+    value, 
+    label: game.i18n.localize(localizationString)
+});
+
+const sortOptions = ({label: aLabel}, {label: bLabel}) => aLabel.localeCompare(bLabel);
 
 export default class Pathfinder2E {
 
     constructor() {
-        this.monsterTraits = Object.values(CONFIG.PF2E.monsterTraits);
-        this.actorSizes = Object.values(CONFIG.PF2E.actorSizes);
-        this.rarityTraits = Object.values(CONFIG.PF2E.rarityTraits);
-        this.alignment = Object.values(CONFIG.PF2E.alignment);
+        this.monsterTraits = Object.entries(CONFIG.PF2E.monsterTraits).map(configToOptions).sort(sortOptions);
+        this.actorSizes = Object.entries(CONFIG.PF2E.actorSizes).map(configToOptions).sort(sortOptions);
+        this.rarityTraits = Object.entries(CONFIG.PF2E.rarityTraits).map(configToOptions).sort(sortOptions);
+        this.alignments = Object.entries(CONFIG.PF2E.alignments).map(configToOptions).sort(sortOptions);
     }
+
+    initValuesFromAllActors(allActors) {}
+
+    levelName() { return "Level" }
 
     histogramStep() { return 1; }
 
     histogramLabelPrettify(level) { return level; }
 
     getPlayerCharacters() {
-        return game.actors.entities.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+        return game.actors.filter((x) => x.hasPlayerOwner && x.data.type == "character");
     }
 
     getNpcs() {
-        return game.actors.entities.filter((x) => x.data.type == "npc" || x.data.type == "hazard");
+        return game.actors.filter((x) => x.data.type == "npc" || x.data.type == "hazard");
     }
 
     filterCompendiumActors(pack, packActors) {
         return packActors;
     }
 
-    filterAvailableActors(availableActors, filters) {
-        if (filters.selectedSources.length > 0) {
-            availableActors = availableActors.filter(x => filters.selectedSources.includes(this.getActorSource(x).toLowerCase()));
+    filterAvailableActors(availableActors, {
+        selectedAlignments,
+        selectedName,
+        selectedRarities,
+        selectedSizes,
+        selectedSources,
+        selectedTraits,
+    }) {
+        if (selectedSources.length) {
+            availableActors = availableActors.filter(x => selectedSources.includes(this.getActorSource(x).toLowerCase()));
         }
-        if (filters.selectedName != "") {
-            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(filters.selectedName.toLowerCase()));
+        if (selectedName != "") {
+            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(selectedName.toLowerCase()));
         }
 
-        // selectedAlignments: [],
-        // selectedTraits: [],
-        // selectedRarities: [],
-        // selectedSizes: [],
-        
+        if (selectedAlignments?.length) {
+            availableActors = availableActors.filter(x => selectedAlignments.includes(x.data.data?.details?.alignments?.value));
+        }
 
-        if (filters.selectedAlignments && filters.selectedAlignments.length > 0) {
+        if (selectedTraits?.length) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.details?.alignment != undefined) {
-                    return filters.selectedAlignments.filter(value => 
-                        Object.entries(CONFIG.PF2E.alignment).find(x => x[1] == value)[0] == x.data.data.details.alignment.value
-                        ).length > 0;
-                }
-                return false;
+                return !!x.data.data?.traits?.traits?.value.some(trait => selectedTraits.includes(trait));
             });
         }
 
-        if (filters.selectedTraits && filters.selectedTraits.length > 0) {
-            availableActors = availableActors.filter(x => {
-                if (x.data.data?.traits?.traits != undefined) {
-                    return filters.selectedTraits.filter(value => x.data.data.traits.traits.value.includes(value)).length > 0;
-                }
-                return false;
-            });
-        }      
-
-        if (filters.selectedRarities && filters.selectedRarities.length > 0) {
-            availableActors = availableActors.filter(x => {
-                if (x.data.data?.traits?.rarity != undefined) {
-                    return filters.selectedRarities.includes(x.data.data.traits.rarity.value);
-                }
-                return false;
-            });
+        if (selectedRarities?.length) {
+            availableActors = availableActors.filter(x => selectedRarities.includes(x.data.data.traits?.rarity?.value));
         }
 
-        if (filters.selectedSizes && filters.selectedSizes.length > 0) {
-            availableActors = availableActors.filter(x => {
-                if (x.data.data?.traits?.size != undefined) {
-                    return filters.selectedSizes.filter(value => 
-                        Object.entries(CONFIG.PF2E.actorSizes).find(x => x[1] == value)[0] == x.data.data.traits.size.value
-                        ).length > 0;
-                }
-                return false;
-            });
+        if (selectedSizes?.length) {
+            availableActors = availableActors.filter(x => selectedSizes.includes(x.data.data.traits?.size?.value));
         }
 
         return availableActors;
     }
 
-    getActorSource(actor) {
-        //console.log(actor.name);
+    getActorSource(actor, skipDetails) {
+        if (actor.data.data.details.source?.value && !skipDetails) {
+            return actor.data.data.details.source.value;
+        }
+
+        //log(false, actor.name);
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
-        let source = game.world.title;
+        let source = game.world.data.title;
 
         if (nonCompendiumSourceType == "folderName") {
             if (actor.folder != undefined) {
@@ -97,12 +92,12 @@ export default class Pathfinder2E {
     };
 
     getUniqueKey(actor, partyInfo, encounterSettings) {
-        return actor._id + partyInfo.averagePartyLevel + partyInfo.numberOfPartyMembers;
+        return actor.id;
     }
 
     getEncounterScore(actor, partyInfo) {
         if (actor == undefined) return -30;
-        //console.log(actor);
+        //log(false, actor);
         try {
             if (actor.data.type == "hazard") {
                 let simpleChart = [
@@ -169,5 +164,19 @@ export default class Pathfinder2E {
         return 0;
     }
 
+    getDefaultLevelRange(partyInfo, minimumLevel, maximumLevel) {
+        let minSelectedLevel = partyInfo.averagePartyLevel - 4;
+        if (minSelectedLevel < minimumLevel)
+            minSelectedLevel = minimumLevel;
+
+        let maxSelectedLevel = partyInfo.averagePartyLevel + 4;
+        if (maxSelectedLevel > maximumLevel)
+            maxSelectedLevel = maximumLevel;
+
+        return {
+            minSelectedLevel: minSelectedLevel,
+            maxSelectedLevel: maxSelectedLevel
+        }
+    }
     
 }
