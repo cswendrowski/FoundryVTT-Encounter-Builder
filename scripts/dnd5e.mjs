@@ -38,11 +38,11 @@ export default class Dnd5e {
     }
 
     getPlayerCharacters() {
-        return game.actors.entities.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+        return game.actors.filter((x) => x.hasPlayerOwner && x.data.type == "character");
     }
 
     getNpcs() {
-        return game.actors.entities.filter((x) => x.data.type == "npc" && !x.data.img.includes("baileywiki"));
+        return game.actors.filter((x) => x.data.type == "npc" && !x.data.img.includes("baileywiki"));
     }
 
     filterCompendiumActors(pack, packActors) {
