@@ -13,7 +13,7 @@ export default class Pathfinder2E {
         this.monsterTraits = Object.entries(CONFIG.PF2E.monsterTraits).map(configToOptions).sort(sortOptions);
         this.actorSizes = Object.entries(CONFIG.PF2E.actorSizes).map(configToOptions).sort(sortOptions);
         this.rarityTraits = Object.entries(CONFIG.PF2E.rarityTraits).map(configToOptions).sort(sortOptions);
-        this.alignment = Object.entries(CONFIG.PF2E.alignment).map(configToOptions).sort(sortOptions);
+        this.alignments = Object.entries(CONFIG.PF2E.alignments).map(configToOptions).sort(sortOptions);
     }
 
     initValuesFromAllActors(allActors) {}
@@ -25,11 +25,11 @@ export default class Pathfinder2E {
     histogramLabelPrettify(level) { return level; }
 
     getPlayerCharacters() {
-        return game.actors.entities.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+        return game.actors.filter((x) => x.hasPlayerOwner && x.data.type == "character");
     }
 
     getNpcs() {
-        return game.actors.entities.filter((x) => x.data.type == "npc" || x.data.type == "hazard");
+        return game.actors.filter((x) => x.data.type == "npc" || x.data.type == "hazard");
     }
 
     filterCompendiumActors(pack, packActors) {
@@ -52,7 +52,7 @@ export default class Pathfinder2E {
         }
 
         if (selectedAlignments?.length) {
-            availableActors = availableActors.filter(x => selectedAlignments.includes(x.data.data?.details?.alignment?.value));
+            availableActors = availableActors.filter(x => selectedAlignments.includes(x.data.data?.details?.alignments?.value));
         }
 
         if (selectedTraits?.length) {

@@ -65,7 +65,7 @@ export default {
       this.monsterTraits = window.dungeonMoon.pathfinder2E.monsterTraits;
       this.actorSizes = window.dungeonMoon.pathfinder2E.actorSizes;
       this.rarityTraits = window.dungeonMoon.pathfinder2E.rarityTraits;
-      this.alignment = window.dungeonMoon.pathfinder2E.alignment;
+      this.alignment = window.dungeonMoon.pathfinder2E.alignments;
     },
     methods: {
         dataBundle: function () {

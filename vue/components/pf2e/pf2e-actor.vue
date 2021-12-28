@@ -56,7 +56,7 @@ export default {
       }
 
       if (!!details?.alignment?.value) {
-        ret.push(game.i18n.localize(CONFIG.PF2E.alignment[details.alignment.value]))
+        ret.push(game.i18n.localize(CONFIG.PF2E.alignments[details.alignment.value]))
       }
 
       if (!!traits?.size?.value) {

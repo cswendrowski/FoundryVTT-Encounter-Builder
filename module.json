@@ -4,8 +4,8 @@
   "description": "",
   "version": "0.0.1",
   "manifestPlusVersion": "1.0.0",
-  "minimumCoreVersion": "0.7.7",
-  "compatibleCoreVersion": "0.7.9",
+  "minimumCoreVersion": "9",
+  "compatibleCoreVersion": "9",
   "systems": [ "archmage", "pf2e", "dnd5e" ],
   "author": "Cody Swendrowski <cody@swendrowski.us>",
   "authors": [
@@ -17,16 +17,23 @@
       "patreon": "ironmoose"
     }
   ],
-  "dependencies": [{
+  "dependencies": [
+    {
     "name": "dlopen",
     "type": "module",
     "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-dlopen/master/module.json"
-  },
-  {
-      "name": "vueport",
+    },
+    {
+        "name": "vueport",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-vueport/master/module.json"
+    },
+    {
+      "name": "warpgate",
       "type": "module",
-      "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-vueport/master/module.json"
-  }],
+      "manifest": "https://github.com/trioderegion/warpgate/blob/master/module.json"
+    }
+  ],
   "esmodules": [
     "/scripts/module.js"
   ],

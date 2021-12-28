@@ -61,9 +61,6 @@
           :encountersettings="encounterSettings"
         >
         </component>
-        <button class="btn btn-primary" v-on:click="spawnOnScene()">
-          Spawn on current Scene
-        </button>
         <button class="btn btn-primary" v-if="warpgateEnabled" v-on:click="warpOnScene()">
           Warp on current Scene
         </button>
@@ -272,31 +269,6 @@ export default {
       this.levelHasBeenSelected = true;
       this.minSelectedLevel = values.from;
       this.maxSelectedLevel = values.to;
-    },
-    spawnOnScene: async function () {
-      let tokensToSpawn = [];
-      let viewedScene = game.scenes.get(game.user.viewedScene);
-      if (viewedScene == undefined) {
-        ui.notifications.warn("No viewed scene to spawn into");
-        return;
-      }
-      let baseX = viewedScene.data.width * viewedScene.data.padding;
-      let baseY = viewedScene.data.height * viewedScene.data.padding;
-      for (let x = 0; x < this.selectedActors.length; x++) {
-        let actor = this.selectedActors[x];
-        if (actor.source && !game.actors.get(actor.id)) {
-          actor = await Actor.create(actor.data);
-        }
-        let token = duplicate(actor.data.token);
-        token.x = baseX + x * viewedScene.data.grid;
-        token.y = baseY;
-        tokensToSpawn.push(token);
-      }
-      this.log(false, tokensToSpawn);
-      await Token.create(tokensToSpawn);
-      ui.notifications.info(
-        tokensToSpawn.length + " tokens spawned on " + viewedScene.name
-      );
     },
     warpOnScene: async function () {
       let tokensToWarp = {};

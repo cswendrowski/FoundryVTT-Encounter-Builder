@@ -11,11 +11,11 @@ export default class ThirteenthAge {
     histogramLabelPrettify(level) { return level; }
 
     getPlayerCharacters() {
-        return game.actors.entities.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+        return game.actors.filter((x) => x.hasPlayerOwner && x.data.type == "character");
     }
 
     getNpcs() {
-        return game.actors.entities.filter((x) => x.data.type == "npc");
+        return game.actors.filter((x) => x.data.type == "npc");
     }
 
     filterCompendiumActors(pack, packActors) {
