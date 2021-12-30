@@ -1,8 +1,9 @@
 {
-  "name": "vue-encounter-builder",
+  "name": "vue-encounter-builder-alpha",
   "title": "🌑 Dungeon Moon Encounter Builder",
   "description": "",
   "version": "0.0.1",
+  "protected": true,
   "manifestPlusVersion": "1.0.0",
   "minimumCoreVersion": "9",
   "compatibleCoreVersion": "9",
@@ -50,7 +51,6 @@
   ],
   "url": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder",
   "manifest": "",
-  "download": "https://github.com/cswendrowski/FoundryVTT-Encounter-Builder/releases/download/0.0.1/module.zip",
   "media": [
     {
       "type": "cover",
