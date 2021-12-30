@@ -32,7 +32,6 @@ jobs:
       env:
         version: ${{github.event.release.tag_name}}
         manifest: https://foundryvtt.s3.us-west-2.amazonaws.com/modules/vue-encounter-builder/module.json
-        download: ""
 
     # create a zip file with all files required by the module to add to the release
     - run: zip -r ./module.zip module.json css/ scripts/ templates/ languages/ dist/
@@ -49,19 +48,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './module.json, ./module.zip'
         tag: ${{ github.event.release.tag_name }}
-        body: ${{ github.event.release.body }}
-
-    # Update the 'latest' release
-    - name: Create Release
-      id: create_latest_release
-      uses: ncipollo/release-action@v1
-      if: endsWith(github.ref, 'master')
-      with:
-        allowUpdates: true
-        name: Latest
-        draft: false
-        prerelease: false
-        token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: './module.json,./module.zip'
-        tag: latest
         body: ${{ github.event.release.body }}
