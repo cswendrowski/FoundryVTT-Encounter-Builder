@@ -31,8 +31,8 @@ jobs:
         files: 'module.json'
       env:
         version: ${{github.event.release.tag_name}}
-        manifest: https://foundryvtt.s3.us-west-2.amazonaws.com/modules/vue-encounter-builder/module.json
-        download: ""
+        manifest: https://github.com/${{github.repository}}/releases/latest/download/module.json
+        download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/module.zip
 
     # create a zip file with all files required by the module to add to the release
     - run: zip -r ./module.zip module.json css/ scripts/ templates/ languages/ dist/
