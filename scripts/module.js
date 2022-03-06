@@ -150,7 +150,10 @@ Hooks.once('ready', function() {
     }
 });
 
-Hooks.on('renderCombatTracker', () => { 
+Hooks.on('renderCombatTracker', () => {
+
+    if ( !game.user.isGM ) return;
+
     $("#combat-controls").append(`<a class="dungeon-moon-launcher dungeon-moon-launcher-full">🌑 Dungeon Moon</a>`);
     $("#combat-controls").append(`<a class="dungeon-moon-launcher dungeon-moon-launcher-smol">🌑</a>`);
 
