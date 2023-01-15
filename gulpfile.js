@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 const prefix = require('gulp-autoprefixer');
 const sourcemaps = require('gulp-sourcemaps');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const concat = require('gulp-concat');
 const wrap = require('gulp-wrap');
 const declare = require('gulp-declare');
@@ -25,9 +25,7 @@ const SCSS_FILES = ["styles/**/*.scss"];
 scss = () => gulp.src(SCSS_FILES)
     .pipe(sourcemaps.init())
     .pipe(
-        sass({
-            outputStyle: 'nested'
-        })
+        sass({})
         .on('error', handleError)
     )
     .pipe(sourcemaps.write('.'))

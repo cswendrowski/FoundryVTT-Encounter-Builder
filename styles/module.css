@@ -1,0 +1,524 @@
+.dungeon-moon-launcher-smol {
+  display: none;
+  align-self: flex-end;
+  flex: 1;
+  flex-grow: 0;
+}
+
+.dungeon-moon-launcher {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.encounter-builder-application {
+  --title-font-family: "mason-serif";
+  --title-font-size: 2.5em;
+  --title-background-image: url(/ui/parchment.jpg);
+  --title-background-color: #78110A;
+  --title-background-blend: color-burn;
+  --background-primary-image: url(/ui/parchment.jpg);
+  --background-primary-color: #B9A660;
+  --background-primary-blend: hard-light;
+  --background-secondary-color: #F4F3EA;
+  --color-primary: #B9A660;
+  --color-secondary: #AE8C13;
+  --color-accent: #78110A;
+  --color-accent2: #2B0603;
+  --shadow-full-color: #00000060;
+  --shadow-subtle-color: #00000030;
+  --text-color: black;
+  min-width: 1130px;
+  width: 70vw;
+  /* BUTTON RESET */
+}
+.encounter-builder-application.archmage {
+  --title-font-family: "mason-serif";
+  --background-primary-image: url(/ui/parchment.jpg);
+  --background-primary-color: hsl(46 71% 83% / 0.8);
+  --background-primary-blend: hard-light;
+}
+.encounter-builder-application.pf2e {
+  --title-font-family: unset;
+  --title-background-image: url(../../../systems/pf2e/assets/sheet/header.webp);
+  --title-background-color: var(--primary, #78110A);
+  --title-background-blend: normal;
+  --background-primary-image: url(../../../systems/pf2e/assets/sheet/header.webp);
+  --background-primary-color: white;
+  --background-primary-blend: normal;
+  --color-primary: #171f69;
+  --color-secondary: #E9D7A1;
+  --color-accent: #171f69;
+  --color-accent2: #f7d488;
+}
+.encounter-builder-application.pf2e .actor-listing {
+  color: var(--color-accent2);
+}
+.encounter-builder-application.pf2e .traits, .encounter-builder-application.pf2e .traits-list {
+  color: #fff !important;
+}
+.encounter-builder-application.pf2e .tags {
+  color: black;
+}
+.encounter-builder-application.pf2e .encounter-info {
+  color: #fff !important;
+}
+.encounter-builder-application.pf2e .vue-histogram-slider-wrapper .irs-bar {
+  background-color: #171f69;
+}
+.encounter-builder-application.pf2e .actor-info-button {
+  color: #f7d488;
+}
+.encounter-builder-application.dnd5e {
+  --title-font-family: unset;
+}
+.encounter-builder-application.dnd5e .current-threat-level {
+  font-weight: bold;
+}
+.encounter-builder-application.dnd5e .actor-source {
+  position: absolute;
+  bottom: 0.2em;
+  right: 0.4em;
+  font-style: italic;
+}
+.encounter-builder-application.dnd5e .results .actor-listing-contents {
+  padding-bottom: 1.5em;
+}
+.encounter-builder-application.dnd5e .actor-info {
+  flex: 1 100%;
+  padding-left: 0.5em;
+  padding-bottom: 0;
+}
+.encounter-builder-application.dnd5e .trait-list dd {
+  font-style: italic;
+}
+.encounter-builder-application.dnd5e hr {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-left: 100px solid #2B0603;
+  margin: 0.2em 0;
+}
+.encounter-builder-application.window-app .window-content {
+  height: 100%;
+  padding: 0;
+  z-index: 0;
+}
+.encounter-builder-application.window-app .window-content .dialog-buttons {
+  display: none;
+}
+.encounter-builder-application.window-app .window-content .dialog-content {
+  flex: 0 0 100%;
+  height: 100%;
+}
+.encounter-builder-application button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: inherit;
+  line-height: unset;
+  font-size: inherit;
+  background-color: rgba(185, 166, 96, 0);
+  transition: background-color 0.3s;
+}
+.encounter-builder-application button:hover, .encounter-builder-application button:focus {
+  box-shadow: none;
+  background-color: rgba(185, 166, 96, 0.5);
+}
+.encounter-builder-application button > svg {
+  display: block;
+}
+
+.encounter-builder {
+  display: grid;
+  grid-template-columns: 1fr 4fr 30ch;
+  grid-template-rows: 5em 15em 1fr;
+  grid-template-areas: "header header encounter" "filters histogram encounter" "filters results encounter";
+  height: 100%;
+  color: var(--text-color);
+}
+.dnd5e .encounter-builder {
+  grid-template-columns: minmax(280px, 1fr) 4fr 30ch;
+}
+.encounter-builder .vs__actions button {
+  padding: 0.2em;
+}
+.encounter-builder .vs__actions > svg {
+  cursor: pointer;
+  flex: 1 0 auto;
+}
+.encounter-builder .vs__selected > button {
+  padding: 0.2em;
+  margin-left: auto;
+  width: fit-content;
+}
+.encounter-builder h2 {
+  border-bottom: 1px solid var(--color-accent);
+  box-shadow: 0px 8px 16px -11px var(--shadow-full-color);
+  margin-top: 0.25em;
+  margin-bottom: 0.8em;
+}
+.encounter-builder h4 {
+  margin-top: 0.5em;
+}
+.encounter-builder .encounter-info {
+  grid-area: header;
+  height: 100%;
+  background: var(--title-background-image), var(--title-background-color);
+  background-repeat: repeat;
+  background-blend-mode: var(--title-background-blend);
+  z-index: 1;
+  color: var(--color-primary);
+  box-shadow: 0px 2px 6px 0px var(--shadow-full-color);
+  padding: 0.5em;
+}
+.encounter-builder .encounter-info h1 {
+  font-size: var(--title-font-size);
+  border: none;
+  font-family: var(--title-font-family, inherit);
+  height: 100%;
+  margin: 0;
+  line-height: 1.5;
+}
+.encounter-builder .encounter-info h1 input {
+  color: inherit;
+  border: 0;
+  background: none;
+}
+.encounter-builder .encounter-info h1 input:focus {
+  text-decoration: underline dashed;
+  box-shadow: none;
+}
+.encounter-builder .encounter-details {
+  grid-area: encounter;
+  padding: 0.5em 1ch 0.5em 1ch;
+  box-shadow: -1px 3px 6px 0px var(--shadow-full-color);
+  background: var(--background-secondary-color);
+  z-index: 2;
+  overflow: auto;
+}
+.encounter-builder .encounter-details .numeric-input {
+  background: none;
+  border: 1px solid rgba(60, 60, 60, 0.26);
+  border-radius: 4px;
+  height: inherit;
+}
+.encounter-builder .encounter-details .encounter-results .perfect {
+  color: green;
+}
+.encounter-builder .encounter-details .encounter-results .close {
+  color: seagreen;
+}
+.encounter-builder .encounter-details .encounter-results .straying {
+  color: orange;
+}
+.encounter-builder .encounter-details .encounter-results .faraway {
+  color: orangered;
+}
+.encounter-builder .encounter-details .encounter-results .distant {
+  color: red;
+}
+.encounter-builder .encounter-members {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.encounter-builder .encounter-members .member {
+  display: flex;
+  padding: 0.2em;
+  position: relative;
+}
+.encounter-builder .encounter-members .member .member-details {
+  padding-left: 5px;
+  flex: 1 100%;
+  overflow: hidden;
+}
+.encounter-builder .encounter-members .actor-image {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+}
+.encounter-builder input[type=text] {
+  padding: 5px;
+  background: none;
+  border: 1px solid rgba(60, 60, 60, 0.26);
+  border-radius: 4px;
+  height: auto;
+  line-height: 1.4;
+  width: 100%;
+}
+.encounter-builder input[type=text]:hover, .encounter-builder input[type=text]:focus {
+  box-shadow: none;
+  border: 1px solid rgba(60, 60, 60, 0.6);
+}
+.encounter-builder .vs__dropdown-toggle:focus-within, .encounter-builder .vs__dropdown-toggle:hover {
+  border: 1px solid rgba(60, 60, 60, 0.6);
+}
+.encounter-builder .search-configuration {
+  grid-area: filters;
+  padding: 0.5em 1ch 0.5em 1ch;
+  box-shadow: 1px 4px 6px 0px var(--shadow-full-color);
+  background: var(--background-secondary-color);
+  overflow-y: scroll;
+}
+.encounter-builder .search-configuration .sortings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.encounter-builder .search-configuration .sortings .active {
+  background-color: #B9A660;
+}
+.encounter-builder .search-configuration .sort-group {
+  display: flex;
+}
+.encounter-builder .search-configuration .sort-group .toggle-button-group {
+  margin-left: auto;
+  width: 50%;
+  flex: 0 0 50%;
+}
+.encounter-builder .loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  grid-row-end: -1;
+  grid-row-start: 2;
+}
+.encounter-builder .loading-container .spinner {
+  width: 75% !important;
+  fill: #78110A !important;
+}
+.encounter-builder .loading-container .line {
+  animation: linePencil 0.8s infinite linear;
+}
+@keyframes linePencil {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-150px);
+  }
+}
+.encounter-builder ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.encounter-builder .results {
+  grid-area: results;
+  overflow: auto;
+  padding: 0.5em;
+}
+.encounter-builder .result-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  column-gap: 0.5em;
+  row-gap: 0.5em;
+}
+.encounter-builder .result-list .actor-image {
+  width: 100px;
+  height: 100px;
+  flex: 0 0 100px;
+}
+.encounter-builder .filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5em;
+}
+.encounter-builder .filters-grid h3 {
+  margin-bottom: 0;
+  grid-column-start: 1;
+  grid-column-end: -1;
+}
+.encounter-builder .filters-grid .full-width-filter {
+  grid-column-start: 1;
+  grid-column-end: -1;
+}
+.encounter-builder .filters-grid .full-width-filter > .flexrow {
+  gap: 0.2em;
+}
+.encounter-builder .filters-grid .filter-divider {
+  width: 1em;
+  flex: 0 0 1em;
+  height: 2px;
+  background: var(--color-primary);
+  align-self: center;
+}
+.encounter-builder .system-filters {
+  grid-column-start: 1;
+  grid-column-end: -1;
+  gap: 0.5em;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+.encounter-builder .actor-listing {
+  background: var(--background-primary-image), var(--background-primary-color);
+  background-repeat: repeat;
+  background-blend-mode: var(--background-primary-blend);
+  position: relative;
+  border-radius: 4px;
+  box-shadow: 0 0 6px 0px var(--shadow-subtle-color);
+}
+.encounter-builder .actor-listing[disabled] {
+  cursor: not-allowed;
+  opacity: 40%;
+}
+.encounter-builder .actor-listing[disabled]:hover {
+  box-shadow: none;
+}
+.encounter-builder .actor-listing:hover .actor-info-buttons-overlay {
+  opacity: 1;
+  transition-delay: 0.8s;
+}
+.encounter-builder .actor-listing .name {
+  font-weight: bold;
+  margin: 0 0 0.2em;
+  color: var(--color-accent2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+.encounter-builder .actor-listing .name .level {
+  padding-right: 3px;
+}
+.encounter-builder .actor-source {
+  font-style: italic;
+}
+.encounter-builder .trait-list dt, .encounter-builder .trait-list dd {
+  display: inline;
+}
+.encounter-builder .trait-list dt {
+  font-weight: bold;
+}
+.encounter-builder .trait-list dt:after {
+  content: " - ";
+}
+.encounter-builder .trait-list dd {
+  padding-left: 0;
+  margin: 0;
+  text-transform: capitalize;
+}
+.encounter-builder .trait-list .missing {
+  color: red;
+}
+.encounter-builder .tags {
+  font-size: 0.8em;
+  display: flex;
+  gap: 0.2em;
+  line-height: 1;
+  flex-wrap: wrap;
+}
+.encounter-builder .tags > li {
+  background-color: var(--background-primary-color);
+  text-transform: capitalize;
+  padding: 0.2em;
+  margin-bottom: 0.2em;
+  border-radius: 4px;
+}
+.encounter-builder .actor-listing-contents {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.encounter-builder .actor-info {
+  padding: 0.5em 0;
+  height: 100%;
+  box-sizing: border-box;
+  flex: 1 100%;
+}
+.encounter-builder .actor-info:not(:only-child) {
+  max-width: calc(100% - 100px - 1em);
+}
+.encounter-builder .actor-image {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  place-items: center;
+  place-content: center;
+  flex: 0 0 100px;
+}
+.encounter-builder .actor-image img {
+  flex: 0 0 auto;
+  max-width: 100%;
+  max-height: 100%;
+  border: none;
+}
+.encounter-builder .actor-info-buttons-overlay {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  place-items: center;
+  justify-content: space-around;
+  gap: 0.2em;
+  padding: 0.2em;
+  transition: opacity 0.3s;
+  transition-delay: 0.3s;
+  pointer-events: none;
+}
+.encounter-builder .actor-info-button {
+  font-size: 2em;
+  border-radius: 50%;
+  width: 1.6em;
+  height: 1.6em;
+  line-height: 1.7;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(60, 60, 60, 0.26);
+  color: white;
+  pointer-events: all;
+}
+.encounter-builder .actor-info-button > i {
+  margin-right: 0;
+}
+.encounter-builder .actor-info-button:hover {
+  background: var(--color-accent);
+}
+.encounter-builder .level-histogram {
+  grid-area: histogram;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.encounter-builder .level-histogram .vue-histogram-slider-wrapper .irs-bar {
+  background-color: #AE8C13;
+}
+.encounter-builder .toggle-button-group {
+  background-color: rgba(185, 166, 96, 0);
+  border: 1px solid var(--background-primary-color);
+  border-radius: 4px;
+  padding: 2px;
+  display: flex;
+}
+.encounter-builder .toggle-button {
+  border-radius: 2px;
+  padding: 0.2em 0.7em;
+  cursor: pointer;
+}
+.encounter-builder .btn {
+  padding: 0.5em 1em;
+}
+.encounter-builder .btn-primary {
+  background: var(--color-primary);
+  color: var(--color-accent2);
+  margin-bottom: 5px;
+}
+.encounter-builder .btn-primary:hover {
+  box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.4);
+  background: var(--color-primary);
+  color: var(--color-accent2);
+}
+
+/*# sourceMappingURL=module.css.map */

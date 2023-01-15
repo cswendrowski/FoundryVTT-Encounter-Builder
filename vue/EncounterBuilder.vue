@@ -508,7 +508,7 @@ export default {
     let allActors = npcs;
     this.sources.push(game.world.data.title);
     let actorCompendiums = Array.from(game.packs.entries()).filter(
-      (x) => x[1].metadata.entity == "Actor" && !x[1].metadata.name.includes("baileywiki")
+      (x) => x[1].metadata.type == "Actor" && !x[1].metadata.name.includes("baileywiki")
     );
 
     for (let index = 0; index < actorCompendiums.length; index++) {

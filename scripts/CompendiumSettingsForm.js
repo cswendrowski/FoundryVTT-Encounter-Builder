@@ -8,7 +8,7 @@ export class CompendiumSettingsForm extends FormApplication {
             template: "./modules/vue-encounter-builder/templates/compendium-settings.hbs",
             classes: ["sheet"],
             width: 500,
-            height: 500,
+            height: 'auto',
             closeOnSubmit: true,
             submitOnClose: true
         });
@@ -18,7 +18,7 @@ export class CompendiumSettingsForm extends FormApplication {
     getData(options) {
         return {
             compendiums: Array.from(game.packs.entries())
-                .filter((x) => x[1].metadata.entity == "Actor" && !x[1].metadata.name.includes("baileywiki"))
+                .filter((x) => x[1].metadata.type == "Actor" && !x[1].metadata.name.includes("baileywiki"))
                 .map(x => {
                     return {
                         name: x[0],
