@@ -33,28 +33,28 @@ export default class ThirteenthAge {
             availableActors = availableActors.filter(x => selectedSources.includes(this.getActorSource(x).toLowerCase()));
         }
         if (!!selectedName) {
-            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(selectedName.toLowerCase()));
+            availableActors = availableActors.filter(x => x.name.toLowerCase().includes(selectedName.toLowerCase()));
         }
         if (selectedSizes?.length) {
             availableActors = availableActors.filter(x => {
-                if (!!x.data.data?.details?.size) {
-                    return selectedSizes.includes(x.data.data.details.size.value.toLowerCase());
+                if (!!x.system?.details?.size) {
+                    return selectedSizes.includes(x.system.details.size.value.toLowerCase());
                 }
                 return false;
             });
         }
         if (selectedRoles?.length) {
             availableActors = availableActors.filter(x => {
-                if (!!x.data.data?.details?.role) {
-                    return selectedRoles.includes(x.data.data.details.role.value.toLowerCase());
+                if (!!x.system?.details?.role) {
+                    return selectedRoles.includes(x.system.details.role.value.toLowerCase());
                 }
                 return false;
             });
         }
         if (selectedTypes?.length) {
             availableActors = availableActors.filter(x => {
-                if (!!x.data.data?.details?.type) {
-                    return selectedTypes.includes(x.data.data.details.type.value.toLowerCase());
+                if (!!x.system?.details?.type) {
+                    return selectedTypes.includes(x.system.details.type.value.toLowerCase());
                 }
                 return false;
             });
@@ -87,8 +87,8 @@ export default class ThirteenthAge {
         //console.log(actor);
         try {
             let role = 'troop';
-            if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.role != undefined) {
-                role = actor.data.data.details.role.value.toLowerCase();
+            if (actor.system != undefined && actor.system.details != undefined && actor.system.details.role != undefined) {
+                role = actor.system.details.role.value.toLowerCase();
             }
 
             let encounterTier = "adventurer";
@@ -113,8 +113,8 @@ export default class ThirteenthAge {
     }
 
     getSafeLevel(actor) {
-        if (actor.data.data != undefined && actor.data.data.details != undefined && actor.data.data.details.level != undefined) {
-            return actor.data.data.details.level.value;
+        if (actor.system != undefined && actor.system.details != undefined && actor.system.details.level != undefined) {
+            return actor.system.details.level.value;
         }
         return 0;
     }
@@ -131,8 +131,8 @@ export default class ThirteenthAge {
         ];
 
         let size = 'normal';
-        if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined && enemy.data.data.details.size != '') {
-            size = enemy.data.data.details.size.value.toLowerCase();
+        if (enemy.system != undefined && enemy.system.details != undefined && enemy.system.details.size != undefined && enemy.system.details.size != '') {
+            size = enemy.system.details.size.value.toLowerCase();
         }
         let sizeToColumn = {
             "weakling": 0,
@@ -149,8 +149,8 @@ export default class ThirteenthAge {
         };
 
         let enemyLevel = 1;
-        if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined && enemy.data.data.details.level != '') {
-            enemyLevel = enemy.data.data.details.level.value;
+        if (enemy.system != undefined && enemy.system.details != undefined && enemy.system.details.level != undefined && enemy.system.details.level != '') {
+            enemyLevel = enemy.system.details.level.value;
         }
         let levelDifference = enemyLevel - averageLevel;
         if (tier == "champion") {
@@ -185,8 +185,8 @@ export default class ThirteenthAge {
         ];
 
         let size = 'normal';
-        if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.size != undefined && enemy.data.data.details.size != '') {
-            size = enemy.data.data.details.size.value.toLowerCase();
+        if (enemy.system != undefined && enemy.system.details != undefined && enemy.system.details.size != undefined && enemy.system.details.size != '') {
+            size = enemy.system.details.size.value.toLowerCase();
         }
 
         let sizeToColumn = {
@@ -204,8 +204,8 @@ export default class ThirteenthAge {
         };
 
         let enemyLevel = 1;
-        if (enemy.data.data != undefined && enemy.data.data.details != undefined && enemy.data.data.details.level != undefined && enemy.data.data.details.level != '') {
-            enemyLevel = enemy.data.data.details.level.value;
+        if (enemy.system != undefined && enemy.system.details != undefined && enemy.system.details.level != undefined && enemy.system.details.level != '') {
+            enemyLevel = enemy.system.details.level.value;
         }
         let levelDifference = enemyLevel - averageLevel;
         if (tier == "champion") {

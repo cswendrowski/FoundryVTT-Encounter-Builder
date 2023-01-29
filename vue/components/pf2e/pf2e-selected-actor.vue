@@ -13,10 +13,10 @@
       <div class="member-details">
         <strong class="name">{{ group }}</strong>
         <div>
-          Level {{ actor.data.data.details.level.value }}
+          Level {{ actor.system.details.level.value }}
         </div>
         <div>
-          <strong>{{ groupsize }}</strong> x {{ actor.encounterScore }} = {{ (actor.encounterScore * groupsize) }} XP
+          <strong>{{ groupSize }}</strong> x {{ actor.encounterScore }} = {{ (actor.encounterScore * groupSize) }} XP
         </div>
       </div>
     </div>
@@ -30,6 +30,6 @@
 <script>
 export default {
     name: "pf2e-selected-actor",
-    props: ["group", "actor", "groupsize"],
+    props: ["group", "actor", "groupSize"],
 };
 </script>

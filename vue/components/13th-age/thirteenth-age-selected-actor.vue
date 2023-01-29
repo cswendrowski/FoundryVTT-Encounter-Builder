@@ -13,10 +13,10 @@
       <div class="member-details">
         <strong class="name">{{ group }}</strong>
         <div>
-          Level {{ actor.data.data.details.level.value }} {{ actor.data.data.details.role.value }}
+          Level {{ actor.system.details.level.value }} {{ actor.system.details.role.value }}
         </div>
         <div>
-          <strong>{{ groupsize }}</strong> x {{ actor.encounterScore.toFixed(2) }} = {{ (actor.encounterScore * groupsize).toFixed(2) }} ES
+          <strong>{{ groupSize }}</strong> x {{ actor.encounterScore.toFixed(2) }} = {{ (actor.encounterScore * groupSize).toFixed(2) }} ES
         </div>
       </div>
     </div>
@@ -31,6 +31,10 @@
 <script>
 export default {
     name: "thirteenth-age-selected-actor",
-    props: ["group", "actor", "groupsize"],
+    props: ["group", "actor", "groupSize"],
+  mounted() {
+    console.log("thirteenth-age-selected-actor mounted");
+    console.dir(this.groupSize)
+  },
 };
 </script>

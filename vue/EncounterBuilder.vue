@@ -282,13 +282,15 @@ export default {
       for (let x = 0; x < this.selectedActors.length; x++) {
         let actor = this.selectedActors[x];
         if (actor.source && !game.actors.get(actor.id)) {
-          actor = await Actor.create(actor.data, {keepId: true});
+          const actorData = foundry.utils.duplicate(actor);
+          this.log(false, actorData);
+          actor = await Actor.create(actorData, {keepId: true});
         }
-        if (Object.keys(tokensToWarp).includes(actor.data.name)) {
-          tokensToWarp[actor.data.name]++;
+        if (Object.keys(tokensToWarp).includes(actor.name)) {
+          tokensToWarp[actor.name]++;
         }
         else {
-          tokensToWarp[actor.data.name] = 1;
+          tokensToWarp[actor.name] = 1;
         }
         total++;
       }
@@ -437,7 +439,9 @@ export default {
         grouped[name].push(selected);
       }
 
-      return Object.entries(grouped);
+      const data = Object.entries(grouped);
+      this.log(false, data);
+      return data;
     },
   },
   watch: {
