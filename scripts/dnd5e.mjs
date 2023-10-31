@@ -80,7 +80,7 @@ export default class Dnd5e {
         if (selectedEnvironments?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.system?.details?.environment != undefined) {
-                    return selectedEnvironments.filter(value => x.details.environment.includes(value)).length > 0;
+                    return selectedEnvironments.filter(value => x.system.details.environment.includes(value)).length > 0;
                 }
                 return false;
             });
