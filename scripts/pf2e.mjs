@@ -25,11 +25,11 @@ export default class Pathfinder2E {
     histogramLabelPrettify(level) { return level; }
 
     getPlayerCharacters() {
-        return game.actors.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+        return game.actors.filter((x) => x.hasPlayerOwner && x.type == "character");
     }
 
     getNpcs() {
-        return game.actors.filter((x) => x.data.type == "npc" || x.data.type == "hazard");
+        return game.actors.filter((x) => x.type == "npc" || x.type == "hazard");
     }
 
     filterCompendiumActors(pack, packActors) {
@@ -48,38 +48,38 @@ export default class Pathfinder2E {
             availableActors = availableActors.filter(x => selectedSources.includes(this.getActorSource(x).toLowerCase()));
         }
         if (selectedName != "") {
-            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(selectedName.toLowerCase()));
+            availableActors = availableActors.filter(x => x.name.toLowerCase().includes(selectedName.toLowerCase()));
         }
 
         if (selectedAlignments?.length) {
-            availableActors = availableActors.filter(x => selectedAlignments.includes(x.data.data?.details?.alignments?.value));
+            availableActors = availableActors.filter(x => selectedAlignments.includes(x.system?.details?.alignments?.value));
         }
 
         if (selectedTraits?.length) {
             availableActors = availableActors.filter(x => {
-                return !!x.data.data?.traits?.traits?.value.some(trait => selectedTraits.includes(trait));
+                return !!x.system?.traits?.traits?.value.some(trait => selectedTraits.includes(trait));
             });
         }
 
         if (selectedRarities?.length) {
-            availableActors = availableActors.filter(x => selectedRarities.includes(x.data.data.traits?.rarity?.value));
+            availableActors = availableActors.filter(x => selectedRarities.includes(x.system.traits?.rarity?.value));
         }
 
         if (selectedSizes?.length) {
-            availableActors = availableActors.filter(x => selectedSizes.includes(x.data.data.traits?.size?.value));
+            availableActors = availableActors.filter(x => selectedSizes.includes(x.system.traits?.size?.value));
         }
 
         return availableActors;
     }
 
     getActorSource(actor, skipDetails) {
-        if (actor.data.data.details.source?.value && !skipDetails) {
-            return actor.data.data.details.source.value;
+        if (actor.system.details.source?.value && !skipDetails) {
+            return actor.system.details.source.value;
         }
 
         //log(false, actor.name);
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
-        let source = game.world.data.title;
+        let source = game.world.title;
 
         if (nonCompendiumSourceType == "folderName") {
             if (actor.folder != undefined) {
@@ -99,7 +99,7 @@ export default class Pathfinder2E {
         if (actor == undefined) return -30;
         //log(false, actor);
         try {
-            if (actor.data.type == "hazard") {
+            if (actor.type == "hazard") {
                 let simpleChart = [
                     2,
                     3,
@@ -124,7 +124,7 @@ export default class Pathfinder2E {
                     150
                 ];
 
-                let xpChart = actor.data.data.details.isComplex ? complexChart : simpleChart;
+                let xpChart = actor.system.details.isComplex ? complexChart : simpleChart;
 
                 let levelDifference = this.getSafeLevel(actor) - partyInfo.averagePartyLevel;
                 let xpIndex = levelDifference + 4;
@@ -157,9 +157,9 @@ export default class Pathfinder2E {
     }
 
     getSafeLevel(actor) {
-        if (actor?.data?.data?.details?.level) {
-            if (actor.data.data.details.level?.value) return actor.data.data.details.level.value;
-            return actor.data.data.details.level;
+        if (actor?.system?.details?.level) {
+            if (actor.system.details.level?.value) return actor.system.details.level.value;
+            return actor.system.details.level;
         }
         return 0;
     }
