@@ -11,11 +11,11 @@ export default class ThirteenthAge {
     histogramLabelPrettify(level) { return level; }
 
     getPlayerCharacters() {
-        return game.actors.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+        return game.actors.filter((x) => x.hasPlayerOwner && x.type == "character");
     }
 
     getNpcs() {
-        return game.actors.filter((x) => x.data.type == "npc");
+        return game.actors.filter((x) => x.type == "npc");
     }
 
     filterCompendiumActors(pack, packActors) {
@@ -66,7 +66,7 @@ export default class ThirteenthAge {
     getActorSource(actor) {
         //console.log(actor.name);
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
-        let source = game.world.data.title;
+        let source = game.world.title;
 
         if (nonCompendiumSourceType == "folderName") {
             if (actor.folder != undefined) {

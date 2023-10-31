@@ -3,32 +3,32 @@
     <div class="actor-listing-contents" v-on:click.left="$emit('add-actor')"  v-on:click.right="$emit('remove-actor')">
 
     <div class="actor-image">
-      <img :src="actor.data.img" width="100" height="100" />
+      <img :src="actor.img" width="100" height="100" />
     </div>
     
     <section class="actor-info">
       <h4 class="name">
-        <span class="level" v-if="actor.data.data.details?.level?.value"
-          >[{{ actor.data.data.details.level.value }}]</span
+        <span class="level" v-if="actor.system.details?.level?.value"
+          >[{{ actor.system.details.level.value }}]</span
         >
-        {{ actor.data.name }}
+        {{ actor.name }}
       </h4>
 
       <dl class="trait-list">
         <div
           is="actor-trait"
           :label="'Size'"
-          :value="actor.data.data.details?.size?.value"></div>
+          :value="actor.system.details?.size?.value"></div>
           
         <div
           is="actor-trait"
           :label="'Role'"
-          :value="actor.data.data.details?.role?.value"></div>
+          :value="actor.system.details?.role?.value"></div>
           
         <div
           is="actor-trait"
           :label="'Type'"
-          :value="actor.data.data.details?.type?.value"></div>
+          :value="actor.system.details?.type?.value"></div>
 
         <div
           is="actor-trait"
