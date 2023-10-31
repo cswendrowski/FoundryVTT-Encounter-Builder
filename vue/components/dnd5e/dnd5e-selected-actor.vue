@@ -7,7 +7,7 @@
       v-on:click.left="$emit('add-actor')"
       v-on:click.right="$emit('remove-actor')">
       <div class="actor-image">
-        <img :src="actor.data.img" />
+        <img :src="actor.img" />
       </div>
 
       <div class="member-details">

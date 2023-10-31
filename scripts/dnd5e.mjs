@@ -16,8 +16,8 @@ export default class Dnd5e {
     initValuesFromAllActors(allActors) {
         let environments = new Set();
         allActors.forEach(actor => {
-            if (actor.data?.data?.details?.environment) {
-                environments.add(actor.data?.data?.details?.environment);
+            if (actor.system?.details?.environment) {
+                environments.add(actor.system?.details?.environment);
             }
         });
         this.environments = Array.from(environments);
@@ -38,11 +38,11 @@ export default class Dnd5e {
     }
 
     getPlayerCharacters() {
-        return game.actors.filter((x) => x.hasPlayerOwner && x.data.type == "character");
+        return game.actors.filter((x) => x.hasPlayerOwner && x.type == "character");
     }
 
     getNpcs() {
-        return game.actors.filter((x) => x.data.type == "npc" && !x.data.img.includes("baileywiki"));
+        return game.actors.filter((x) => x.type == "npc" && !x.img.includes("baileywiki"));
     }
 
     filterCompendiumActors(pack, packActors) {
@@ -74,13 +74,13 @@ export default class Dnd5e {
         }
 
         if (!!selectedName) {
-            availableActors = availableActors.filter(x => x.data.name.toLowerCase().includes(selectedName.toLowerCase()));
+            availableActors = availableActors.filter(x => x.name.toLowerCase().includes(selectedName.toLowerCase()));
         }
 
         if (selectedEnvironments?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.details?.environment != undefined) {
-                    return selectedEnvironments.filter(value => x.data.data.details.environment.includes(value)).length > 0;
+                if (x.system?.details?.environment != undefined) {
+                    return selectedEnvironments.filter(value => x.details.environment.includes(value)).length > 0;
                 }
                 return false;
             });
@@ -88,8 +88,8 @@ export default class Dnd5e {
 
         if (selectedTypes?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.details?.type != undefined) {
-                    return selectedTypes.filter(value => x.data.data.details.type.value == value).length > 0;
+                if (x.system?.details?.type != undefined) {
+                    return selectedTypes.filter(value => x.system.details.type.value == value).length > 0;
                 }
                 return false;
             });
@@ -97,9 +97,9 @@ export default class Dnd5e {
 
         if (selectedSizes?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.traits?.size != undefined) {
+                if (x.system?.traits?.size != undefined) {
                     return selectedSizes.filter(value =>
-                        Object.entries(CONFIG.DND5E.actorSizes).find(x => x[1] == value)[0] == x.data.data.traits.size
+                        Object.entries(CONFIG.DND5E.actorSizes).find(x => x[1] == value)[0] == x.system.traits.size
                     ).length > 0;
                 }
                 return false;
@@ -108,7 +108,7 @@ export default class Dnd5e {
 
         if (selectedAlignmentsLaw?.length || selectedAlignmentsGood?.length) {
             availableActors = availableActors.filter(x => {
-                const alignment = x.data.data.details.alignment.toLowerCase();
+                const alignment = x.system.details.alignment.toLowerCase();
 
                 if (alignment === 'unaligned') {
                     return false;
@@ -141,14 +141,14 @@ export default class Dnd5e {
 
         if (selectedMovements?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.attributes?.movement != undefined) {
+                if (x.system?.attributes?.movement != undefined) {
                     let matchingMovements = selectedMovements.filter(value => {
                         switch (value) {
-                            case "Burrows": return x.data.data.attributes.movement.burrow > 0;
-                            case "Climbs": return x.data.data.attributes.movement.climb > 0;
-                            case "Flys": return x.data.data.attributes.movement.fly > 0;
-                            case "Swims": return x.data.data.attributes.movement.swim > 0;
-                            case "Walks": return x.data.data.attributes.movement.walk > 0;
+                            case "Burrows": return x.system.attributes.movement.burrow > 0;
+                            case "Climbs": return x.system.attributes.movement.climb > 0;
+                            case "Flys": return x.system.attributes.movement.fly > 0;
+                            case "Swims": return x.system.attributes.movement.swim > 0;
+                            case "Walks": return x.system.attributes.movement.walk > 0;
                         }
                     });
                     return matchingMovements.length > 0;
@@ -159,12 +159,12 @@ export default class Dnd5e {
 
         if (selectedTraits?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data != undefined) {
+                if (x.system != undefined) {
                     let matchingTraits = selectedTraits.filter(value => {
                         switch (value) {
-                            case "Spellcaster": return x.data.data.details.spellLevel > 0;
-                            case "Lair Actions": return x.data.data.resources?.lair?.value;
-                            case "Legendary Actions": return x.data.data.resources?.legact?.max > 0 || x.data.data.resources?.legres?.max > 0;
+                            case "Spellcaster": return x.system.details.spellLevel > 0;
+                            case "Lair Actions": return x.system.resources?.lair?.value;
+                            case "Legendary Actions": return x.system.resources?.legact?.max > 0 || x.system.resources?.legres?.max > 0;
                         }
                     });
                     return matchingTraits.length > 0;
@@ -175,8 +175,8 @@ export default class Dnd5e {
 
         if (selectedResistances?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.traits?.dr != undefined) {
-                    return selectedResistances.filter(value => x.data.data.traits.dr.value.includes(value)).length > 0;
+                if (x.system?.traits?.dr != undefined) {
+                    return selectedResistances.filter(value => x.system.traits.dr.value.includes(value)).length > 0;
                 }
                 return false;
             });
@@ -184,8 +184,8 @@ export default class Dnd5e {
 
         if (selectedImmunities?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.traits?.di != undefined) {
-                    return selectedImmunities.filter(value => x.data.data.traits.di.value.includes(value)).length > 0;
+                if (x.system?.traits?.di != undefined) {
+                    return selectedImmunities.filter(value => x.system.traits.di.value.includes(value)).length > 0;
                 }
                 return false;
             });
@@ -193,8 +193,8 @@ export default class Dnd5e {
 
         if (selectedVulnerabilities?.length > 0) {
             availableActors = availableActors.filter(x => {
-                if (x.data.data?.traits?.dv != undefined) {
-                    return selectedVulnerabilities.filter(value => x.data.data.traits.dv.value.includes(value)).length > 0;
+                if (x.system?.traits?.dv != undefined) {
+                    return selectedVulnerabilities.filter(value => x.system.traits.dv.value.includes(value)).length > 0;
                 }
                 return false;
             });
@@ -204,12 +204,12 @@ export default class Dnd5e {
     }
 
     getActorSource(actor, skipDetails) {
-        if (actor.data.data.details.source && !skipDetails) {
-            return actor.data.data.details.source.split('pg')[0];
+        if (actor.system.details.source && !skipDetails) {
+            return actor.system.details.source.split('pg')[0];
         }
 
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
-        let source = game.world.data.title;
+        let source = game.world.title;
 
         if (nonCompendiumSourceType == "folderName") {
             if (actor.folder != undefined) {
@@ -228,7 +228,7 @@ export default class Dnd5e {
     getEncounterScore(actor) {
         if (actor == undefined) return -30;
         try {
-            return actor.data.data.details.xp.value;
+            return actor.system.details.xp.value;
         }
         catch (error) {
             console.error(error);
@@ -237,14 +237,14 @@ export default class Dnd5e {
     }
 
     getSafeLevel(actor) {
-        if (actor.data.type == "character") {
-            if (actor.data?.data?.details?.level) {
-                return Number(actor.data.data.details.level);
+        if (actor.type == "character") {
+            if (actor.system?.details?.level) {
+                return Number(actor.system.details.level);
             }
         }
         else {
-            if (actor.data?.data?.details?.cr) {
-                return Number(actor.data.data.details.cr);
+            if (actor.system?.details?.cr) {
+                return Number(actor.system.details.cr);
             }
         }
         return 0;
