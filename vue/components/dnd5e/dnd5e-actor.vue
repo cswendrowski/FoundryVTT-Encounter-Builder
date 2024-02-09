@@ -3,11 +3,11 @@
     <div class="actor-listing-contents" v-on:click.left="$emit('add-actor')"  v-on:click.right="$emit('remove-actor')">
       <section class="actor-info">
         <h4 class="name">
-          {{ actor.data.name }}
+          {{ actor.name }}
         </h4>
 
         <em class="trait-value">
-            {{actorSizes[actor.data.data.traits.size]}} {{ actor.labels.creatureType }}
+            {{actorSizes[actor.system.traits.size]}} {{ actor.labels.creatureType }}
         </em>
 
         <hr />
@@ -16,7 +16,7 @@
           <div
             is="actor-trait"
             :label="'Challenge'"
-            :value="`${system.histogramLabelPrettify(actor.data.data.details.cr)}   (${actor.encounterScore} XP)`"></div>
+            :value="`${system.histogramLabelPrettify(actor.system.details.cr)}   (${actor.encounterScore} XP)`"></div>
         </dl>
 
         <ul class="tags">
@@ -24,11 +24,11 @@
             :key="tag">{{tag}}</li>
         </ul>
 
-        <small class="actor-source">{{ actor.data.data.details.source }}</small>
+        <small class="actor-source">{{ actor.system.details.source }}</small>
       </section>
 
-      <div class="actor-image" v-if="actor.data.img !== 'icons/svg/mystery-man.svg'">
-        <img :src="actor.data.img" />
+      <div class="actor-image" v-if="actor.img !== 'icons/svg/mystery-man.svg'">
+        <img :src="actor.img" />
       </div>
     </div>
 
@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     tags() {
-      const {attributes, details, resources} = this.actor.data.data;
+      const {attributes, details, resources} = this.actor.system;
       const ret = [];
 
 

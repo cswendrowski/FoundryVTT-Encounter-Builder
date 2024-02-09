@@ -2,14 +2,14 @@
   <li class="actor-listing">
     <div class="actor-listing-contents" v-on:click.left="$emit('add-actor')"  v-on:click.right="$emit('remove-actor')">
       <div class="actor-image">
-        <img :src="actor.data.img" width="100" height="100" />
+        <img :src="actor.img" width="100" height="100" />
       </div>
       <section class="actor-info">
         <h4 class="name">
-          <span class="level" v-if="actor.data.data.details?.level?.value"
-            >[{{ actor.data.data.details.level.value }}]</span
+          <span class="level" v-if="actor.system.details?.level?.value"
+            >[{{ actor.system.details.level.value }}]</span
           >
-          {{ actor.data.name }}
+          {{ actor.name }}
         </h4>
 
 
@@ -48,7 +48,7 @@ export default {
   props: ["actor"],
   computed: {
     primaryTags() {
-      const {traits, details} = this.actor.data.data;
+      const {traits, details} = this.actor.system;
       const ret = [];
 
       if (!!traits?.rarity?.value) {
@@ -66,7 +66,7 @@ export default {
       return ret;
     },
     tags() {
-      return this.actor.data.data?.traits?.traits?.value
+      return this.actor.system?.traits?.traits?.value
         .map((tag) => game.i18n.localize(CONFIG.PF2E.monsterTraits[tag]))
         .filter((tag) => !!tag)
     },

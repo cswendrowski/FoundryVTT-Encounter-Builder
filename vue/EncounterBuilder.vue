@@ -355,8 +355,8 @@ export default {
         (a, b) => {
           const aLevel = this.system.getSafeLevel(a);
           const bLevel = this.system.getSafeLevel(b);
-          const aName = a.data.name;
-          const bName = b.data.name;
+          const aName = a.name;
+          const bName = b.name;
 
           switch (true) {
             // if both levels are the same, sort by name
@@ -394,9 +394,9 @@ export default {
 
       // if (this.sortNameAsc != undefined) {
       //   if (this.sortNameAsc) {
-      //     availableActors.sort((a, b) => (a.data.name > b.data.name ? 1 : -1));
+      //     availableActors.sort((a, b) => (a.name > b.name ? 1 : -1));
       //   } else {
-      //     availableActors.sort((a, b) => (a.data.name < b.data.name ? 1 : -1));
+      //     availableActors.sort((a, b) => (a.name < b.name ? 1 : -1));
       //   }
       // }
 
@@ -431,7 +431,7 @@ export default {
       for (let x = 0; x < this.selectedActors.length; x++) {
         let selected = this.selectedActors[x];
         //this.log(false, selected);
-        let name = selected.data.name;
+        let name = selected.name;
         if (!(name in grouped)) {
           grouped[name] = [];
         }
@@ -510,7 +510,7 @@ export default {
 
     let npcs = this.system.getNpcs();
     let allActors = npcs;
-    this.sources.push(game.world.data.title);
+    this.sources.push(game.world.title);
     let actorCompendiums = Array.from(game.packs.entries()).filter(
       (x) => x[1].metadata.type == "Actor" && !x[1].metadata.name.includes("baileywiki")
     );
