@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "manifestPlusVersion": "1.0.0",
   "compatibility": {
-    "minimum": 10,
+    "minimum": 11,
     "verified": 11
   },
   "author": "Cody Swendrowski <cody@swendrowski.us>",
@@ -33,18 +33,15 @@
     "requires": [
       {
         "id": "dlopen",
-        "type": "module",
-        "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-dlopen/master/module.json"
+        "type": "module"
       },
       {
         "id": "vueport",
-        "type": "module",
-        "manifest": "https://raw.githubusercontent.com/ForgeVTT/fvtt-module-vueport/master/module.json"
+        "type": "module"
       },
       {
         "id": "warpgate",
-        "type": "module",
-        "manifest": "https://github.com/trioderegion/warpgate/blob/master/module.json"
+        "type": "module"
       }
     ]
   },

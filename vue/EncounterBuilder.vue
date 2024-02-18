@@ -70,7 +70,7 @@
     <aside class="search-configuration">
       <h2>Filters</h2>
       <div class="filters-grid">
-        
+
         <div>
           <label>Name</label>
           <input type="text" placeholder="Name" v-model="selectedName" />
@@ -454,7 +454,7 @@ export default {
             from: this.minSelectedLevel,
             to: this.maxSelectedLevel,
           });
-        
+
           if (shouldReset) {
             this.levelHasBeenSelected = false;
           }
@@ -490,6 +490,8 @@ export default {
   },
   async mounted() {
 
+    let cache = game.settings.get("vue-encounter-builder", "cache");
+
     this.step = this.system.histogramStep();
     this.levelName = this.system.levelName();
 
@@ -508,49 +510,60 @@ export default {
       );
     }
 
-    let npcs = this.system.getNpcs();
-    let allActors = npcs;
-    this.sources.push(game.world.title);
-    let actorCompendiums = Array.from(game.packs.entries()).filter(
-      (x) => x[1].metadata.type == "Actor" && !x[1].metadata.name.includes("baileywiki")
-    );
+    if ( cache ) {
+      this.actors = cache.actors;
+      this.sources = cache.sources;
+    }
+    else {
+      let npcs = this.system.getNpcs();
+      let allActors = npcs;
+      this.sources.push(game.world.title);
+      let actorCompendiums = Array.from(game.packs.entries()).filter(
+          (x) => x[1].metadata.type == "Actor" && !x[1].metadata.name.includes("baileywiki")
+      );
 
-    for (let index = 0; index < actorCompendiums.length; index++) {
-      let pack = actorCompendiums[index];
-      if (!game.settings.get("vue-encounter-builder", pack[0])) continue;
-      //this.log(false, pack);
-      let packActors = await pack[1].getDocuments();
-      //this.log(false, packActors);
-      allActors = allActors.concat(this.system.filterCompendiumActors(pack, packActors));
-      this.sources.push(pack[1].metadata.label);
+      for (let index = 0; index < actorCompendiums.length; index++) {
+        let pack = actorCompendiums[index];
+        if (!game.settings.get("vue-encounter-builder", pack[0])) continue;
+        //this.log(false, pack);
+        let packActors = await pack[1].getDocuments();
+        //this.log(false, packActors);
+        allActors = allActors.concat(this.system.filterCompendiumActors(pack, packActors));
+        this.sources.push(pack[1].metadata.label);
+      }
+
+      this.system.initValuesFromAllActors(allActors);
+
+      for (let x = 0; x < allActors.length; x++) {
+        let actor = allActors[x];
+        let level = this.system.getSafeLevel(actor);
+
+        if (level > this.maximumLevel) this.maximumLevel = level;
+        if (level < this.minimumLevel) this.minimumLevel = level;
+        this.sources.push(this.system.getActorSource(actor));
+      }
+
+      function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+      }
+
+      this.sources = this.sources.filter(onlyUnique);
+
+      let defaultRange = this.system.getDefaultLevelRange(this.partyInfo, this.minimumLevel, this.maximumLevel);
+      this.minSelectedLevel = defaultRange.minSelectedLevel;
+      this.maxSelectedLevel = defaultRange.maxSelectedLevel;
+
+      this.log(false, `Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
+
+      this.log(false, allActors);
+      this.actors = allActors;
     }
 
-    this.system.initValuesFromAllActors(allActors);
-
-    for (let x = 0; x < allActors.length; x++) {
-      let actor = allActors[x];
-      let level = this.system.getSafeLevel(actor);
-
-      if (level > this.maximumLevel) this.maximumLevel = level;
-      if (level < this.minimumLevel) this.minimumLevel = level;
-      this.sources.push(this.system.getActorSource(actor));
-    }
-
-    function onlyUnique(value, index, self) {
-      return self.indexOf(value) === index;
-    }
-
-    this.sources = this.sources.filter(onlyUnique);
-
-    let defaultRange = this.system.getDefaultLevelRange(this.partyInfo, this.minimumLevel, this.maximumLevel);
-    this.minSelectedLevel = defaultRange.minSelectedLevel;
-    this.maxSelectedLevel = defaultRange.maxSelectedLevel;
-
-    this.log(false, `Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
-
-    this.log(false, allActors);
-    this.actors = allActors;
     this.loading = false;
+    cache.actors = this.actors;
+    cache.sources = this.sources;
+
+    game.settings.set("vue-encounter-builder", "cache", cache);
 
     Hooks.on("deleteActor", (actor, meta, id) => {
       this.log(false, "Handling delete for " + id);

@@ -160,9 +160,30 @@ Hooks.on('renderCombatTracker', () => {
     $(".dungeon-moon-launcher").on("click", () => {
         EncounterBuilder.run();
     });
-    
+
     if (game.combats.find(x => x.data.scene == game.user.viewedScene)) {
         $(".dungeon-moon-launcher-full").hide();
         $(".dungeon-moon-launcher-smol").show();
+    }
+});
+
+// Cache resets
+Hooks.on("createActor", (actor) => {
+    game.settings.set("vue-encounter-builder", "cache", undefined);
+});
+
+Hooks.on("updateActor", (actor) => {
+    game.settings.set("vue-encounter-builder", "cache", undefined);
+});
+
+Hooks.on("deleteActor", (actor) => {
+    game.settings.set("vue-encounter-builder", "cache", undefined);
+});
+
+// Compendiums don't have a hook, so we react to the closeDialog event
+Hooks.on("closeDialog", (dialog) => {
+    const title = dialog.data.title;
+    if ( title.includes("Create Compendium") || title.includes("Update Compendium") || title.includes("Delete Compendium")) {
+        game.settings.set("vue-encounter-builder", "cache", undefined);
     }
 });
