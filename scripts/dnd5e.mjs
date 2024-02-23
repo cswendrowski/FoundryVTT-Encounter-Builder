@@ -27,6 +27,8 @@ export default class Dnd5e {
 
     histogramStep() { return 0.25; }
 
+    perPage() { return 12; }
+
     histogramLabelPrettify(cr) {
         if (cr >= 1) return cr.toString();
         if (cr == 0.75) return "3/4";
@@ -130,7 +132,7 @@ export default class Dnd5e {
 
                 // BRITTLE ASSUMPTION
                 const [lawfulness, goodness] = alignmentArray;
-                
+
                 const matchLaw = selectedAlignmentsLaw.length ? selectedAlignmentsLaw.includes(lawfulness) : true;
 
                 const matchGood = selectedAlignmentsGood.length ? selectedAlignmentsGood.includes(goodness) : true;
@@ -256,5 +258,5 @@ export default class Dnd5e {
             maxSelectedLevel: partyInfo.averagePartyLevel + 1
         }
     }
-    
+
 }

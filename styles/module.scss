@@ -29,20 +29,20 @@ $dark-maroon: #2B0603;
     --title-background-image: url(/ui/parchment.jpg);
     --title-background-color: #{$red};
     --title-background-blend: color-burn;
-    
+
     --background-primary-image: url(/ui/parchment.jpg);
     --background-primary-color: #{$gold};
     --background-primary-blend: hard-light;
     --background-secondary-color: #{$white};
-    
+
     --color-primary: #{$gold};
     --color-secondary: #{$yellow};
     --color-accent: #{$red};
     --color-accent2: #{$dark-maroon}; // contrasts color-primary: used for text on a primary field
-    
+
     --shadow-full-color: #00000060;
     --shadow-subtle-color: #00000030;
-    
+
     --text-color: black;
 
     min-width: 1130px;
@@ -53,6 +53,10 @@ $dark-maroon: #2B0603;
         --background-primary-image: url(/ui/parchment.jpg);
         --background-primary-color: hsl(46 71% 83% / 0.8); // from character sheet
         --background-primary-blend: hard-light;
+
+        .pagination {
+            margin-top: 1rem;
+        }
     }
 
     &.pf2e {
@@ -74,7 +78,7 @@ $dark-maroon: #2B0603;
             // background: url(../../../systems/pf2e/assets/sheet/header.webp) !important;
             color: var(--color-accent2);
         }
-        
+
         .traits, .traits-list {
             color: #fff !important;
         }
@@ -82,22 +86,26 @@ $dark-maroon: #2B0603;
         .tags {
             color: black;
         }
-        
+
         .encounter-info {
             color: #fff !important;
         }
-        
+
         .vue-histogram-slider-wrapper {
             .irs-bar {
                 background-color: #171f69;
             }
         }
-        
+
         .actor-info-button {
             color: #f7d488;
         }
+
+        .pagination {
+            margin-top: 0.25rem;
+        }
     }
-    
+
     &.dnd5e {
         --title-font-family: unset;
 
@@ -137,18 +145,21 @@ $dark-maroon: #2B0603;
             margin: 0.2em 0;
         }
 
+        .pagination {
+            margin-top: 1rem;
+        }
     }
-    
+
     &.window-app .window-content {
         // @include background-primary;
         height: 100%;
         padding: 0;
         z-index: 0;
-        
+
         .dialog-buttons {
             display: none;
         }
-        
+
         .dialog-content {
             flex: 0 0 100%;
             height: 100%;
@@ -181,13 +192,13 @@ $dark-maroon: #2B0603;
     display: grid;
     grid-template-columns: 1fr 4fr 30ch;
     grid-template-rows: 5em 15em 1fr;
-    grid-template-areas: 
+    grid-template-areas:
     'header header encounter'
     'filters histogram encounter'
     'filters results encounter';
     height: 100%;
     color: var(--text-color);
-    
+
     .dnd5e & {
         grid-template-columns: minmax(280px, 1fr) 4fr 30ch;
     }
@@ -221,10 +232,10 @@ $dark-maroon: #2B0603;
     h4 {
         margin-top: .5em;
     }
-    
+
     .encounter-info {
         grid-area: header;
-        
+
         height: 100%;
         background: var(--title-background-image), var(--title-background-color);
         background-repeat: repeat;
@@ -233,7 +244,7 @@ $dark-maroon: #2B0603;
         color: var(--color-primary);
         box-shadow: 0px 2px 6px 0px var(--shadow-full-color);
         padding: .5em;
-        
+
         h1 {
             font-size: var(--title-font-size);
             border: none;
@@ -245,7 +256,7 @@ $dark-maroon: #2B0603;
                 color: inherit;
                 border: 0;
                 background: none;
-                
+
                 &:focus {
                     text-decoration: underline dashed;
                     box-shadow: none;
@@ -253,7 +264,7 @@ $dark-maroon: #2B0603;
             }
         }
     }
-    
+
     .encounter-details {
         grid-area: encounter;
         padding: .5em 1ch .5em 1ch;
@@ -261,7 +272,7 @@ $dark-maroon: #2B0603;
         background: var(--background-secondary-color);
         z-index: 2;
         overflow: auto;
-        
+
         .numeric-input {
             background: none;
             border: 1px solid rgba(60,60,60,.26);
@@ -287,19 +298,19 @@ $dark-maroon: #2B0603;
             }
         }
     }
-    
+
     .encounter-members {
         list-style: none;
         padding-left: 0;
         display: flex;
         flex-direction: column;
         gap: 0.5em;
-        
+
         .member {
             display: flex;
             padding: 0.2em;
             position: relative;
-            
+
             .member-details {
                 padding-left: 5px;
                 flex: 1 100%;
@@ -335,15 +346,15 @@ $dark-maroon: #2B0603;
             border: 1px solid rgba(60,60,60,.6);
         }
     }
-    
+
     .search-configuration {
         grid-area: filters;
-        
+
         padding: .5em 1ch .5em 1ch;
         box-shadow: 1px 4px 6px 0px var(--shadow-full-color);
         background: var(--background-secondary-color);
         overflow-y: scroll;
-        
+
         .sortings {
             display: flex;
             flex-direction: column;
@@ -365,7 +376,7 @@ $dark-maroon: #2B0603;
         }
 
     }
-    
+
     .loading-container {
         display: flex;
         align-items: center;
@@ -373,7 +384,7 @@ $dark-maroon: #2B0603;
         height: 100%;
         grid-row-end: -1;
         grid-row-start: 2;
-        
+
         .spinner {
             width: 75% !important;
             fill: $red !important;
@@ -390,20 +401,20 @@ $dark-maroon: #2B0603;
             }
         }
     }
-    
+
     ul {
         padding: 0;
         margin: 0;
         list-style: none;
     }
-    
-    
+
+
     .results {
         grid-area: results;
         overflow: auto;
         padding: 0.5em;
     }
-    
+
     .result-list {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -416,7 +427,7 @@ $dark-maroon: #2B0603;
             flex: 0 0 100px;
         }
     }
-    
+
     .filters-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -464,8 +475,8 @@ $dark-maroon: #2B0603;
             opacity: 40%;
             &:hover { box-shadow: none; }
         }
-        
-        
+
+
         &:hover {
             .actor-info-buttons-overlay {
                 opacity: 1;
@@ -481,14 +492,14 @@ $dark-maroon: #2B0603;
             white-space: nowrap;
             overflow: hidden;
             display: block;
-            
+
             .level {
                 padding-right: 3px;
             }
         }
     }
 
-    
+
     .actor-source {
         font-style: italic;
     }
@@ -516,7 +527,7 @@ $dark-maroon: #2B0603;
         }
     }
 
-    
+
     .tags {
         font-size: 0.8em;
         display: flex;
@@ -571,7 +582,7 @@ $dark-maroon: #2B0603;
             border: none;
         }
     }
-    
+
     .actor-info-buttons-overlay {
         opacity: 0;
         position: absolute;
@@ -616,14 +627,14 @@ $dark-maroon: #2B0603;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        
+
         .vue-histogram-slider-wrapper {
             .irs-bar {
                 background-color: $yellow;
             }
         }
     }
-    
+
     .toggle-button-group {
         background-color: transparentize($gold, 1);
         border: 1px solid var(--background-primary-color);
@@ -651,6 +662,16 @@ $dark-maroon: #2B0603;
             box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.4);
             background: var(--color-primary);
             color: var(--color-accent2);
+        }
+
+        &:disabled {
+            background: var(--color-accent2);
+            color: var(--color-primary);
+            cursor: initial;
+
+            &:hover {
+                box-shadow: none;
+            }
         }
     }
 

@@ -23,6 +23,8 @@ export default class Pathfinder2E {
 
     histogramLabelPrettify(level) { return level; }
 
+    perPage() { return 16; }
+
     getPlayerCharacters() {
         return game.actors.filter((x) => x.hasPlayerOwner && x.type == "character");
     }

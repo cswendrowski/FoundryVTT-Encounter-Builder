@@ -38,6 +38,9 @@
   --background-primary-color: hsl(46 71% 83% / 0.8);
   --background-primary-blend: hard-light;
 }
+.encounter-builder-application.archmage .pagination {
+  margin-top: 1rem;
+}
 .encounter-builder-application.pf2e {
   --title-font-family: unset;
   --title-background-image: url(../../../systems/pf2e/assets/sheet/header.webp);
@@ -69,6 +72,9 @@
 .encounter-builder-application.pf2e .actor-info-button {
   color: #f7d488;
 }
+.encounter-builder-application.pf2e .pagination {
+  margin-top: 0.25rem;
+}
 .encounter-builder-application.dnd5e {
   --title-font-family: unset;
 }
@@ -97,6 +103,9 @@
   border-bottom: 1px solid transparent;
   border-left: 100px solid #2B0603;
   margin: 0.2em 0;
+}
+.encounter-builder-application.dnd5e .pagination {
+  margin-top: 1rem;
 }
 .encounter-builder-application.window-app .window-content {
   height: 100%;
@@ -519,6 +528,14 @@
   box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.4);
   background: var(--color-primary);
   color: var(--color-accent2);
+}
+.encounter-builder .btn-primary:disabled {
+  background: var(--color-accent2);
+  color: var(--color-primary);
+  cursor: initial;
+}
+.encounter-builder .btn-primary:disabled:hover {
+  box-shadow: none;
 }
 
 /*# sourceMappingURL=module.css.map */

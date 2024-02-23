@@ -10,6 +10,8 @@ export default class ThirteenthAge {
 
     histogramLabelPrettify(level) { return level; }
 
+    perPage() { return 12; }
+
     getPlayerCharacters() {
         return game.actors.filter((x) => x.hasPlayerOwner && x.type == "character");
     }

@@ -62,6 +62,15 @@ class EncounterBuilder {
             init: () => Vue.component("pencil", VueLoadingSpinner.Pencil)
         });
 
+        Dlopen.register('vue-awesome-paginate', {
+            scripts: [
+                "https://unpkg.com/vue-awesome-paginate@1.1.46"
+            ],
+            styles: [],
+            dependencies: [],
+            init: () => Vue.component("vue-awesome-paginate", window["vue-awesome-paginate"].default)
+        });
+
         // Define dependency on our own custom vue components for when we need it
         Dlopen.register('vueport-encounter-builder', {
             scripts: "/modules/vue-encounter-builder/dist/vue-components.min.js",

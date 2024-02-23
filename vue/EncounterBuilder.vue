@@ -174,6 +174,23 @@
           :disabled="t.encounterScore <= 0"
         ></component>
       </ul>
+      <!-- Basic pagination -->
+      <div v-if="pagination.enabled" class="pagination flexrow">
+        <button
+          class="btn btn-primary"
+          v-on:click="pagination.currentPage--"
+          :disabled="!pagination.hasPreviousPage"
+        >
+          <i class="fas fa-angles-left"></i> Previous
+        </button>
+        <button
+          class="btn btn-primary"
+          v-on:click="pagination.currentPage++"
+          :disabled="!pagination.hasNextPage"
+        >
+          Next <i class="fas fa-angles-right"></i>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -225,6 +242,15 @@ export default {
 
     sortLevelAsc: true,
     sortNameAsc: undefined,
+
+    pagination: {
+      enabled: false,
+      currentPage: 1,
+      perPage: 16,
+      totalPages: 1,
+      hasNextPage: false,
+      hasPreviousPage: false,
+    },
 
     warpgateEnabled: game.modules.get("warpgate")?.active
   }),
@@ -401,6 +427,22 @@ export default {
       // }
 
       //this.log(false, availableActors);
+
+      // Pagination
+      if (availableActors.length > this.pagination.perPage) {
+        this.pagination.enabled = true;
+        this.pagination.totalPages = Math.ceil(
+          availableActors.length / this.pagination.perPage
+        );
+        this.pagination.hasNextPage =
+          this.pagination.currentPage < this.pagination.totalPages;
+        this.pagination.hasPreviousPage = this.pagination.currentPage > 1;
+        availableActors = availableActors.slice(
+          (this.pagination.currentPage - 1) * this.pagination.perPage,
+          this.pagination.currentPage * this.pagination.perPage
+        );
+      }
+
       return availableActors;
     },
     levelData() {
@@ -460,6 +502,18 @@ export default {
           }
         }
       }, 100);
+    },
+    pagination() {
+      this.pagination.totalPages = Math.ceil(
+        this.availableActors.length / this.pagination.perPage
+      );
+      this.pagination.hasNextPage =
+        this.pagination.currentPage < this.pagination.totalPages;
+      this.pagination.hasPreviousPage = this.pagination.currentPage > 1;
+      this.availableActors = this.actors.slice(
+        (this.pagination.currentPage - 1) * this.pagination.perPage,
+        this.pagination.currentPage * this.pagination.perPage
+      );
     }
   },
   async created() {
@@ -489,11 +543,10 @@ export default {
     }
   },
   async mounted() {
-
-    let cache = game.settings.get("vue-encounter-builder", "cache");
-
     this.step = this.system.histogramStep();
     this.levelName = this.system.levelName();
+
+    this.pagination.perPage = this.system.perPage();
 
     //this.log(false, "Mounted!");
     let characters = this.system.getPlayerCharacters();
@@ -510,60 +563,51 @@ export default {
       );
     }
 
-    if ( !foundry.utils.isEmpty(cache) ) {
-      this.actors = cache.actors;
-      this.sources = cache.sources;
+    let npcs = this.system.getNpcs();
+    let allActors = npcs;
+    this.sources.push(game.world.title);
+    let actorCompendiums = Array.from(game.packs.entries()).filter(
+        (x) => x[1].metadata.type == "Actor" && !x[1].metadata.name.includes("baileywiki")
+    );
+
+    for (let index = 0; index < actorCompendiums.length; index++) {
+      let pack = actorCompendiums[index];
+      if (!game.settings.get("vue-encounter-builder", pack[0])) continue;
+      //this.log(false, pack);
+      let packActors = await pack[1].getDocuments();
+      //this.log(false, packActors);
+      allActors = allActors.concat(this.system.filterCompendiumActors(pack, packActors));
+      this.sources.push(pack[1].metadata.label);
     }
-    else {
-      let npcs = this.system.getNpcs();
-      let allActors = npcs;
-      this.sources.push(game.world.title);
-      let actorCompendiums = Array.from(game.packs.entries()).filter(
-          (x) => x[1].metadata.type == "Actor" && !x[1].metadata.name.includes("baileywiki")
-      );
 
-      for (let index = 0; index < actorCompendiums.length; index++) {
-        let pack = actorCompendiums[index];
-        if (!game.settings.get("vue-encounter-builder", pack[0])) continue;
-        //this.log(false, pack);
-        let packActors = await pack[1].getDocuments();
-        //this.log(false, packActors);
-        allActors = allActors.concat(this.system.filterCompendiumActors(pack, packActors));
-        this.sources.push(pack[1].metadata.label);
-      }
+    this.system.initValuesFromAllActors(allActors);
 
-      this.system.initValuesFromAllActors(allActors);
+    for (let x = 0; x < allActors.length; x++) {
+      let actor = allActors[x];
+      let level = this.system.getSafeLevel(actor);
 
-      for (let x = 0; x < allActors.length; x++) {
-        let actor = allActors[x];
-        let level = this.system.getSafeLevel(actor);
-
-        if (level > this.maximumLevel) this.maximumLevel = level;
-        if (level < this.minimumLevel) this.minimumLevel = level;
-        this.sources.push(this.system.getActorSource(actor));
-      }
-
-      function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-      }
-
-      this.sources = this.sources.filter(onlyUnique);
-
-      let defaultRange = this.system.getDefaultLevelRange(this.partyInfo, this.minimumLevel, this.maximumLevel);
-      this.minSelectedLevel = defaultRange.minSelectedLevel;
-      this.maxSelectedLevel = defaultRange.maxSelectedLevel;
-
-      this.log(false, `Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
-
-      this.log(false, allActors);
-      this.actors = allActors;
+      if (level > this.maximumLevel) this.maximumLevel = level;
+      if (level < this.minimumLevel) this.minimumLevel = level;
+      this.sources.push(this.system.getActorSource(actor));
     }
+
+    function onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+
+    this.sources = this.sources.filter(onlyUnique);
+
+    let defaultRange = this.system.getDefaultLevelRange(this.partyInfo, this.minimumLevel, this.maximumLevel);
+    this.minSelectedLevel = defaultRange.minSelectedLevel;
+    this.maxSelectedLevel = defaultRange.maxSelectedLevel;
+
+    this.log(false, `Min CR: ${this.minimumLevel} Max CR: ${this.maximumLevel}`);
+
+    this.log(false, allActors);
+    this.actors = allActors;
+
 
     this.loading = false;
-    cache.actors = this.actors;
-    cache.sources = this.sources;
-
-    game.settings.set("vue-encounter-builder", "cache", cache);
 
     Hooks.on("deleteActor", (actor, meta, id) => {
       this.log(false, "Handling delete for " + id);
