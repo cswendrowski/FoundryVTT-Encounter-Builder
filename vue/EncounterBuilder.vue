@@ -442,6 +442,9 @@ export default {
           this.pagination.currentPage * this.pagination.perPage
         );
       }
+      else {
+        this.pagination.enabled = false;
+      }
 
       return availableActors;
     },
