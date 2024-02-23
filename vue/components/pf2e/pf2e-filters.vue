@@ -33,25 +33,12 @@
 
         ></v-select>
         </div>
-
-        <div>
-        <label>Alignment</label>
-        <v-select
-            multiple
-            v-model="selectedAlignments"
-            :options="alignment"
-            :reduce="(x) => x.value"
-
-        ></v-select>
-        </div>
-
     </div>
 </template>
 <script>
 export default {
     name: 'pf2e-filters',
     data: () => ({
-        selectedAlignments: [],
         selectedTraits: [],
         selectedRarities: [],
         selectedSizes: [],
@@ -65,12 +52,10 @@ export default {
       this.monsterTraits = window.dungeonMoon.pathfinder2E.monsterTraits;
       this.actorSizes = window.dungeonMoon.pathfinder2E.actorSizes;
       this.rarityTraits = window.dungeonMoon.pathfinder2E.rarityTraits;
-      this.alignment = window.dungeonMoon.pathfinder2E.alignments;
     },
     methods: {
         dataBundle: function () {
             return {
-                selectedAlignments: this.selectedAlignments,
                 selectedTraits: this.selectedTraits,
                 selectedRarities: this.selectedRarities,
                 selectedSizes: this.selectedSizes,
@@ -78,9 +63,6 @@ export default {
         }
     },
     watch: {
-        selectedAlignments() {
-            this.$emit('input', this.dataBundle());
-        },
         selectedTraits() {
             this.$emit('input', this.dataBundle());
         },

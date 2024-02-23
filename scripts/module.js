@@ -113,6 +113,13 @@ Hooks.once('ready', function() {
         restricted: true
     });
 
+    game.settings.register("vue-encounter-builder", "cache", {
+        scope: 'world',
+        config: false,
+        type: Object,
+        default: {}
+    });
+
     Array.from(game.packs.entries())
         .filter((x) => x[1].metadata.type == "Actor" && !x[1].metadata.name.includes("baileywiki"))
         .forEach(pack => {

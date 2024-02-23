@@ -55,10 +55,6 @@ export default {
         ret.push(game.i18n.localize(CONFIG.PF2E.rarityTraits[traits.rarity?.value]))
       }
 
-      if (!!details?.alignment?.value) {
-        ret.push(game.i18n.localize(CONFIG.PF2E.alignments[details.alignment.value]))
-      }
-
       if (!!traits?.size?.value) {
         ret.push(game.i18n.localize(CONFIG.PF2E.actorSizes[traits?.size?.value]))
       }
@@ -67,7 +63,7 @@ export default {
     },
     tags() {
       return this.actor.system?.traits?.traits?.value
-        .map((tag) => game.i18n.localize(CONFIG.PF2E.monsterTraits[tag]))
+        .map((tag) => game.i18n.localize(CONFIG.PF2E.creatureTraits[tag]))
         .filter((tag) => !!tag)
     },
   }

@@ -33,7 +33,7 @@
         <ul class="encounter-members">
           <li
             v-for="t of groupedSelectedActors"
-                        :key="system.getUniqueKey(t[1][0], partyInfo, encounterSettings)"
+                        :key="'selected-' + system.getUniqueKey(t[1][0], partyInfo, encounterSettings)"
           >
             <component
               v-bind:is="selectedActorComponent"
@@ -165,7 +165,7 @@
           v-bind:is="actorComponent"
           v-model="encounterSettings"
           v-for="t of availableActors"
-                        :key="system.getUniqueKey(t, partyInfo, encounterSettings)"
+                        :key="'result-' + system.getUniqueKey(t, partyInfo, encounterSettings)"
           :actor="t"
           :system="system"
           v-on:add-actor="addActor(t)"
@@ -510,7 +510,7 @@ export default {
       );
     }
 
-    if ( cache ) {
+    if ( !foundry.utils.isEmpty(cache) ) {
       this.actors = cache.actors;
       this.sources = cache.sources;
     }

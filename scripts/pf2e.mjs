@@ -1,7 +1,7 @@
 import {log} from './module.js';
 
-const configToOptions = ([value, localizationString]) => ({ 
-    value, 
+const configToOptions = ([value, localizationString]) => ({
+    value,
     label: game.i18n.localize(localizationString)
 });
 
@@ -10,10 +10,9 @@ const sortOptions = ({label: aLabel}, {label: bLabel}) => aLabel.localeCompare(b
 export default class Pathfinder2E {
 
     constructor() {
-        this.monsterTraits = Object.entries(CONFIG.PF2E.monsterTraits).map(configToOptions).sort(sortOptions);
+        this.monsterTraits = Object.entries(CONFIG.PF2E.creatureTraits).map(configToOptions).sort(sortOptions);
         this.actorSizes = Object.entries(CONFIG.PF2E.actorSizes).map(configToOptions).sort(sortOptions);
         this.rarityTraits = Object.entries(CONFIG.PF2E.rarityTraits).map(configToOptions).sort(sortOptions);
-        this.alignments = Object.entries(CONFIG.PF2E.alignments).map(configToOptions).sort(sortOptions);
     }
 
     initValuesFromAllActors(allActors) {}
@@ -49,10 +48,6 @@ export default class Pathfinder2E {
         }
         if (selectedName != "") {
             availableActors = availableActors.filter(x => x.name.toLowerCase().includes(selectedName.toLowerCase()));
-        }
-
-        if (selectedAlignments?.length) {
-            availableActors = availableActors.filter(x => selectedAlignments.includes(x.system?.details?.alignments?.value));
         }
 
         if (selectedTraits?.length) {
@@ -178,5 +173,5 @@ export default class Pathfinder2E {
             maxSelectedLevel: maxSelectedLevel
         }
     }
-    
+
 }
