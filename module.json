@@ -40,7 +40,7 @@
         "type": "module"
       },
       {
-        "id": "warpgate",
+        "id": "portal-lib",
         "type": "module"
       }
     ]

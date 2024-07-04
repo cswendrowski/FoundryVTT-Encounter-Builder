@@ -61,8 +61,8 @@
           :encountersettings="encounterSettings"
         >
         </component>
-        <button class="btn btn-primary" v-if="warpgateEnabled" v-on:click="warpOnScene()">
-          Warp on current Scene
+        <button class="btn btn-primary"  v-on:click="warpOnScene()">
+          Spawn on current Scene
         </button>
       </div>
     </section>
@@ -251,8 +251,6 @@ export default {
       hasNextPage: false,
       hasPreviousPage: false,
     },
-
-    warpgateEnabled: game.modules.get("warpgate")?.active
   }),
   methods: {
     prettify: function(level) {
@@ -297,37 +295,39 @@ export default {
       this.maxSelectedLevel = values.to;
     },
     warpOnScene: async function () {
-      let tokensToWarp = {};
-      let viewedScene = game.scenes.get(game.user.viewedScene);
-      if (viewedScene == undefined) {
+      const viewedScene = game.scenes.get(game.user.viewedScene);
+      if (!viewedScene) {
         ui.notifications.warn("No viewed scene to spawn into");
         return;
       }
-      let total = 0;
 
-      for (let x = 0; x < this.selectedActors.length; x++) {
-        let actor = this.selectedActors[x];
+      const tokensToWarp = {};
+      for (const actor of this.selectedActors) {
         if (actor.source && !game.actors.get(actor.id)) {
           const actorData = foundry.utils.duplicate(actor);
           this.log(false, actorData);
-          actor = await Actor.create(actorData, {keepId: true});
+          await Actor.create(actorData, {keepId: true});
         }
-        if (Object.keys(tokensToWarp).includes(actor.name)) {
-          tokensToWarp[actor.name]++;
+
+        const monsterName = actor.name
+        if (Object.keys(tokensToWarp).includes(monsterName)) {
+          tokensToWarp[monsterName]++;
         }
         else {
-          tokensToWarp[actor.name] = 1;
+          tokensToWarp[monsterName] = 1;
         }
-        total++;
       }
+
       this.log(false, tokensToWarp);
 
-      for (let name in tokensToWarp) {
-        await warpgate.spawn(name, {}, {}, {duplicates: tokensToWarp[name]});
+      for (const name in tokensToWarp) {
+        const spawner = new Portal();
+        spawner.addCreature(name, {count: tokensToWarp[name]});
+        await spawner.spawn();
       }
 
       ui.notifications.info(
-          total + " tokens spawned on " + viewedScene.name
+          this.selectedActors.length + " tokens spawned on " + viewedScene.name
       );
     },
   },
