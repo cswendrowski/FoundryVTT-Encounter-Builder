@@ -258,8 +258,8 @@ export default {
     },
     addActor: function (actor) {
       if (actor.encounterScore > 0) {
-        let toPush = duplicate(actor);
-        toPush.id = randomID(16);
+        let toPush = foundry.utils.duplicate(actor);
+        toPush.id = foundry.utils.randomID(16);
         this.selectedActors.push(actor);
       }
     },
@@ -351,7 +351,7 @@ export default {
     availableActors() {
       let availableActors = this.actors;
 
-      let filters = duplicate(this.filters);
+      let filters = foundry.utils.duplicate(this.filters);
       filters["selectedName"] = this.selectedName;
       filters["selectedSources"] = this.selectedSources;
 
@@ -453,7 +453,7 @@ export default {
       let availableActors = this.actors;
 
       // We don't  use this.availableActors because that filters by level, and we always want the histogram to be all levels available
-      let filters = duplicate(this.filters);
+      let filters = foundry.utils.duplicate(this.filters);
       filters["selectedName"] = this.selectedName;
       filters["selectedSources"] = this.selectedSources;
       availableActors = this.system.filterAvailableActors(
