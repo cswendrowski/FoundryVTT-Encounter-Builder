@@ -5,12 +5,12 @@ export default class Dnd5e {
     constructor() {
         this.environments = [];
         this.creatureTypes = Object.keys(CONFIG.DND5E.creatureTypes).map((x) => ({
-            label: game.i18n.localize(CONFIG.DND5E.creatureTypes[x]),
+            label: game.i18n.localize(`DND5E.Creature${x.charAt(0).toUpperCase()}${x.slice(1)}`),
             value: x,
         }));
-        this.actorSizes = Object.values(CONFIG.DND5E.actorSizes).reverse();
-        this.damageResistanceTypes = Object.values(CONFIG.DND5E.damageResistanceTypes);
-        this.movementTypes = Object.keys(CONFIG.DND5E.movementTypes);
+        this.actorSizes = Object.values(CONFIG.DND5E.actorSizes).map(x => x.label);
+        this.damageResistanceTypes = Object.values(CONFIG.DND5E.damageTypes).map(x => x.label);
+        this.movementTypes = Object.values(CONFIG.DND5E.movementTypes);
     }
 
     initValuesFromAllActors(allActors) {
@@ -101,7 +101,7 @@ export default class Dnd5e {
             availableActors = availableActors.filter(x => {
                 if (x.system?.traits?.size != undefined) {
                     return selectedSizes.filter(value =>
-                        Object.entries(CONFIG.DND5E.actorSizes).find(x => x[1] == value)[0] == x.system.traits.size
+                        Object.entries(CONFIG.DND5E.actorSizes).find(x => x[1].label === value)[0] === x.system.traits.size
                     ).length > 0;
                 }
                 return false;
@@ -178,7 +178,7 @@ export default class Dnd5e {
         if (selectedResistances?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.system?.traits?.dr != undefined) {
-                    return selectedResistances.filter(value => x.system.traits.dr.value.includes(value)).length > 0;
+                    return selectedResistances.filter(value => x.system.traits.dr.value.has(value)).length > 0;
                 }
                 return false;
             });
@@ -187,7 +187,7 @@ export default class Dnd5e {
         if (selectedImmunities?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.system?.traits?.di != undefined) {
-                    return selectedImmunities.filter(value => x.system.traits.di.value.includes(value)).length > 0;
+                    return selectedImmunities.filter(value => x.system.traits.di.value.has(value)).length > 0;
                 }
                 return false;
             });
@@ -196,7 +196,7 @@ export default class Dnd5e {
         if (selectedVulnerabilities?.length > 0) {
             availableActors = availableActors.filter(x => {
                 if (x.system?.traits?.dv != undefined) {
-                    return selectedVulnerabilities.filter(value => x.system.traits.dv.value.includes(value)).length > 0;
+                    return selectedVulnerabilities.filter(value => x.system.traits.dv.value.has(value)).length > 0;
                 }
                 return false;
             });
@@ -207,7 +207,7 @@ export default class Dnd5e {
 
     getActorSource(actor, skipDetails) {
         if (actor.system.details.source && !skipDetails) {
-            return actor.system.details.source.split('pg')[0];
+            return actor.system.details.source.label;
         }
 
         let nonCompendiumSourceType = game.settings.get("vue-encounter-builder", "nonCompendiumSourceType");
