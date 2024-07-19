@@ -21,13 +21,22 @@
   "relationships": {
     "systems": [
       {
-        "id": "archmage"
+        "id": "archmage",
+        "compatibility": {
+          "verified": "1.30.2"
+        }
       },
       {
-        "id": "pf2e"
+        "id": "pf2e",
+        "compatibility": {
+          "verified": "6.0.4"
+        }
       },
       {
-        "id": "dnd5e"
+        "id": "dnd5e",
+        "compatibility": {
+          "verified": "3.2.1"
+        }
       }
     ],
     "requires": [
@@ -40,18 +49,14 @@
         "type": "module"
       },
       {
-        "id": "warpgate",
+        "id": "portal-lib",
         "type": "module"
       }
     ]
   },
-  "esmodules": [
-    "/scripts/module.js"
-  ],
+  "esmodules": ["/scripts/module.js"],
   "scripts": [],
-  "styles": [
-    "/css/module.css"
-  ],
+  "styles": ["/css/module.css"],
   "languages": [
     {
       "lang": "en",

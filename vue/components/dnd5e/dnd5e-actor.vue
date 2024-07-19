@@ -24,7 +24,7 @@
             :key="tag">{{tag}}</li>
         </ul>
 
-        <small class="actor-source">{{ actor.system.details.source }}</small>
+        <small class="actor-source">{{ actor.system.details.source.label }}</small>
       </section>
 
       <div class="actor-image" v-if="actor.img !== 'icons/svg/mystery-man.svg'">
