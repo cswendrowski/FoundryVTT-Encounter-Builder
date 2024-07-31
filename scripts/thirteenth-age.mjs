@@ -134,7 +134,7 @@ export default class ThirteenthAge {
 
         let size = 'normal';
         if (enemy.system != undefined && enemy.system.details != undefined && enemy.system.details.size != undefined && enemy.system.details.size != '') {
-            size = enemy.system.details.size.value.toLowerCase();
+            size = enemy.system.details.strength.value.toLowerCase();
         }
         let sizeToColumn = {
             "weakling": 0,
@@ -188,7 +188,7 @@ export default class ThirteenthAge {
 
         let size = 'normal';
         if (enemy.system != undefined && enemy.system.details != undefined && enemy.system.details.size != undefined && enemy.system.details.size != '') {
-            size = enemy.system.details.size.value.toLowerCase();
+            size = enemy.system.details.strength.value.toLowerCase();
         }
 
         let sizeToColumn = {

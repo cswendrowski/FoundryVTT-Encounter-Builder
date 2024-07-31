@@ -30,7 +30,16 @@ export default {
     maxEncounterScore() {
       let max = this.partyinfo.numberOfPartyMembers;
 
-      if (this.encountersettings.selectedChallenge == undefined) this.encountersettings.selectedChallenge = "Normal";
+      if (game.settings.get("archmage", "secondEdition")) {
+        // Using Second edition Gamma battle balance
+        if (max > 3) {
+          max = 5 + (max - 4)*2
+        }
+      }
+
+      if (this.encountersettings.selectedChallenge == undefined) {
+        this.encountersettings.selectedChallenge = "Normal";
+      }
 
       if (this.encountersettings.selectedChallenge.toLowerCase() == "double strength") {
         max *= 2;
@@ -38,6 +47,7 @@ export default {
       else if (this.encountersettings.selectedChallenge.toLowerCase() == "killer") {
         max *= 3;
       }
+      
       return max;
     },
   },
